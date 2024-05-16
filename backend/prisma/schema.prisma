@@ -12,3 +12,121 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id String @id
+
+  reviews Review[]
+  orders  Order[]
+}
+
+model Book {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  discount    Float    @default(0)
+  slug        String
+  createAt    DateTime @default(now())
+  updateAt    DateTime @updatedAt
+
+  reviews    Review[]
+  images     Image[]
+  analysis   Analysis?
+  categories Category[]
+  authors    Author[]
+  orders     OrderBook[]
+}
+
+model Review {
+  id       String   @id @default(cuid())
+  content  String
+  rating   Int
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  userId String
+  bookId String
+  user   User   @relation(fields: [userId], references: [id])
+  book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model Image {
+  id     String @id @default(cuid())
+  url    String
+  bookId String
+
+  book Book @relation(fields: [bookId], references: [id])
+}
+
+model Analysis {
+  id                 String @id @default(cuid())
+  avarageRating      Float  @default(0)
+  totalReview        Int    @default(0)
+  totalOrder         Int    @default(0)
+  totalOrderQuantity Int    @default(0)
+
+  book   Book   @relation(fields: [bookId], references: [id])
+  bookId String
+
+  @@unique([bookId])
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String
+
+  books Book[]
+
+  @@unique([name])
+}
+
+model Author {
+  id   String @id @default(cuid())
+  name String
+
+  books Book[]
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  currentStatus OrderStatus
+  createAt      DateTime    @default(now())
+  updateAt      DateTime    @updatedAt
+
+  userId String
+  bookId String
+
+  user             User               @relation(fields: [userId], references: [id])
+  books            OrderBook[]
+  orderTrackingLog OrderTrackingLog[]
+}
+
+model OrderBook {
+  id       String @id @default(cuid())
+  quantity Int
+  price    Float
+  discount Float
+  bookId   String
+  orderId  String
+
+  book  Book  @relation(fields: [bookId], references: [id])
+  order Order @relation(fields: [orderId], references: [id])
+}
+
+model OrderTrackingLog {
+  id       String      @id @default(cuid())
+  status   OrderStatus
+  createAt DateTime    @default(now())
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPING
+  DELIVERED
+  CANCELLED
+}
