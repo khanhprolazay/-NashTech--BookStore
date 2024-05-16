@@ -30,4 +30,5 @@ export abstract class BaseService<T> {
   create(data: Partial<Exclude<T, 'id'>>): Promise<T> {
     return this.model().create({ data });
   }
+
 }

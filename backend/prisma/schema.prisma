@@ -24,11 +24,12 @@ model Book {
   id          String   @id @default(cuid())
   title       String
   description String
-  price       Float
+  price       Float    @default(0)
   discount    Float    @default(0)
   slug        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  isbn        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   reviews    Review[]
   images     Image[]
@@ -36,12 +37,14 @@ model Book {
   categories Category[]
   authors    Author[]
   orders     OrderBook[]
+
+  @@unique([slug, isbn])
 }
 
 model Review {
-  id       String   @id @default(cuid())
-  content  String
-  rating   Int
+  id        String   @id @default(cuid())
+  content   String
+  rating    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -75,24 +78,30 @@ model Analysis {
 model Category {
   id   String @id @default(cuid())
   name String
+  slug String
 
   books Book[]
 
   @@unique([name])
+
+  @@unique([slug])
 }
 
 model Author {
   id   String @id @default(cuid())
   name String
+  slug String
 
   books Book[]
+
+  @@unique([slug])
 }
 
 model Order {
   id            String      @id @default(cuid())
   currentStatus OrderStatus
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   userId String
   bookId String
@@ -115,8 +124,8 @@ model OrderBook {
 }
 
 model OrderTrackingLog {
-  id       String      @id @default(cuid())
-  status   OrderStatus
+  id        String      @id @default(cuid())
+  status    OrderStatus
   createdAt DateTime    @default(now())
 
   orderId String
