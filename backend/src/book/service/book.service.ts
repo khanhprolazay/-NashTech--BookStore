@@ -6,6 +6,7 @@ import { AnalysisService } from './analysis.service';
 import { Util } from 'src/core/util/util';
 import { AuthorService } from './author.service';
 import { CategoryService } from './category.service';
+import { IPagination } from 'src/core/interface';
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -60,6 +61,11 @@ export class BookService extends BaseService<Book> {
     return this.connectEntity(book, 'categories', category);
   }
 
+  findByPagination(pagination: IPagination) {
+    const { page = 0, limit = 20 } = pagination;
+    return this.model().findMany({ take: limit, skip: page * limit})
+  }
+
   findByCategory(category: { slug: string }) {
     return this.findByEntitySlug(category, 'categories');
   }
@@ -68,14 +74,21 @@ export class BookService extends BaseService<Book> {
     return this.findByEntitySlug(author, 'authors');
   }
 
-  private connectEntity(book: Book, field: 'authors' | 'categories', entity: { id: string }) {
+  private connectEntity(
+    book: Book,
+    field: 'authors' | 'categories',
+    entity: { id: string },
+  ) {
     return this.model().update({
       where: { id: book.id },
       data: { [field]: { connect: { id: entity.id } } },
     });
   }
 
-  private findByEntitySlug(entity: { slug: string }, field: 'authors' | 'categories') {
+  private findByEntitySlug(
+    entity: { slug: string },
+    field: 'authors' | 'categories',
+  ) {
     return this.model().findMany({
       where: { [field]: { some: { slug: entity.slug } } },
     });

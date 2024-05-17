@@ -7,6 +7,10 @@ export abstract class BaseService<T> {
 
   abstract model();
 
+  count(): Promise<number> {
+    return this.model().count();
+  }
+
   findAll(): Promise<T[]> {
     return this.model().findMany();
   }

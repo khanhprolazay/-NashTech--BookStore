@@ -6,6 +6,7 @@ import { AuthorService } from '../service/author.service';
 import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/core/guard/auth.guard';
+import { PaginationDto } from '../../core/dto/pagination.dto';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
@@ -23,8 +24,13 @@ export class BookResolver {
   }
 
   @Query((_) => [Book])
-  books() {
-    return this.bookService.findAll();
+  books(@Args('dto') dto: PaginationDto) {
+    return this.bookService.findByPagination(dto);
+  }
+
+  @Query((_) => Number) 
+  count() {
+    return this.bookService.count();
   }
 
   @ResolveField()

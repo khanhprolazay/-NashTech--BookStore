@@ -29,9 +29,18 @@ type Book {
 
 type Query {
   book(slug: String!): Book!
-  books: [Book!]!
+  books(dto: PaginationDto!): [Book!]!
+  count: Float!
   author(slug: String!): Author!
   authors: [Author!]!
   category(slug: String!): Category!
   categories: [Category!]!
+}
+
+input PaginationDto {
+  page: Float
+  limit: Float
+  sort: String
+  order: String
+  search: String
 }
