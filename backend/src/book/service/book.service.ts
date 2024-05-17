@@ -60,10 +60,24 @@ export class BookService extends BaseService<Book> {
     return this.connectEntity(book, 'categories', category);
   }
 
+  findByCategory(category: { slug: string }) {
+    return this.findByEntitySlug(category, 'categories');
+  }
+
+  findByAuthor(author: { slug: string }) {
+    return this.findByEntitySlug(author, 'authors');
+  }
+
   private connectEntity(book: Book, field: 'authors' | 'categories', entity: { id: string }) {
     return this.model().update({
       where: { id: book.id },
       data: { [field]: { connect: { id: entity.id } } },
+    });
+  }
+
+  private findByEntitySlug(entity: { slug: string }, field: 'authors' | 'categories') {
+    return this.model().findMany({
+      where: { [field]: { some: { slug: entity.slug } } },
     });
   }
 }

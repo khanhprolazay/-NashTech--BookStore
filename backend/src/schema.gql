@@ -1,0 +1,37 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Author {
+  id: ID!
+  name: String!
+  slug: String!
+  books: [Book!]!
+}
+
+type Category {
+  id: ID!
+  name: String!
+  slug: String!
+  books: [Book!]!
+}
+
+type Book {
+  id: ID!
+  title: String!
+  description: String!
+  price: Float!
+  discount: Float!
+  slug: String!
+  authors: [Author!]!
+  categories: [Category!]!
+}
+
+type Query {
+  book(slug: String!): Book!
+  books: [Book!]!
+  author(slug: String!): Author!
+  authors: [Author!]!
+  category(slug: String!): Category!
+  categories: [Category!]!
+}

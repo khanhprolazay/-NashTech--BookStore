@@ -15,6 +15,10 @@ export abstract class BaseService<T> {
     return this.model().findFirst({ where: { id } });
   }
 
+  findBySlug(slug: string): Promise<T> {
+    return this.model().findFirst({ where: { slug } });
+  }
+
   findFirstByName(name: string): Promise<T> {
     return this.model().findFirst({ where: { name } });
   }
