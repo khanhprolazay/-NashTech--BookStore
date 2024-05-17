@@ -15,4 +15,10 @@ export class AuthorService extends BaseService<Author> {
     if (instance) return instance;
     return super.create({ ...data, slug });
   }
+
+  findByBook(book: { id: string }) {
+    return this.model().findMany({
+      where: { books: { some: { id: book.id } } },
+    });
+  }
 }

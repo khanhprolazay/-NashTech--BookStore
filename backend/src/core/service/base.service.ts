@@ -7,12 +7,20 @@ export abstract class BaseService<T> {
 
   abstract model();
 
+  count(): Promise<number> {
+    return this.model().count();
+  }
+
   findAll(): Promise<T[]> {
     return this.model().findMany();
   }
 
   findById(id: string): Promise<T> {
     return this.model().findFirst({ where: { id } });
+  }
+
+  findBySlug(slug: string): Promise<T> {
+    return this.model().findFirst({ where: { slug } });
   }
 
   findFirstByName(name: string): Promise<T> {
