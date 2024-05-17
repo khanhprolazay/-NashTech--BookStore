@@ -1,10 +1,10 @@
 import { DynamicModule, Global, Module } from '@nestjs/common';
 import { OauthJwkOptions, OauthIntrospectOptions } from './oauth.types';
-import { OauthJwkService } from './services/oauth-jwk.service';
-import { OauthIntrospectService } from './services/oauth-introspect.service';
-import { JwtUtil } from './utils/jwt.util';
+import { OauthJwkService } from './service/oauth-jwk.service';
+import { OauthIntrospectService } from './service/oauth-introspect.service';
+import { JwtUtil } from './util/jwt.util';
 import { ScheduleModule } from '@nestjs/schedule';
-import { OAuthService } from './services/oauth.service';
+import { OAuthService } from './service/oauth.service';
 import { HttpClient } from 'src/core/util/http-client';
 
 @Global()

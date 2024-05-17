@@ -2,7 +2,7 @@ import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { OAuthService } from './oauth.service';
 import { OauthJwkOptions } from '../oauth.types';
 import { SchedulerRegistry } from '@nestjs/schedule';
-import { JwtUtil } from '../utils/jwt.util';
+import { JwtUtil } from '../util/jwt.util';
 import { Algorithm, JwtHeader } from 'jsonwebtoken';
 import { HttpClient } from 'src/core/util/http-client';
 
