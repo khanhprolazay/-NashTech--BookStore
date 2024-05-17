@@ -3,8 +3,13 @@ import { Book } from '../model/book.model';
 import { BookService } from '../service/book.service';
 import { CategoryService } from '../service/category.service';
 import { AuthorService } from '../service/author.service';
+import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/core/guard/auth.guard';
 
 @Resolver((_) => Book)
+@ControllerContext('gql')
+@UseGuards(AuthGuard)
 export class BookResolver {
   constructor(
     private bookService: BookService,

@@ -2,8 +2,13 @@ import { Query, Resolver, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { Category } from '../model/category.model';
 import { CategoryService } from '../service/category.service';
 import { BookService } from '../service/book.service';
+import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from 'src/core/guard/auth.guard';
 
 @Resolver((_) => Category)
+@ControllerContext('gql')
+@UseGuards(AuthGuard)
 export class CategoryResolver {
   constructor(
     private bookService: BookService,

@@ -11,6 +11,7 @@ import { HttpClient } from 'src/core/util/http-client';
 @Module({
   imports: [ScheduleModule.forRoot()],
   providers: [JwtUtil, HttpClient],
+  exports: [JwtUtil],
 })
 export class OauthModule {
   static forRoot<T>(options: T): DynamicModule {
