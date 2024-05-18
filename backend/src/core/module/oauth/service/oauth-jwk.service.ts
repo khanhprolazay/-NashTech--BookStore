@@ -37,24 +37,20 @@ export class OauthJwkService extends OAuthService {
   }
 
   async verify(token: string): Promise<boolean> {
-    try {
-      // Decode token and get kid and alg
-      const decode = this.jwtUtil.decodeComplete(token);
-      const { kid, alg } = decode.header;
+    // Decode token and get kid and alg
+    const decode = this.jwtUtil.decodeComplete(token);
+    const { kid, alg } = decode.header;
 
-      // Get pem from cache or convert key to pem
-      let pem = this.pems[kid];
-      if (!pem) {
-        const key = this.keys.find((k) => k.kid === kid);
-        pem = this.jwtUtil.toPem(key);
-        this.pems[kid] = pem;
-      }
-
-      // Verify token
-      return this.jwtUtil.verify(token, pem, alg as Algorithm);
-    } catch (error) {
-      return false;
+    // Get pem from cache or convert key to pem
+    let pem = this.pems[kid];
+    if (!pem) {
+      const key = this.keys.find((k) => k.kid === kid);
+      pem = this.jwtUtil.toPem(key);
+      this.pems[kid] = pem;
     }
+
+    // Verify token
+    return this.jwtUtil.verify(token, pem, alg as Algorithm);
   }
 
   private async refresh() {

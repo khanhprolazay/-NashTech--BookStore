@@ -4,11 +4,11 @@ import { CategoryService } from '../service/category.service';
 import { BookService } from '../service/book.service';
 import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/core/guard/auth.guard';
+import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 
 @Resolver((_) => Category)
 @ControllerContext('gql')
-@UseGuards(AuthGuard)
+@UseGuards(HeaderTokenGuard)
 export class CategoryResolver {
   constructor(
     private bookService: BookService,

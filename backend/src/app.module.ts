@@ -6,7 +6,6 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
-import { AdminController } from './admin/admin.controller';
 
 @Module({
   imports: [

@@ -5,12 +5,12 @@ import { CategoryService } from '../service/category.service';
 import { AuthorService } from '../service/author.service';
 import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from 'src/core/guard/auth.guard';
 import { PaginationDto } from '../../core/dto/pagination.dto';
+import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
-@UseGuards(AuthGuard)
+@UseGuards(HeaderTokenGuard)
 export class BookResolver {
   constructor(
     private bookService: BookService,
@@ -28,7 +28,7 @@ export class BookResolver {
     return this.bookService.findByPagination(dto);
   }
 
-  @Query((_) => Number) 
+  @Query((_) => Number)
   count() {
     return this.bookService.count();
   }
