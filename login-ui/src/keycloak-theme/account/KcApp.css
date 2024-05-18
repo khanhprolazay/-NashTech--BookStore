@@ -1,0 +1,94 @@
+/* 
+If you use global CSS like we do here(not recommended) 
+Be mindful that the CSS of the login theme may clash with the CSS of the account theme in Storybook (and only in storybook).
+This is why I made sure to use .my-root-account-class instead of .my-root-class that is already used in the login theme.
+*/
+
+/* .my-root-account-class {
+	background: url(./assets/background.svg) no-repeat center center fixed;
+} */
+
+.my-root-class body {
+	background: #ebedef !important;
+}
+
+body {
+	background: #ebedef !important;
+	font-family: "Roboto", sans-serif;
+}
+
+.h-14 {
+	height: 3.5rem;
+}
+
+.w-14 {
+	width: 3.5rem;
+}
+
+.inline-block {
+	display: inline-block;
+}
+
+.flex {
+	display: flex;
+}
+
+.justify-center {
+	justify-content: center;
+}
+
+.items-center {
+	align-items: center;
+}
+
+.my-0 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.text-white {
+	color: white;
+}
+
+.navbar {
+	border: 0;
+}
+
+
+.navbar-pf {
+	/* background: white; */
+	background: #3c4b64;
+	border-top: 0px;
+}
+
+.navbar-header {
+	/* border-bottom: 1px solid #0f172a1a !important; */
+	border-bottom: none !important;
+	height: 2.5rem;
+}
+
+.bs-sidebar {
+	background: white;
+}
+
+.bs-sidebar a {
+	border-color: transparent !important;
+}
+
+.navbar-pf .navbar-utility > li > a {
+	/* color: black !important; */
+}
+
+.content-area {
+	border-color: #0f172a1a;
+}
+
+.form-group {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
+.row {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
