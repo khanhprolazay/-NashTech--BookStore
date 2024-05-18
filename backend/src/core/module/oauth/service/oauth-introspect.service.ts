@@ -21,19 +21,16 @@ export class OauthIntrospectService extends OAuthService {
   }
 
   async verify(token: string): Promise<boolean> {
-    try {
-      // Verify token by calling introspection endpoint
-      const response = await this.httpClient.post<{ active: boolean }>(
-        this.configuration.introspection_endpoint,
-        {
-          token,
-          client_id: this.options.clientId,
-          client_secret: this.options.clientSecret,
-        },
-      );
-      return response.data.active;
-    } catch (error) {
-      return false;
-    }
+    // Verify token by calling introspection endpoint
+    const response = await this.httpClient.post<{ active: boolean }>(
+      this.configuration.introspection_endpoint,
+      {
+        token,
+        client_id: this.options.clientId,
+        client_secret: this.options.clientSecret,
+      },
+    );
+    return response.data.active;
+   
   }
 }
