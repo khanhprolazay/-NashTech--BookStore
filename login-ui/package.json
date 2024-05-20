@@ -1,11 +1,12 @@
 {
-  "name": "sap",
+  "name": "bookworm",
   "version": "latest",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build-keycloak-theme": "yarn build && keycloakify",
+    "build-keycloak-theme": "yarn build && keycloakify && rm -f theme/bookworm-keycloak-theme-latest.jar && mv dist_keycloak/target/bookworm-keycloak-theme-latest.jar theme && mkdir -p theme/bookworm-keycloak-theme-latest && unzip -o theme/bookworm-keycloak-theme-latest.jar -d theme/bookworm-keycloak-theme-latest && cp theme/keycloak-themes.json theme/bookworm-keycloak-theme-latest/META-INF/keycloak-themes.json && cp -r theme/admin theme/bookworm-keycloak-theme-latest/theme/bookworm && cd theme/bookworm-keycloak-theme-latest && zip -r ../bookworm-keycloak-theme-latest.jar . && cd ../.. && rm -rf theme/bookworm-keycloak-theme-latest",
+    "start-keycloak": "docker build -t keycloak . && docker compose up",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

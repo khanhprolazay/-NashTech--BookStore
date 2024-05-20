@@ -1,0 +1,60 @@
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+#masthead-logo {
+  width: auto;
+  height: 48px;
+}
+
+
+.pf-c-page {
+  --pf-c-page__sidebar--BackgroundColor: #3b3b43;
+  --pf-c-page__header--BackgroundColor: #42424a;
+
+}
+
+.pf-c-table {
+  --pf-global--link--Color: #76203d !important;
+  --pf-global--link--Color--hover: #76203d !important;
+}
+
+:root {
+  --pf-global--active-color--400: #ee5387;
+  --pf-global--active-color--100: #d43a6e;
+  --pf-global--primary-color--100: #EC407A;
+  --pf-global--link--Color:  #bd3362;
+  --pf-global--link--Color--hover: #8e2649;
+  --pf-global--BackgroundColor--dark-300: #191919;
+}
+
+.bg-gradient-dark {
+  background-image: linear-gradient(195deg, #42424a 0%, #191919 100%);
+}
+
+
+.keycloak__page_nav__nav {
+  --pf-c-page__sidebar--Transition: all 50ms cubic-bezier(.42, 0, .58, 1);
+  overflow: inherit;
+}
+
+.pf-c-nav {
+  --pf-c-nav__link--m-current--BackgroundColor: #ffffff0d;
+  --pf-c-nav__link--hover--BackgroundColor: #ffffff0d;
+  --pf-c-nav--c-divider--BackgroundColor: #64748b;
+  --pf-c-nav__section-title--BorderBottomColor: #64748b;
+  --pf-c-nav__link--active--BackgroundColor: #ffffff0d;
+}
+
+.keycloak__realm_selector_dropdown__toggle  {
+  --pf-c-dropdown__toggle--BackgroundColor: #00001533;
+}
+
+.pf-c-text-input-group {
+  --pf-c-text-input-group--hover__text--after--BorderBottomColor: #EC407A;
+  --pf-c-text-input-group__text--focus-within--after--BorderBottomColor: #EC407A;
+}
+
+.keycloak__realm_selector_dropdown__toggle {
+  --pf-c-dropdown__toggle--BackgroundColor: #2f2f36 !important;
+}

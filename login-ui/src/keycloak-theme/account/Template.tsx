@@ -1,3 +1,5 @@
+/** @format */
+
 // Copy pasted from: https://github.com/InseeFrLab/keycloakify/blob/main/src/login/Template.tsx
 
 import { clsx } from "keycloakify/tools/clsx";
@@ -6,17 +8,16 @@ import { type TemplateProps } from "keycloakify/account/TemplateProps";
 import { useGetClassName } from "keycloakify/account/lib/useGetClassName";
 import type { KcContext } from "./kcContext";
 import type { I18n } from "./i18n";
-import { assert } from "keycloakify/tools/assert";
+import icon from "./assets/bookworm-icon.svg";
 
 export default function Template(props: TemplateProps<KcContext, I18n>) {
 	const { kcContext, i18n, doUseDefaultCss, active, classes, children } = props;
 
 	const { getClassName } = useGetClassName({ doUseDefaultCss, classes });
 
-	const { msg } =
-		i18n;
+	const { msg } = i18n;
 
-	const { locale, url, features, realm, message, referrer } = kcContext;
+	const { url, features, realm, message, referrer } = kcContext;
 
 	const { isReady } = usePrepareTemplate({
 		doFetchDefaultThemeResources: doUseDefaultCss,
@@ -39,39 +40,11 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 				<nav className="navbar" role="navigation">
 					<div className="navbar-header">
 						<div className="container flex items-center">
-							{/* <h1 className="navbar-title">Keycloak</h1> */}
-							<h3 className="text-white inline-block my-0">STARTUP</h3>
-						</div>
-					</div>
-					<div className="navbar-collapse navbar-collapse-1">
-						<div className="container">
+							<div className="flex items-center h-full">
+								<img className="navbar-icon" src={icon}></img>
+								<h3 className="text-white inline-block my-0">Bookworm</h3>
+							</div>
 							<ul className="nav navbar-nav navbar-utility">
-								{realm.internationalizationEnabled &&
-									(assert(locale !== undefined), true) &&
-									locale.supported.length > 1 && (
-										<></>
-										// Hide multiple language
-										// <li>
-										// 	<div className="kc-dropdown" id="kc-locale-dropdown">
-										// 		{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-										// 		<a href="#" id="kc-current-locale-link">
-										// 			{labelBySupportedLanguageTag[currentLanguageTag]}
-										// 		</a>
-										// 		<ul>
-										// 			{locale.supported.map(({ languageTag }) => (
-										// 				<li key={languageTag} className="kc-dropdown-item">
-										// 					{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-										// 					<a
-										// 						href="#"
-										// 						onClick={() => changeLocale(languageTag)}>
-										// 						{labelBySupportedLanguageTag[languageTag]}
-										// 					</a>
-										// 				</li>
-										// 			))}
-										// 		</ul>
-										// 	</div>
-										// </li>
-									)}
 								{referrer?.url && (
 									<li>
 										<a href={referrer.url} id="referrer">
@@ -83,6 +56,11 @@ export default function Template(props: TemplateProps<KcContext, I18n>) {
 									<a href={url.getLogoutUrl()}>{msg("doSignOut")}</a>
 								</li>
 							</ul>
+						</div>
+					</div>
+					<div className="navbar-collapse navbar-collapse-1">
+						<div className="container">
+						
 						</div>
 					</div>
 				</nav>
