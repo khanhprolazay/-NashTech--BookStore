@@ -36,8 +36,8 @@ export default function Error(
 							{message.summary}
 						</p>
 						<a
-							href="https://obis.bagiit.vn"
-							className="mt-4 inline-block rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-600 hover:!text-slate-200">
+							href="localhost:5000/admin"
+							className="btn-primary mt-4 inline-block rounded px-4 py-2 font-semibold">
 							Go back to Home
 						</a>
 					</div>

@@ -13,7 +13,7 @@ FROM quay.io/keycloak/keycloak:24.0.1 as builder
 
 WORKDIR /opt/keycloak
 
-COPY dist_keycloak/target/sap-keycloak-theme-latest.jar /opt/keycloak/providers
+COPY theme/*.jar /opt/keycloak/providers
 
 # for demonstration purposes only, please make sure to use proper certificates in production instead
 RUN /opt/keycloak/bin/kc.sh build

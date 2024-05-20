@@ -1,5 +1,6 @@
 import {
   OauthOptions,
+  OauthTokenResponse,
   OauthUserInfor,
   OpenIdConfiguration,
 } from '../oauth.types';
@@ -9,7 +10,7 @@ import { HttpClient } from 'src/core/util/http-client';
 
 @Injectable()
 export abstract class OAuthService implements OnModuleInit {
-  protected configuration: OpenIdConfiguration = null;
+  public configuration: OpenIdConfiguration = null;
 
   constructor(
     @Inject('OAUTH_OPTIONS') protected options: OauthOptions,
@@ -26,6 +27,37 @@ export abstract class OAuthService implements OnModuleInit {
       this.configuration = response.data;
     } catch (error) {
       throw new Error('OpenID configuration URL is not valid.');
+    }
+  }
+
+  createLoginUrl() {
+    return `${this.configuration.authorization_endpoint}?response_type=code&client_id=${this.options.clientId}&redirect_uri=${encodeURIComponent(this.options.redirectUri)}&scope=openid`;
+  }
+
+  createLogoutUrl(idToken: string) {
+    return `${this.configuration.end_session_endpoint}?post_logout_redirect_uri=${encodeURIComponent(this.options.postLogoutRedirectUri)}&id_token_hint=${idToken}&client_id=${this.options.clientId}`;
+  }
+
+  async exchange(code: string) {
+    try {
+      const response = await this.httpClient.post<OauthTokenResponse>(
+        this.configuration.token_endpoint,
+        {
+          code,
+          grant_type: 'authorization_code',
+          client_id: this.options.clientId,
+          client_secret: this.options.clientSecret,
+          redirect_uri: this.options.redirectUri,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Failed to exchange token.');
     }
   }
 

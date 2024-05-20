@@ -1,15 +1,12 @@
 /** @format */
 
-import { useState, type FormEventHandler, useRef } from "react";
+import { useState, type FormEventHandler } from "react";
 import { clsx } from "keycloakify/tools/clsx";
 import { useConstCallback } from "keycloakify/tools/useConstCallback";
 import type { PageProps } from "keycloakify/login/pages/PageProps";
 import { useGetClassName } from "keycloakify/login/lib/useGetClassName";
 import type { KcContext } from "../kcContext";
 import type { I18n } from "../i18n";
-import TermAndConditionPopup, {
-	PopupHandle,
-} from "../../components/popup/term-and-condition.popup";
 import "@patternfly/react-core/dist/styles/base.css";
 import LoginLogo from "../../components/logo/login.logo";
 import GoogleLogo from "../../components/logo/google.logo";
@@ -38,7 +35,6 @@ export default function Login(
 	props: PageProps<Extract<KcContext, { pageId: "login.ftl" }>, I18n>
 ) {
 	const { kcContext, i18n, doUseDefaultCss, Template, classes } = props;
-	const popupRef = useRef<PopupHandle>(null);
 
 	const { getClassName } = useGetClassName({
 		doUseDefaultCss,

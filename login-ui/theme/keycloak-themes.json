@@ -1,0 +1,24 @@
+{
+  "themes": [
+    {
+      "name": "bookworm",
+      "types": [
+        "login",
+        "account",
+        "admin"
+      ]
+    },
+    {
+      "name": "account-v1",
+      "types": [
+        "account"
+      ]
+    },
+    {
+      "name": "bookworm_retrocompat",
+      "types": [
+        "account"
+      ]
+    }
+  ]
+}
