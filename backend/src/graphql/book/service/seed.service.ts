@@ -1,13 +1,13 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ExcelService } from 'src/core/module/excel/excel.service';
 import { HttpClient } from 'src/core/util/http-client';
-import { IBook, IGoogleBookResponse } from '../book.type';
 import { BookService } from './book.service';
+import { IBook, IGoogleBookResponse } from '../book.type';
 
 @Injectable()
 export class SeedService implements OnModuleInit {
   private data: IBook[] = [];
-  private index: number = 489;
+  private index: number = 130;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -15,7 +15,7 @@ export class SeedService implements OnModuleInit {
     private readonly excelService: ExcelService,
   ) {
     this.data = this.excelService.read<IBook>(
-      `${__dirname}/../../../../data/books.csv`,
+      '/home/leminh/Desktop/nashtech/bookworm/data/books.csv',
     );
   }
 
@@ -24,7 +24,7 @@ export class SeedService implements OnModuleInit {
       // Prevent the process from crashing by too many requests
       try {
         await this.process();
-      } catch (err){
+      } catch (err) {
         continue;
       }
     }
@@ -36,7 +36,6 @@ export class SeedService implements OnModuleInit {
       const response = (await this.getBook(book.isbn)).data;
       console.log(`${this.index}. Searching for book: ${book.title}`);
       if (response.totalItems > 0) {
-
         console.log(`Book found: ${book.title}`);
 
         const item = response.items[0];
@@ -47,6 +46,9 @@ export class SeedService implements OnModuleInit {
           title: book.title,
           description,
           isbn: `${book.isbn}`,
+          mainImage: book.image_url,
+          discount: Math.round(Math.random() * 100),
+          price: Math.round(Math.random() * 100),
         });
 
         if (authors && authors.length > 0) {

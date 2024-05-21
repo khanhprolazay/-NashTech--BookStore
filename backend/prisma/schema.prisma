@@ -28,6 +28,7 @@ model Book {
   discount    Float    @default(0)
   slug        String
   isbn        String
+  mainImage   String @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

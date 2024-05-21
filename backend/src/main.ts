@@ -19,7 +19,7 @@ async function bootstrap() {
   app.useStaticAssets(`${__dirname}/admin/public`);
   app.setBaseViewsDir(`${__dirname}/admin/view`);
   utils.registerPartials(`${__dirname}/admin/view/partial`);
-  utils.registerWatchedPartials(`${__dirname}/admin/view/partial`)
+  utils.registerWatchedPartials(`${__dirname}/admin/view/partial`);
   utils.precompilePartials();
   await app.listen(5000);
 }

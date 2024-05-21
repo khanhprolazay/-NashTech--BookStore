@@ -1,9 +1,9 @@
 import { ExecutionContext, HttpException, Injectable } from '@nestjs/common';
 import { BaseGuard } from './base.guard';
 import { Reflector } from '@nestjs/core';
-import { UserService } from 'src/user/user.service';
 import { OAuthService } from '../module/oauth/service/oauth.service';
 import { JwtUtil } from '../module/oauth/util/jwt.util';
+import { UserService } from '../module/user/user.service';
 
 @Injectable()
 export abstract class BaseAuthGuard extends BaseGuard {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Book } from '@prisma/client';
 import { BaseService } from 'src/core/service/base.service';
 import { PrismaService } from 'src/core/service/prisma.service';
@@ -7,6 +7,7 @@ import { Util } from 'src/core/util/util';
 import { AuthorService } from './author.service';
 import { CategoryService } from './category.service';
 import { IPagination } from 'src/core/interface';
+import { Dto } from 'src/core/type/utility.type';
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -29,7 +30,7 @@ export class BookService extends BaseService<Book> {
     });
   }
 
-  override async create(data: Pick<Book, 'title' | 'description' | 'isbn'>) {
+  override async create(data: Dto<Book>) {
     const book = await this.findByIsbn(data.isbn);
     if (book) return book;
     const instance = await this.model().create({
@@ -63,7 +64,7 @@ export class BookService extends BaseService<Book> {
 
   findByPagination(pagination: IPagination) {
     const { page = 0, limit = 20 } = pagination;
-    return this.model().findMany({ take: limit, skip: page * limit})
+    return this.model().findMany({ take: limit, skip: page * limit });
   }
 
   findByCategory(category: { slug: string }) {

@@ -5,8 +5,8 @@ import { CategoryService } from '../service/category.service';
 import { AuthorService } from '../service/author.service';
 import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
-import { PaginationDto } from '../../core/dto/pagination.dto';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
+import { PaginationDto } from 'src/core/dto/pagination.dto';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
