@@ -1,0 +1,15 @@
+.form-control {
+  border: 1px solid #d2d6da !important;
+  padding: 0.375rem 0.75rem !important;
+}
+
+.toast {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.toast-logo {
+  height: 20px;
+}

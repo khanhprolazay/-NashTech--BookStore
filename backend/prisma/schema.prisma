@@ -35,8 +35,8 @@ model Book {
   reviews    Review[]
   images     Image[]
   analysis   Analysis?
-  categories Category[]
-  authors    Author[]
+  categories BookToCategory[]
+  authors    BookToAuthor[]
   orders     OrderBook[]
 
   @@unique([slug, isbn])
@@ -81,11 +81,22 @@ model Category {
   name String
   slug String
 
-  books Book[]
+  books BookToCategory[]
 
   @@unique([name])
-
   @@unique([slug])
+}
+
+model BookToCategory {
+  id         String @id @default(cuid())
+
+  bookId     String
+  categoryId String
+  book     Book     @relation(fields: [bookId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([bookId, categoryId])
+
 }
 
 model Author {
@@ -93,9 +104,20 @@ model Author {
   name String
   slug String
 
-  books Book[]
+  books BookToAuthor[]
 
   @@unique([slug])
+}
+
+model BookToAuthor {
+  id      String @id @default(cuid())
+
+  bookId  String
+  authorId String
+  book    Book   @relation(fields: [bookId], references: [id])
+  author  Author @relation(fields: [authorId], references: [id])
+
+  @@unique([bookId, authorId])
 }
 
 model Order {

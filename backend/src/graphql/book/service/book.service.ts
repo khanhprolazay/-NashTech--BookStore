@@ -8,16 +8,19 @@ import { AuthorService } from './author.service';
 import { CategoryService } from './category.service';
 import { IPagination } from 'src/core/interface';
 import { Dto } from 'src/core/type/utility.type';
+import { APP_CONTEXT } from 'src/core/constant/app.constant';
+import { AppContext } from 'src/core/type/app-context.type';
 
 @Injectable()
 export class BookService extends BaseService<Book> {
   constructor(
+    @Inject(APP_CONTEXT) protected readonly appContext: AppContext,
     private readonly analysisService: AnalysisService,
     private readonly categoryService: CategoryService,
     private readonly authorService: AuthorService,
     protected readonly client: PrismaService,
   ) {
-    super(client);
+    super(appContext, client);
   }
 
   model() {
@@ -54,12 +57,12 @@ export class BookService extends BaseService<Book> {
 
   async addAuthor(book: Book, authorName: string) {
     const author = await this.authorService.create({ name: authorName });
-    return this.connectEntity(book, 'authors', author);
+    return this.connectEntity(book, 'authors', 'author', author);
   }
 
   async addCategory(book: Book, categoryName: string) {
     const category = await this.categoryService.create({ name: categoryName });
-    return this.connectEntity(book, 'categories', category);
+    return this.connectEntity(book, 'categories', 'category', category);
   }
 
   findByPagination(pagination: IPagination) {
@@ -77,12 +80,21 @@ export class BookService extends BaseService<Book> {
 
   private connectEntity(
     book: Book,
-    field: 'authors' | 'categories',
+    relation: 'authors' | 'categories',
+    field: 'author' | 'category',
     entity: { id: string },
   ) {
     return this.model().update({
       where: { id: book.id },
-      data: { [field]: { connect: { id: entity.id } } },
+      data: {
+        [relation]: {
+          create: [
+            {
+              [field]: { connect: { id: entity.id } },
+            },
+          ],
+        },
+      },
     });
   }
 

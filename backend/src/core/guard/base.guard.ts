@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { ControllerContext } from '../type/controller-context.type';
 import { GqlExecutionContext } from '@nestjs/graphql';
+import { CONTROLLER_CONTEXT } from '../constant/app.constant';
 
 @Injectable()
 export abstract class BaseGuard implements CanActivate {
@@ -14,7 +15,7 @@ export abstract class BaseGuard implements CanActivate {
 
   getRequest(context: ExecutionContext) {
     const controllerContext = this.reflector.get(
-      'controller_context',
+      CONTROLLER_CONTEXT,
       context.getClass(),
     ) as ControllerContext;
 

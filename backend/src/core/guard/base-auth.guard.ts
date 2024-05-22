@@ -25,9 +25,9 @@ export abstract class BaseAuthGuard extends BaseGuard {
 
       /*
         There are 2 types of token
-          1. Token from PKCE Flow
+          1. Token from Standard Flow
           2. Token from Service Account Flow
-        The token from PKCE Flow has a subject (sub) and email (email) in the payload
+        The token from Standard Flow has a subject (sub) and email (email) in the payload
         The token from Service Account Flow doesn't represent for a user, so we don't need to check the user
       */
 

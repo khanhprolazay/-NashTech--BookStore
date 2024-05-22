@@ -34,6 +34,11 @@
 			href="/assets/css/material-dashboard.css?v=3.1.0"
 			rel="stylesheet" />
 
+    <link
+			id="pagestyle"
+			href="/assets/css/customize.css"
+			rel="stylesheet" />
+
 		<!-- Nepcha Analytics (nepcha.com) -->
 		<!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
 		<script
@@ -44,6 +49,7 @@
 
   </head>
   <body class="g-sidenav-show bg-gray-100">
+    {{> toast}}
 		{{> sidebar}}
 		<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
 			{{> nav}}
@@ -57,6 +63,7 @@
   <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <script src="/assets/js/toast.js"></script>
 	<script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
 
@@ -317,5 +324,7 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="/assets/js/material-dashboard.min.js?v=3.1.0"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </html>

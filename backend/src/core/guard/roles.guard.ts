@@ -12,7 +12,8 @@ export class RolesGuard extends BaseGuard {
     }
 
     const request = this.getRequest(context);
-    const user = request.user;
-    return roles.some((role) => user.role.name === role);
+    const client = request.client;
+    const realmRoles = client.realm_access.roles;
+    return roles.some((role) => realmRoles.includes(role));
   }
 }

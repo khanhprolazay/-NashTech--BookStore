@@ -13,7 +13,7 @@ import { UserModule } from './module/user/user.module';
     ExcelModule,
     UserModule,
     OauthModule.forRoot<OauthJwkOptions>({
-      ttl: 3600,
+      ttl: 2592000,
       type: 'jwk',
       clientId: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
@@ -23,7 +23,7 @@ import { UserModule } from './module/user/user.module';
     }),
     AppContextModule.forRoot({
       pagination: {
-        limit: 10,
+        limit: 5,
       },
     }),
   ],

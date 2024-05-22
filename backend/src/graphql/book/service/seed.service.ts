@@ -7,7 +7,7 @@ import { IBook, IGoogleBookResponse } from '../book.type';
 @Injectable()
 export class SeedService implements OnModuleInit {
   private data: IBook[] = [];
-  private index: number = 130;
+  private index: number = 4;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -25,6 +25,7 @@ export class SeedService implements OnModuleInit {
       try {
         await this.process();
       } catch (err) {
+        console.log(err)
         continue;
       }
     }

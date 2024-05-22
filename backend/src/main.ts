@@ -5,6 +5,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as hbs from 'hbs';
 import * as cookieParser from 'cookie-parser';
 import * as hbsutil from 'hbs-utils';
+import { ValidationPipe } from '@nestjs/common';
 
 const utils = hbsutil(hbs);
 
@@ -14,6 +15,8 @@ dotenv.config({
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useGlobalPipes(new ValidationPipe()); 
   app.setViewEngine('hbs');
   app.use(cookieParser());
   app.useStaticAssets(`${__dirname}/admin/public`);
@@ -21,6 +24,7 @@ async function bootstrap() {
   utils.registerPartials(`${__dirname}/admin/view/partial`);
   utils.registerWatchedPartials(`${__dirname}/admin/view/partial`);
   utils.precompilePartials();
+
   await app.listen(5000);
 }
 bootstrap();
