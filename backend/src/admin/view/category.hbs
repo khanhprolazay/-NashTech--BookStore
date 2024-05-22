@@ -99,6 +99,15 @@
       </div>
     </div>
   </div>
+
+  <ul class="pagination pagination-primary">
+    {{#each pages}}
+      <li class="page-item  {{#if this.isActive}}active{{/if}}">
+        <a class="page-link" href="?page={{this.page}}">{{this.page}}</a>
+      </li>
+    {{/each}}
+  </ul>
+  
 {{/layout}}
 <script>
   $('#update-form-modal').on('show.bs.modal', function (event) {

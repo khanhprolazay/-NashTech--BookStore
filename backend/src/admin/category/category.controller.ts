@@ -35,8 +35,25 @@ export class CategoryController {
     @Client() client: any,
     @Query('page', new DefaultValuePipe('1'), ParseIntPipe) page: number,
   ) {
-    const categories = await this.categoryService.findByPage(page);
-    return { title: 'Category', client, categories };
+    const [count, categories] = await Promise.all([
+      this.categoryService.count(),
+      this.categoryService.findByPage(page),
+    ]);
+
+    let pages = [];
+    const totalPage = Math.ceil(count / 10);
+    for (let i = 1; i <= totalPage; i++) {
+      let isActive = false;
+      if (i === page) {
+        isActive = true;
+      }
+      pages.push({
+        page: i,
+        isActive,
+      });
+    }
+
+    return { title: 'Category', client, categories, pages  };
   }
 
   @Put(':id')
