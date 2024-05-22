@@ -18,7 +18,7 @@ export class CategoryService extends BaseService<Category> {
 
   findByBook(book: { id: string }) {
     return this.model().findMany({
-      where: { books: { some: { id: book.id } } },
+      where: { books: { some: { bookId: book.id } } },
     });
   }
 }
