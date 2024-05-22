@@ -6,3 +6,7 @@
 .toast-logo {
   height: 20px;
 }
+
+.active > .page-link {
+  color: #fff !important;
+}
