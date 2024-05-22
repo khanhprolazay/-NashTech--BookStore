@@ -1,0 +1,170 @@
+{{#> layout }}
+ <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="px-3 bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center">
+            <h6 class="text-white text-capitalize">Authors table</h6>
+            <button class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#create-form-modal"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;New</button>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Author</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Number of Books</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                  <th class="text-secondary opacity-7"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each authors}}
+                  <tr>
+                    <td class="align-middle">
+                      <span class="text-secondary text-xs font-weight-bold">{{this.name}}</span>
+                    </td>
+                    <td class="align-middle">
+                      <span class="text-secondary text-xs font-weight-bold">{{this.count}}</span>
+                    </td>
+                    <td class="align-middle text-center">
+                      <span class="text-secondary text-xs font-weight-bold">
+                        {{#if this.count}}
+                          <span class="badge bg-gradient-success">USED</span>
+                        {{else}}
+                          <span class="badge bg-gradient-danger">UNUSED</span>
+                        {{/if}}
+                      </span>
+                    </td>
+                    <td>
+                      <div class="ms-auto text-end">
+                        <a class="btn btn-link btn-delete text-danger text-gradient px-3 mb-0" data-id="{{this.id}}" ><i class="material-icons text-sm me-2">delete</i>Delete</a>
+                        <a class="btn btn-link text-dark px-3 mb-0" data-id="{{this.id}}" data-name="{{this.name}}" data-bs-toggle="modal" data-bs-target="#update-form-modal" data-toggle="tooltip"><i class="material-icons text-sm me-2">edit</i>Edit</a>
+                      </div>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+            <div class="modal fade" id="update-form-modal" tabindex="-1" aria-labelledby="update-form-modal" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="update-form-modal">Edit author</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="update-form" method="post">
+
+                      <div class="form-group d-none">
+                        <label for="update-id">Id</label>
+                        <input type="text" class="form-control mb-4" id="update-id" name="update-id">
+                      </div>
+
+                      <div class="form-group">
+                        <label for="update-name">Name</label>
+                        <input type="text" class="form-control mb-4" id="update-name" name="update-name">
+                      </div>
+                      <button type="submit" class="btn btn-primary" >Submit</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="create-form-modal" tabindex="-1" aria-labelledby="create-form-modal" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="update-form-modal">Add author</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="create-form" method="post">
+                      <div class="form-group">
+                        <label for="create-name">Name</label>
+                        <input type="text" class="form-control mb-4" id="create-name" name="create-name">
+                      </div>
+                      <button type="submit" class="btn btn-primary" >Submit</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="pagination pagination-primary">
+    {{#each pages}}
+      <li class="page-item  {{#if this.isActive}}active{{/if}}">
+        <a class="page-link" href="?page={{this.page}}">{{this.page}}</a>
+      </li>
+    {{/each}}
+  </ul>
+{{/layout}}
+<script>
+  $('#update-form-modal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var name = button.data('name')
+    var id = button.data('id') // Assuming the button has a data-id attribute
+
+    var modal = $(this)
+    modal.find('.modal-body #update-name').val(name)
+    modal.find('.modal-body #update-id').val(id)
+  })
+
+  $('#update-form').on('submit', function (e) {
+    e.preventDefault()
+    var id = $('#update-id').val()
+    var name = $('#update-name').val()
+    var url = `author/${id}`
+    $.ajax({
+      type: 'PUT',
+      url,
+      data: { name },
+      success: function (response) {
+        window.location.reload()
+      }
+
+    })
+  })
+
+  $('.btn-delete').on('click', function (e) {
+    var id = $(this).data('id')
+    var url = `author/${id}`
+    $.ajax({
+      type: 'DELETE',
+      url,
+      success: function (response) {
+        window.location.reload()
+      },
+      error: function () {
+        showToast('danger', "Unable to delete author")
+      }
+
+    })
+  })
+
+  $('#create-form').on('submit', function (e) {
+    e.preventDefault()
+    var name = $('#create-name').val()
+    var url = `author`
+    $.ajax({
+      type: 'POST',
+      url,
+      data: { name },
+      success: function (response) {
+        window.location.reload()
+      },
+      error: function (error) {
+        showToast('danger', "Unable to create author")
+      }
+
+    })
+  })  
+</script>

@@ -23,7 +23,7 @@ import { UserModule } from './module/user/user.module';
     }),
     AppContextModule.forRoot({
       pagination: {
-        limit: 5,
+        limit: 10,
       },
     }),
   ],
