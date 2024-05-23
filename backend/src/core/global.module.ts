@@ -6,6 +6,7 @@ import { OauthModule } from './module/oauth/oauth.module';
 import { OauthJwkOptions } from './module/oauth/oauth.types';
 import { AppContextModule } from './module/app/app-context.module';
 import { UserModule } from './module/user/user.module';
+import { LocalFileUploadModule } from './module/file-upload/local/local.module';
 
 @Global()
 @Module({
@@ -26,6 +27,10 @@ import { UserModule } from './module/user/user.module';
         limit: 10,
       },
     }),
+
+    LocalFileUploadModule.forRoot({
+      destination: process.env.FILE_UPLOAD_DESTINATION,
+    })
   ],
   providers: [PrismaService, HttpClient],
   exports: [PrismaService, HttpClient],

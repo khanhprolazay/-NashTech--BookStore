@@ -7,7 +7,7 @@ import { IBook, IGoogleBookResponse } from '../book.type';
 @Injectable()
 export class SeedService implements OnModuleInit {
   private data: IBook[] = [];
-  private index: number = 4;
+  private index: number = 0;
 
   constructor(
     private readonly httpClient: HttpClient,
@@ -40,6 +40,13 @@ export class SeedService implements OnModuleInit {
         console.log(`Book found: ${book.title}`);
 
         const item = response.items[0];
+
+        if (!item.volumeInfo.imageLinks) {
+          console.log(`No image found for book: ${book.title}`);
+          this.index++;
+          continue;
+        }
+
         const { authors, description, categories, imageLinks } =
           item.volumeInfo;
 
@@ -47,7 +54,7 @@ export class SeedService implements OnModuleInit {
           title: book.title,
           description,
           isbn: `${book.isbn}`,
-          mainImage: book.image_url,
+          mainImage: imageLinks.thumbnail.replace('zoom=1', 'zoom=0'),
           discount: Math.round(Math.random() * 100),
           price: Math.round(Math.random() * 100),
         });
@@ -64,11 +71,11 @@ export class SeedService implements OnModuleInit {
           }
         }
 
-        if (imageLinks && imageLinks.thumbnail) {
-          await this.bookService.addImage(instance, imageLinks.thumbnail);
-        }
+        // if (imageLinks && imageLinks.thumbnail) {
+        //   await this.bookService.addImage(instance, imageLinks.thumbnail);
+        // }
 
-        await this.bookService.addImage(instance, book.image_url);
+        // await this.bookService.addImage(instance, book.image_url);
         console.log(`Book created: ${instance.title}`);
       }
       this.index++;

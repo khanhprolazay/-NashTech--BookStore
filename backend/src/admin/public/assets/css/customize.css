@@ -10,3 +10,12 @@
 .active > .page-link {
   color: #fff !important;
 }
+
+.sidenav {
+  z-index: 1;
+}
+
+.card-header > img {
+  border-radius: var(--bs-card-border-radius);
+  width: 100%;
+}

@@ -16,7 +16,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
-
     switch (status) {
       case 401:
         response.clearCookie(TOKEN_COOKIE_KEY);
@@ -30,7 +29,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         response.redirect('/forbidden');
         break;
       default:
-        response.status(status).send('');
+        response.status(status).send(exception.message);
         break;
     }
   }

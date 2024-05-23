@@ -16,7 +16,10 @@ dotenv.config({
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe()); 
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    transformOptions: { enableImplicitConversion: true }
+  })); 
   app.setViewEngine('hbs');
   app.use(cookieParser());
   app.useStaticAssets(`${__dirname}/admin/public`);

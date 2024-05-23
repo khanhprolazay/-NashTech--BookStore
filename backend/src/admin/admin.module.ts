@@ -7,7 +7,13 @@ import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
 
 @Module({
-  imports: [AuthModule, DashboardModule, CategoryModule, BookModule, AuthorModule],
+  imports: [
+    AuthModule,
+    DashboardModule,
+    CategoryModule,
+    BookModule,
+    AuthorModule,
+  ],
   controllers: [AdminController],
 })
 export class AdminModule {}
