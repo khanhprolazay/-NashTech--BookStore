@@ -5,6 +5,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { JwtUtil } from '../util/jwt.util';
 import { Algorithm, JwtHeader } from 'jsonwebtoken';
 import { HttpClient } from 'src/core/util/http-client';
+import { OAUTH_OPTIONS } from '../oauth.constant';
 
 @Injectable()
 export class OauthJwkService extends OAuthService {
@@ -12,7 +13,7 @@ export class OauthJwkService extends OAuthService {
   private pems: Record<string, string> = {};
 
   constructor(
-    @Inject('OAUTH_OPTIONS') protected options: OauthJwkOptions,
+    @Inject(OAUTH_OPTIONS) protected options: OauthJwkOptions,
     protected jwtUtil: JwtUtil,
     protected httpClient: HttpClient,
     protected schedulerRegistry: SchedulerRegistry,

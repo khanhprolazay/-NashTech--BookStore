@@ -25,8 +25,8 @@ export class BookService extends BaseService<Book> {
   async findByPage(page: number) {
     return this.client.$queryRaw` 
       select b.title, b.slug, string_agg(A."name" , ', ') authors, b.price , b.discount, b."mainImage" , b.price * (100 - b.discount) / 100 total
-      from "BookToAuthor" bta
-      left join "Book" b on b.id = bta."bookId"
+      from "Book" b
+      left join "BookToAuthor" bta on bta."bookId" =b.id
       left join "Author" a  on a.id  = bta."authorId"
       group by b.title , b.price, b.discount, b."mainImage", b.slug
       limit ${this.appContext.pagination.limit}
@@ -34,20 +34,39 @@ export class BookService extends BaseService<Book> {
     `;
   }
 
-  override async findBySlug(slug: string) {
-    const books = await this.client.$queryRaw`
-      select b.id, b.title, b.slug, b.description, b.price , b.discount, b."mainImage" , b.price * (100 - b.discount) / 100 total
-      from "BookToAuthor" bta
-      left join "Book" b on b.id = bta."bookId"
-      where b.slug = ${slug}
-      group by b.id, b.title , b.price, b.discount, b."mainImage", b.slug, b.description
-    `;
-    return books[0] as Book;
+  override findBySlug(slug: string) {
+    return this.model().findFirst({
+      where: { slug },
+      include: {
+        authors: { select: { author: true } },
+        categories: { select: { category: true } },
+      },
+    });
   }
 
   updateInformation(id: string, dto: UpdateInformationDto) {
     const slug = Util.slugify(dto.title);
     return this.model().update({ where: { id }, data: { ...dto, slug } });
+  }
+
+  findCategories(book: Book) {
+    return this.client.category.findMany({
+      where: { books: { some: { bookId: book.id } } },
+    });
+  }
+
+  findAuthors(book: Book) {
+    return this.client.author.findMany({
+      where: { books: { some: { bookId: book.id } } },
+    });
+  }
+
+  getCategories() {
+    return this.client.category.findMany();
+  }
+
+  getAuthors() {
+    return this.client.author.findMany();
   }
 
   async updateImage(id: string, image: Express.Multer.File) {
@@ -60,8 +79,48 @@ export class BookService extends BaseService<Book> {
     const oldImageName = splits[splits.length - 1];
     const [_, file] = await Promise.all([
       this.fileUploadService.delete(oldImageName),
-      this.fileUploadService.upload(image)
-    ])
-    return await this.model().update({ where: { id }, data: { mainImage: file }})
+      this.fileUploadService.upload(image),
+    ]);
+    return this.model().update({ where: { id }, data: { mainImage: file } });
+  }
+
+  addCategory(id: string, categoryId: string) {
+    return this.client.bookToCategory.create({
+      data: {
+        bookId: id,
+        categoryId,
+      },
+    });
+  }
+
+  removeCategory(bookId: string, categoryId: string) {
+    return this.model().update({
+      where: { id: bookId },
+      data: {
+        categories: {
+          delete: [{ bookId_categoryId: { bookId, categoryId } }],
+        },
+      },
+    });
+  }
+
+  addAuthor(id: string, authorId: string) {
+    return this.client.bookToAuthor.create({
+      data: {
+        bookId: id,
+        authorId,
+      },
+    });
+  }
+
+  removeAuthor(bookId: string, authorId: string) {
+    return this.model().update({
+      where: { id: bookId },
+      data: {
+        authors: {
+          delete: [{ bookId_authorId: { bookId, authorId } }],
+        },
+      },
+    });
   }
 }

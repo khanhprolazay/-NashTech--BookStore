@@ -6,6 +6,7 @@ import { JwtUtil } from './util/jwt.util';
 import { ScheduleModule } from '@nestjs/schedule';
 import { OAuthService } from './service/oauth.service';
 import { HttpClient } from 'src/core/util/http-client';
+import { OAUTH_OPTIONS } from './oauth.constant';
 
 @Global()
 @Module({
@@ -19,7 +20,7 @@ export class OauthModule {
     const exports = [];
 
     providers.push({
-      provide: 'OAUTH_OPTIONS',
+      provide: OAUTH_OPTIONS,
       useValue: options,
     });
 

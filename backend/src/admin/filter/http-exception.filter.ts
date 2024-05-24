@@ -29,7 +29,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         response.redirect('/forbidden');
         break;
       default:
-        response.status(status).send(exception.message);
+        response.status(400).send("Bad Request");
         break;
     }
   }
