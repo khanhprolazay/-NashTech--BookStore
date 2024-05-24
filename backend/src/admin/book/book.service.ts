@@ -77,10 +77,8 @@ export class BookService extends BaseService<Book> {
 
   async updateImage(id: string, image: Express.Multer.File) {
     const book = await this.findById(id);
-    const splits = book.mainImage.split("/");
-    const oldImageName = splits[splits.length - 1];
     const [_, file] = await Promise.all([
-      this.fileUploadService.delete(oldImageName),
+      this.fileUploadService.delete(book.mainImage),
       this.fileUploadService.upload(image),
     ]);
     return this.model().update({

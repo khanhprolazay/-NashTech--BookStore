@@ -6,13 +6,14 @@ import { OauthModule } from './module/oauth/oauth.module';
 import { OauthJwkOptions } from './module/oauth/oauth.types';
 import { AppContextModule } from './module/app/app-context.module';
 import { UserModule } from './module/user/user.module';
-import { LocalFileUploadModule } from './module/file-upload/local/local.module';
+import { FileUploadModule } from './module/file-upload/file-upload.module';
 
 @Global()
 @Module({
   imports: [
     ExcelModule,
     UserModule,
+    FileUploadModule,
     OauthModule.forRoot<OauthJwkOptions>({
       ttl: 2592000,
       type: 'jwk',
@@ -27,10 +28,6 @@ import { LocalFileUploadModule } from './module/file-upload/local/local.module';
         limit: 10,
       },
     }),
-
-    LocalFileUploadModule.forRoot({
-      destination: process.env.FILE_UPLOAD_DESTINATION,
-    })
   ],
   providers: [PrismaService, HttpClient],
   exports: [PrismaService, HttpClient],

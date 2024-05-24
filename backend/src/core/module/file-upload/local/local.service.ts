@@ -22,7 +22,8 @@ export class LocalFileUploadService extends FileUploadService {
     return `${this.options.destination}/${id}.${type}`;
   }
 
-  delete(file: string): void | Promise<void> {
-    return unlink(`${this.basePath}/${file}`, (_) => Promise.resolve());
+
+  delete(filePath: string): void | Promise<void> {
+    return unlink(`${this.basePath}/${this.getFileName(filePath)}`, (_) => Promise.resolve());
   }
 }

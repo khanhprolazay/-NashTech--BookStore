@@ -8,7 +8,6 @@ import { BookResolver } from './book/resolver/book.resolver';
 import { AuthorResolver } from './book/resolver/author.resolver';
 import { CategoryResolver } from './book/resolver/category.resolver';
 import { BookService } from './book/service/book.service';
-import { AnalysisService } from './book/service/analysis.service';
 
 @Module({
   imports: [
@@ -24,7 +23,6 @@ import { AnalysisService } from './book/service/analysis.service';
     BookResolver,
     AuthorResolver,
     CategoryResolver,
-    AnalysisService,
   ],
 })
 export class GraphQLModule {}
