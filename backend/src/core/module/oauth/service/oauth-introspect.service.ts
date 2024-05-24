@@ -2,11 +2,12 @@ import { Inject, Injectable } from '@nestjs/common';
 import { OAuthService } from './oauth.service';
 import { OauthOptions } from '../oauth.types';
 import { HttpClient } from 'src/core/util/http-client';
+import { OAUTH_OPTIONS } from '../oauth.constant';
 
 @Injectable()
 export class OauthIntrospectService extends OAuthService {
   constructor(
-    @Inject('OAUTH_OPTIONS') protected options: OauthOptions,
+    @Inject(OAUTH_OPTIONS) protected options: OauthOptions,
     protected httpClient: HttpClient,
   ) {
     super(options, httpClient);

@@ -7,13 +7,14 @@ import {
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { HttpClient } from 'src/core/util/http-client';
+import { OAUTH_OPTIONS } from '../oauth.constant';
 
 @Injectable()
 export abstract class OAuthService implements OnModuleInit {
   public configuration: OpenIdConfiguration = null;
 
   constructor(
-    @Inject('OAUTH_OPTIONS') protected options: OauthOptions,
+    @Inject(OAUTH_OPTIONS) protected options: OauthOptions,
     protected readonly httpClient: HttpClient,
   ) {}
 
