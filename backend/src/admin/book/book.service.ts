@@ -25,8 +25,8 @@ export class BookService extends BaseService<Book> {
   async findByPage(page: number) {
     return this.client.$queryRaw` 
       select b.title, b.slug, string_agg(A."name" , ', ') authors, b.price , b.discount, b."mainImage" , b.price * (100 - b.discount) / 100 total
-      from "BookToAuthor" bta
-      left join "Book" b on b.id = bta."bookId"
+      from "Book" b
+      left join "BookToAuthor" bta on bta."bookId" =b.id
       left join "Author" a  on a.id  = bta."authorId"
       group by b.title , b.price, b.discount, b."mainImage", b.slug
       limit ${this.appContext.pagination.limit}
@@ -34,20 +34,14 @@ export class BookService extends BaseService<Book> {
     `;
   }
 
-  override async findBySlug(slug: string) {
-    const books = await this.client.$queryRaw`
-      select b.id, b.title, b.slug, b.description, b.price , b.discount, b."mainImage" , b.price * (100 - b.discount) / 100 total
-      from "BookToAuthor" bta
-      left join "Book" b on b.id = bta."bookId"
-      where b.slug = ${slug}
-      group by b.id, b.title , b.price, b.discount, b."mainImage", b.slug, b.description
-    `;
-    const book = books[0];
-    const [authors, categories] = await Promise.all([
-      this.findAuthors(book),
-      this.findCategories(book),
-    ]);
-    return { ...book, authors, categories };
+  override findBySlug(slug: string) {
+    return this.model().findFirst({
+      where: { slug },
+      include: {
+        authors: { select: { author: true } },
+        categories: { select: { category: true } },
+      },
+    });
   }
 
   updateInformation(id: string, dto: UpdateInformationDto) {
@@ -100,11 +94,11 @@ export class BookService extends BaseService<Book> {
   }
 
   removeCategory(bookId: string, categoryId: string) {
-    return this.client.bookToCategory.delete({
-      where: {
-        bookId_categoryId: {
-          bookId,
-          categoryId,
+    return this.model().update({
+      where: { id: bookId },
+      data: {
+        categories: {
+          delete: [{ bookId_categoryId: { bookId, categoryId } }],
         },
       },
     });
@@ -120,11 +114,11 @@ export class BookService extends BaseService<Book> {
   }
 
   removeAuthor(bookId: string, authorId: string) {
-    return this.client.bookToAuthor.delete({
-      where: {
-        bookId_authorId: {
-          bookId,
-          authorId,
+    return this.model().update({
+      where: { id: bookId },
+      data: {
+        authors: {
+          delete: [{ bookId_authorId: { bookId, authorId } }],
         },
       },
     });

@@ -75,10 +75,10 @@
                  {{#each this.book.authors}}
                   <tr>
                     <td class="align-middle">
-                      <span id="{{this.id}}" class="text-secondary text-xs font-weight-bold">{{this.name}}</span>
+                      <span id="{{this.author.id}}" class="text-secondary text-xs font-weight-bold">{{this.author.name}}</span>
                     </td>
                     <td class="align-end">
-                      <a class="btn btn-link btn-delete text-danger text-gradient px-3 mb-0" data-id="{{this.id}}" data-action="author"><i class="material-icons text-sm me-2">delete</i>Delete</a>
+                      <a class="btn btn-link btn-delete text-danger text-gradient px-3 mb-0" data-id="{{this.author.id}}" data-action="author"><i class="material-icons text-sm me-2">delete</i>Delete</a>
                     </td>
                   </tr>
                 {{/each}}
@@ -112,10 +112,10 @@
                  {{#each this.book.categories}}
                   <tr>
                     <td class="align-middle">
-                      <span id="{{this.id}}" class="text-secondary text-xs font-weight-bold">{{this.name}}</span>
+                      <span id="{{this.category.id}}" class="text-secondary text-xs font-weight-bold">{{this.category.name}}</span>
                     </td>
                     <td class="align-end">
-                      <a class="btn btn-link btn-delete text-danger text-gradient px-3 mb-0" data-id="{{this.id}}" data-action="category" ><i class="material-icons text-sm me-2">delete</i>Delete</a>
+                      <a class="btn btn-link btn-delete text-danger text-gradient px-3 mb-0" data-id="{{this.category.id}}" data-action="category" ><i class="material-icons text-sm me-2">delete</i>Delete</a>
                     </td>
                   </tr>
                 {{/each}}
