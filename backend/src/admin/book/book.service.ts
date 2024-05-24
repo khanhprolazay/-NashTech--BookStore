@@ -42,12 +42,37 @@ export class BookService extends BaseService<Book> {
       where b.slug = ${slug}
       group by b.id, b.title , b.price, b.discount, b."mainImage", b.slug, b.description
     `;
-    return books[0] as Book;
+    const book = books[0];
+    const [authors, categories] = await Promise.all([
+      this.findAuthors(book),
+      this.findCategories(book),
+    ]);
+    return { ...book, authors, categories };
   }
 
   updateInformation(id: string, dto: UpdateInformationDto) {
     const slug = Util.slugify(dto.title);
     return this.model().update({ where: { id }, data: { ...dto, slug } });
+  }
+
+  findCategories(book: Book) {
+    return this.client.category.findMany({
+      where: { books: { some: { bookId: book.id } } },
+    });
+  }
+
+  findAuthors(book: Book) {
+    return this.client.author.findMany({
+      where: { books: { some: { bookId: book.id } } },
+    });
+  }
+
+  getCategories() {
+    return this.client.category.findMany();
+  }
+
+  getAuthors() {
+    return this.client.author.findMany();
   }
 
   async updateImage(id: string, image: Express.Multer.File) {
@@ -60,8 +85,48 @@ export class BookService extends BaseService<Book> {
     const oldImageName = splits[splits.length - 1];
     const [_, file] = await Promise.all([
       this.fileUploadService.delete(oldImageName),
-      this.fileUploadService.upload(image)
-    ])
-    return await this.model().update({ where: { id }, data: { mainImage: file }})
+      this.fileUploadService.upload(image),
+    ]);
+    return this.model().update({ where: { id }, data: { mainImage: file } });
+  }
+
+  addCategory(id: string, categoryId: string) {
+    return this.client.bookToCategory.create({
+      data: {
+        bookId: id,
+        categoryId,
+      },
+    });
+  }
+
+  removeCategory(bookId: string, categoryId: string) {
+    return this.client.bookToCategory.delete({
+      where: {
+        bookId_categoryId: {
+          bookId,
+          categoryId,
+        },
+      },
+    });
+  }
+
+  addAuthor(id: string, authorId: string) {
+    return this.client.bookToAuthor.create({
+      data: {
+        bookId: id,
+        authorId,
+      },
+    });
+  }
+
+  removeAuthor(bookId: string, authorId: string) {
+    return this.client.bookToAuthor.delete({
+      where: {
+        bookId_authorId: {
+          bookId,
+          authorId,
+        },
+      },
+    });
   }
 }
