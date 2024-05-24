@@ -1,21 +1,22 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { ExcelService } from 'src/core/module/excel/excel.service';
-import { HttpClient } from 'src/core/util/http-client';
-import { BookService } from './book.service';
-import { IBook, IGoogleBookResponse } from '../book.type';
+import { Injectable, OnModuleInit } from "@nestjs/common";
+import { ExcelService } from "src/core/module/excel/excel.service";
+import { HttpClient } from "src/core/util/http-client";
+import { IBook, IGoogleBookResponse } from "../book.type";
+import { PrismaService } from "src/core/service/prisma.service";
+import { Util } from "src/core/util/util";
 
 @Injectable()
 export class SeedService implements OnModuleInit {
   private data: IBook[] = [];
-  private index: number = 0;
+  private index: number = 4;
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly bookService: BookService,
     private readonly excelService: ExcelService,
+    private readonly prismaService: PrismaService,
   ) {
     this.data = this.excelService.read<IBook>(
-      '/home/leminh/Desktop/nashtech/bookworm/data/books.csv',
+      "/home/leminh/Desktop/nashtech/bookworm/data/books.csv",
     );
   }
 
@@ -25,7 +26,7 @@ export class SeedService implements OnModuleInit {
       try {
         await this.process();
       } catch (err) {
-        console.log(err)
+        console.log(err);
         continue;
       }
     }
@@ -50,32 +51,86 @@ export class SeedService implements OnModuleInit {
         const { authors, description, categories, imageLinks } =
           item.volumeInfo;
 
-        const instance = await this.bookService.create({
-          title: book.title,
-          description,
-          isbn: `${book.isbn}`,
-          mainImage: imageLinks.thumbnail.replace('zoom=1', 'zoom=0'),
-          discount: Math.round(Math.random() * 100),
-          price: Math.round(Math.random() * 100),
+        let instance = await this.book().findFirst({
+          where: {
+            isbn: `${book.isbn}`,
+          },
+        });
+
+        if (instance) {
+          console.log(`Book already exists: ${instance.title}`);
+          this.index++;
+          continue;
+        }
+
+        instance = await this.book().create({
+          data: {
+            title: book.title,
+            slug: Util.slugify(book.title),
+            description,
+            isbn: `${book.isbn}`,
+            mainImage: imageLinks.thumbnail.replace("zoom=1", "zoom=0"),
+            discount: Math.round(Math.random() * 100),
+            price: Math.round(Math.random() * 100),
+          },
+        });
+
+        await this.analysis().create({
+          data: {
+            bookId: instance.id,
+          },
         });
 
         if (authors && authors.length > 0) {
           for (const author of authors) {
-            await this.bookService.addAuthor(instance, author);
+            const slug = Util.slugify(author);
+            const authorInstance = await this.author().upsert({
+              update: {},
+              where: { slug },
+              create: { name: author, slug },
+            });
+            await this.book().update({
+              where: { id: instance.id },
+              data: {
+                authors: {
+                  create: {
+                    author: {
+                      connect: {
+                        id: authorInstance.id,
+                      },
+                    },
+                  },
+                },
+              },
+            });
           }
         }
 
         if (categories && categories.length > 0) {
           for (const category of categories) {
-            await this.bookService.addCategory(instance, category);
+            const slug = Util.slugify(category);
+            const categoryInstance = await this.category().upsert({
+              update: {},
+              where: { slug },
+              create: { name: category, slug },
+            });
+            await this.book().update({
+              where: { id: instance.id },
+              data: {
+                categories: {
+                  create: {
+                    category: {
+                      connect: {
+                        id: categoryInstance.id,
+                      },
+                    },
+                  },
+                },
+              },
+            });
           }
         }
 
-        // if (imageLinks && imageLinks.thumbnail) {
-        //   await this.bookService.addImage(instance, imageLinks.thumbnail);
-        // }
-
-        // await this.bookService.addImage(instance, book.image_url);
         console.log(`Book created: ${instance.title}`);
       }
       this.index++;
@@ -86,5 +141,21 @@ export class SeedService implements OnModuleInit {
     return this.httpClient.get<IGoogleBookResponse>(
       `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${process.env.GOOGLE_API_KEY}`,
     );
+  }
+
+  private book() {
+    return this.prismaService.book;
+  }
+
+  private analysis() {
+    return this.prismaService.analysis;
+  }
+
+  private author() {
+    return this.prismaService.author;
+  }
+
+  private category() {
+    return this.prismaService.category;
   }
 }

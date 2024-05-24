@@ -1,12 +1,12 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Book } from '@prisma/client';
-import { BaseService } from 'src/core/service/base.service';
-import { UpdateInformationDto } from './upate-information.dto';
-import { Util } from 'src/core/util/util';
-import { PrismaService } from 'src/core/service/prisma.service';
-import { AppContext } from 'src/core/type/app-context.type';
-import { APP_CONTEXT } from 'src/core/constant/app.constant';
-import { FileUploadService } from 'src/core/module/file-upload/base/file-upload.service';
+import { Inject, Injectable } from "@nestjs/common";
+import { Book } from "@prisma/client";
+import { BaseService } from "src/core/service/base.service";
+import { UpdateInformationDto } from "./upate-information.dto";
+import { Util } from "src/core/util/util";
+import { PrismaService } from "src/core/service/prisma.service";
+import { AppContext } from "src/core/type/app-context.type";
+import { APP_CONTEXT } from "src/core/constant/app.constant";
+import { FileUploadService } from "src/core/module/file-upload/base/file-upload.service";
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -36,28 +36,34 @@ export class BookService extends BaseService<Book> {
 
   override findBySlug(slug: string) {
     return this.model().findFirst({
-      where: { slug },
+      where: {
+        slug,
+      },
       include: {
-        authors: { select: { author: true } },
-        categories: { select: { category: true } },
+        authors: {
+          select: {
+            author: true,
+          },
+        },
+        categories: {
+          select: {
+            category: true,
+          },
+        },
       },
     });
   }
 
   updateInformation(id: string, dto: UpdateInformationDto) {
     const slug = Util.slugify(dto.title);
-    return this.model().update({ where: { id }, data: { ...dto, slug } });
-  }
-
-  findCategories(book: Book) {
-    return this.client.category.findMany({
-      where: { books: { some: { bookId: book.id } } },
-    });
-  }
-
-  findAuthors(book: Book) {
-    return this.client.author.findMany({
-      where: { books: { some: { bookId: book.id } } },
+    return this.model().update({
+      where: {
+        id,
+      },
+      data: {
+        ...dto,
+        slug,
+      },
     });
   }
 
@@ -70,18 +76,21 @@ export class BookService extends BaseService<Book> {
   }
 
   async updateImage(id: string, image: Express.Multer.File) {
-    const book = await this.model().findUnique({ where: { id } });
-    if (!book) {
-      throw new Error('Book not found');
-    }
-
-    const splits = book.mainImage.split('/');
+    const book = await this.findById(id);
+    const splits = book.mainImage.split("/");
     const oldImageName = splits[splits.length - 1];
     const [_, file] = await Promise.all([
       this.fileUploadService.delete(oldImageName),
       this.fileUploadService.upload(image),
     ]);
-    return this.model().update({ where: { id }, data: { mainImage: file } });
+    return this.model().update({
+      where: {
+        id,
+      },
+      data: {
+        mainImage: file,
+      },
+    });
   }
 
   addCategory(id: string, categoryId: string) {
@@ -98,16 +107,23 @@ export class BookService extends BaseService<Book> {
       where: { id: bookId },
       data: {
         categories: {
-          delete: [{ bookId_categoryId: { bookId, categoryId } }],
+          delete: [
+            {
+              bookId_categoryId: {
+                bookId,
+                categoryId,
+              },
+            },
+          ],
         },
       },
     });
   }
 
-  addAuthor(id: string, authorId: string) {
+  addAuthor(bookId: string, authorId: string) {
     return this.client.bookToAuthor.create({
       data: {
-        bookId: id,
+        bookId,
         authorId,
       },
     });
@@ -115,10 +131,19 @@ export class BookService extends BaseService<Book> {
 
   removeAuthor(bookId: string, authorId: string) {
     return this.model().update({
-      where: { id: bookId },
+      where: {
+        id: bookId,
+      },
       data: {
         authors: {
-          delete: [{ bookId_authorId: { bookId, authorId } }],
+          delete: [
+            {
+              bookId_authorId: {
+                bookId,
+                authorId,
+              },
+            },
+          ],
         },
       },
     });

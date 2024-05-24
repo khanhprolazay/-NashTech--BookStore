@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { Category } from '@prisma/client';
-import { BaseService } from 'src/core/service/base.service';
-import { Dto } from 'src/core/type/utility.type';
-import { Util } from 'src/core/util/util';
+import { Injectable } from "@nestjs/common";
+import { Category } from "@prisma/client";
+import { BaseService } from "src/core/service/base.service";
+import { Dto } from "src/core/type/utility.type";
+import { Util } from "src/core/util/util";
 
 @Injectable()
 export class CategoryService extends BaseService<Category> {
@@ -25,11 +25,24 @@ export class CategoryService extends BaseService<Category> {
 
   override create(data: Dto<Category>) {
     const slug = Util.slugify(data.name);
-    return this.model().create({ data: { ...data, slug } });
+    return this.model().create({
+      data: {
+        ...data,
+        slug,
+      },
+    });
   }
 
   override update(id: string, data: Dto<Category>) {
     const slug = Util.slugify(data.name);
-    return this.model().update({ where: { id }, data: { ...data, slug } });
+    return this.model().update({
+      where: {
+        id,
+      },
+      data: {
+        ...data,
+        slug,
+      },
+    });
   }
 }

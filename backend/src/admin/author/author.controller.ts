@@ -63,7 +63,7 @@ export class AuthorController {
       title: 'Author',
       client,
       authors,
-      pages: pages,
+      pages,
     };
   }
 

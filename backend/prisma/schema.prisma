@@ -39,7 +39,8 @@ model Book {
   authors    BookToAuthor[]
   orders     OrderBook[]
 
-  @@unique([slug, isbn])
+  @@unique([slug])
+  @@unique([isbn])
 }
 
 model Review {
@@ -106,6 +107,7 @@ model Author {
 
   books BookToAuthor[]
 
+  @@unique([name])
   @@unique([slug])
 }
 
