@@ -201,7 +201,7 @@
             <form id="add-author-form" action="/admin/book/{{this.book.id}}/author" method="post">
     
               <div class="input-group input-group-static mb-4">
-                <label for="author" class="ms-0">Example select</label>
+                <label for="author" class="ms-0">Author</label>
                 <select class="form-control" id="author" name="author">
                   {{#each this.authors}}
                     <option value="{{this.id}}">{{this.name}}</option>
@@ -227,7 +227,7 @@
             <form id="add-category-form" action="/admin/book/{{this.book.id}}/category" method="post">
     
               <div class="input-group input-group-static mb-4">
-                <label for="author" class="ms-0">Example select</label>
+                <label for="author" class="ms-0">Category</label>
                 <select class="form-control" id="category" name="category">
                   {{#each this.categories}}
                     <option value="{{this.id}}">{{this.name}}</option>
