@@ -1,6 +1,7 @@
 .form-control {
   border: 1px solid #d2d6da !important;
   padding: 0.375rem 0.75rem !important;
+  margin-bottom: 1rem !important; 
 }
 
 .toast-logo {
@@ -18,4 +19,15 @@
 .card-header > img {
   border-radius: var(--bs-card-border-radius);
   width: 100%;
+}
+
+textarea {
+  resize: none;
+  overflow: hidden;
+  min-height: 50px;
+  max-height: 100px;
+}
+
+.input-group> :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  border-radius: 0.375rem !important;
 }
