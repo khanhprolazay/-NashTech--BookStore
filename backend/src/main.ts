@@ -8,7 +8,10 @@ import * as hbsutil from 'hbs-utils';
 import { ValidationPipe } from '@nestjs/common';
 import { PrismaExceptionFilter } from './core/filter/prisma-exception.filter';
 import { HttpExceptionFilter } from './admin/filter/http-exception.filter';
+import { eq, range } from './core/util/hbs.util';
 
+hbs.registerHelper('range', range)
+hbs.registerHelper('eq', eq)
 const utils = hbsutil(hbs);
 
 dotenv.config({
@@ -30,6 +33,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.useStaticAssets(`${__dirname}/admin/public`);
   app.setBaseViewsDir(`${__dirname}/admin/view`);
+
   utils.registerPartials(`${__dirname}/admin/view/partial`);
   utils.registerWatchedPartials(`${__dirname}/admin/view/partial`);
   utils.precompilePartials();

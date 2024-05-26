@@ -1,0 +1,7 @@
+<ul class="pagination pagination-primary">
+  {{#each (range 1 this.totalPage)}}
+    <li class="page-item  {{#if (eq this ../currentPage)}}active{{/if}}">
+      <a class="page-link" href="?page={{this}}">{{this}}</a>
+    </li>
+  {{/each}}
+</ul>

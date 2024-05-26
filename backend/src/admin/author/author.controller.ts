@@ -46,24 +46,14 @@ export class AuthorController {
       this.authorService.findByPage(page),
     ]);
 
-    let pages = [];
-    const totalPage = Math.ceil(count / 10);
-    for (let i = 1; i <= totalPage; i++) {
-      let isActive = false;
-      if (i === page) {
-        isActive = true;
-      }
-      pages.push({
-        page: i,
-        isActive,
-      });
-    }
+    const totalPage = Math.ceil(count / this.appContext.pagination.limit);
 
     return {
       title: 'Author',
       client,
       authors,
-      pages,
+      totalPage,
+      currentPage: page,
     };
   }
 
