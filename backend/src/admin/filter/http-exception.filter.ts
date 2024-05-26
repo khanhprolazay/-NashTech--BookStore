@@ -23,10 +23,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         response.redirect('/admin/auth');
         break;
       case 404:
-        response.redirect('/not-found');
+        response.redirect('/admin/not-found');
         break;
       case 403:
-        response.redirect('/forbidden');
+        response.redirect('/admin/forbidden');
         break;
       default:
         response.status(400).send("Bad Request");

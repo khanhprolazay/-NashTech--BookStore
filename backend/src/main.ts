@@ -7,6 +7,7 @@ import * as cookieParser from 'cookie-parser';
 import * as hbsutil from 'hbs-utils';
 import { ValidationPipe } from '@nestjs/common';
 import { PrismaExceptionFilter } from './core/filter/prisma-exception.filter';
+import { HttpExceptionFilter } from './admin/filter/http-exception.filter';
 
 const utils = hbsutil(hbs);
 
@@ -22,6 +23,7 @@ async function bootstrap() {
     transformOptions: { enableImplicitConversion: true }
   })); 
 
+  app.useGlobalFilters(new HttpExceptionFilter())
   app.useGlobalFilters(new PrismaExceptionFilter())
 
   app.setViewEngine('hbs');

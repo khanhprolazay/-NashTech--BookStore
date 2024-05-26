@@ -1,0 +1,35 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookworm Admin Console</title>
+    <link rel="apple-touch-icon" href="/assets/img/bookworm-icon.png" />
+    <link rel="icon" type="image/svg" href="/assets/img/bookworm-icon.svg" />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700"
+    />
+
+    <link
+      id="pagestyle"
+      href="/assets/css/material-dashboard.css?v=3.1.0"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <div class="d-flex justify-content-center flex-column align-items-center h-100">
+      <img src="/assets/img/bookworm-icon.svg" class="position-absolute" style="height: 64px; top: 16px; left: 32px"/>
+      <div class="d-flex flex-column align-items-center position-relative" style="top: -64px">
+        <h1 style="font-size: 6rem">403</h1>
+        <h6 style="font-weight: 500;">Access Denied</h6>
+        <p class="text-center" style="font-weight: 400; font-size: 0.8rem; margin-bottom: 2rem;">This page you are trying to access has restricted access </br> Please contact your administrator for more information</p>
+        <div>
+          <a class="btn btn-sm btn-outline-primary" href="/admin/auth/logout" style="margin-right: 0.5rem;">Logout</a>
+          <a class="btn btn-sm btn-primary" href="/admin/auth/logout">Home</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
