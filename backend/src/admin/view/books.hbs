@@ -3,8 +3,9 @@
     <div class="col-12">
       <div class="card my-4">
         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
-            <h6 class="text-white text-capitalize ps-3">Books Table</h6>
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center px-3">
+            <h6 class="text-white text-capitalize">Books Table</h6>
+            <button class="btn bg-gradient-dark mb-0" data-bs-toggle="modal" data-bs-target="#create-form-modal"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;New</button>
           </div>
         </div>
         <div class="card-body px-0 pb-2">
@@ -51,9 +52,153 @@
               </tbody>
             </table>
 
+          <div class="modal modal-xl fade" id="create-form-modal" tabindex="-1" aria-labelledby="create-form-modal" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="update-form-modal">Add book</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                  <form id="create-form" action="/admin/book" method="post" style="margin-block-end: 0 !important;">
+                    <div class="row mx-0">
+                      <div class="col-4 d-flex justify-content-center align-items-center">
+                        <img class="d-block mb-3 rounded w-75" id="image-preview" />
+                      </div>
+                      <div class="col-8 px-4 border-start">
+
+                        <div class="row mt-3">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label for="title">Title</label>
+                              <input type="text" class="form-control mb-4" id="title" name="title" required="">
+                            </div>
+                          </div>
+
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label for="description">Description</label>
+                              <textarea oninput="auto_grow(this)" type="text" class="form-control mb-4" id="description" name="description" required=""></textarea>
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label for="Price">Price</label>
+                              <input type="number" class="form-control mb-4" id="price" name="price" required="">
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label for="Discount">Discount</label>
+                              <input type="number" class="form-control mb-4" id="discount" name="discount" required="">
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group mb-4">
+                              <label for="author" class="ms-0">Author</label>
+                              <select class="form-control" id="author" name="author">
+                                {{#each this.authors}}
+                                  <option value="{{this.id}}">{{this.name}}</option>
+                                {{/each}}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group mb-4">
+                              <label for="author" class="ms-0">Category</label>
+                              <select class="form-control" id="category" name="category">
+                                {{#each this.categories}}
+                                  <option value="{{this.id}}">{{this.name}}</option>
+                                {{/each}}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="col-12">
+                            <label for="image">Image</label>
+                            <input class="form-control" type="file" id="image" name="image" accept="image/png, image/gif, image/jpeg" required="">
+                          </div>
+
+                          <div class="col-12">
+                            <button type="submit" class="btn btn-sm btn-primary mb-3">Save</button>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <ul class="pagination pagination-primary">
+    {{#each pages}}
+      <li class="page-item  {{#if this.isActive}}active{{/if}}">
+        <a class="page-link" href="?page={{this.page}}">{{this.page}}</a>
+      </li>
+    {{/each}}
+  </ul>
+  
 {{/layout}}
+
+<script>
+  function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+  }
+
+  $("#image").on('change', function () {
+    const file = $(this)[0].files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      $('#image-preview').attr('src', e.target.result);
+    }
+    reader.readAsDataURL(file);
+  })
+
+  $('#create-form').on('submit', function (e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    $.ajax({
+      url: $(this).attr('action'),
+      type: 'POST',
+      data: formData,
+      contentType: false, 
+      processData: false,
+      success: function (data) {
+        window.location.reload();
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  });
+
+  $('.btn-delete').on('click', function (e) {
+    var id = $(this).data('id')
+    var url = `book/${id}`
+    $.ajax({
+      type: 'DELETE',
+      url,
+      success: function (response) {
+        window.location.reload()
+      },
+      error: function () {
+        showToast('danger', "Unable to delete category")
+      }
+
+    })
+  })
+
+</script>

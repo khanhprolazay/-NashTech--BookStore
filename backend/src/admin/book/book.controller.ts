@@ -24,6 +24,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { RolesGuard } from 'src/core/guard/roles.guard';
 import { Roles } from 'src/core/decorator/roles.decorator';
 import { Role } from 'src/core/constant/user.constant';
+import { CreateBookDto } from './create-book.dto';
 
 @Controller('admin/book')
 @UseFilters(HttpExceptionFilter)
@@ -38,8 +39,27 @@ export class BookController {
     @Client() client: any,
     @Query('page', new DefaultValuePipe('1'), ParseIntPipe) page: number,
   ) {
-    const books = await this.bookService.findByPage(page);
-    return { title: 'Book', books, client };
+    const [count, books, authors, categories] = await Promise.all([
+      this.bookService.count(),
+      this.bookService.findByPage(page),
+      this.bookService.getAuthors(),
+      this.bookService.getCategories(),
+    ]);
+
+    let pages = [];
+    const totalPage = Math.ceil(count / 10);
+    for (let i = 1; i <= totalPage; i++) {
+      let isActive = false;
+      if (i === page) {
+        isActive = true;
+      }
+      pages.push({
+        page: i,
+        isActive,
+      });
+    }
+
+    return { title: 'Book', books, client, authors, categories, pages };
   }
 
   @Get(':slug')
@@ -58,6 +78,13 @@ export class BookController {
       categories,
       book
     };
+  }
+
+  @Post()
+  @Roles([Role.Admin])
+  @UseInterceptors(FileInterceptor('image'))
+  createBook(@Body() dto: CreateBookDto, @UploadedFile() image: Express.Multer.File) {
+    return this.bookService.createBook(dto, image);
   }
 
   @Patch(':id/information')
@@ -92,6 +119,12 @@ export class BookController {
   @Roles([Role.Admin])
   addAuthor(@Param('id') id: string, @Body('author') authorId: string) {
     return this.bookService.addAuthor(id, authorId);
+  }
+
+  @Delete(':id')
+  @Roles([Role.Admin])
+  removeBook(@Param('id') id: string) {
+    return this.bookService.delete(id);
   }
 
   @Delete(':id/category/:categoryId')
