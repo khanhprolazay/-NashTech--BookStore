@@ -29,7 +29,7 @@ export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
   @Get()
-  @Render('category')
+  @Render('categories')
   @Roles([Role.Admin])
   async genre(
     @Client() client: any,

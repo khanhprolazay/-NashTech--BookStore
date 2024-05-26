@@ -35,7 +35,7 @@ export class AuthorController {
   ) {}
 
   @Get()
-  @Render('author')
+  @Render('authors')
   @Roles([Role.Admin])
   async author(
     @Client() client: any,
