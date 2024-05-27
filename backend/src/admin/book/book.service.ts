@@ -1,13 +1,13 @@
-import { HttpException, Inject, Injectable } from '@nestjs/common';
-import { Book } from '@prisma/client';
-import { BaseService } from 'src/core/service/base.service';
-import { UpdateInformationDto } from './dto/upate-information.dto';
-import { Util } from 'src/core/util/util';
-import { PrismaService } from 'src/core/service/prisma.service';
-import { AppContext } from 'src/core/type/app-context.type';
-import { APP_CONTEXT } from 'src/core/constant/app.constant';
-import { FileUploadService } from 'src/core/module/file-upload/base/file-upload.service';
-import { CreateBookDto } from './dto/create-book.dto';
+import { HttpException, Inject, Injectable } from "@nestjs/common";
+import { Book } from "@prisma/client";
+import { BaseService } from "src/core/service/base.service";
+import { UpdateInformationDto } from "./dto/upate-information.dto";
+import { Util } from "src/core/util/util";
+import { PrismaService } from "src/core/service/prisma.service";
+import { AppContext } from "src/core/type/app-context.type";
+import { APP_CONTEXT } from "src/core/constant/app.constant";
+import { FileUploadService } from "src/core/module/file-upload/base/file-upload.service";
+import { CreateBookDto } from "./dto/create-book.dto";
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -25,11 +25,11 @@ export class BookService extends BaseService<Book> {
 
   async findByPage(page: number) {
     return this.client.$queryRaw` 
-      select b.id, b.title, b.slug, string_agg(A."name" , ', ') authors, b.price , b.discount, b."mainImage" , b.price * (100 - b.discount) / 100 total
+      select b.id, b.title, b.slug, string_agg(A."name" , ', ') authors, b.price, b."mainImage"
       from "Book" b
       left join "BookToAuthor" bta on bta."bookId" =b.id
       left join "Author" a  on a.id  = bta."authorId"
-      group by b.id, b.title , b.price, b.discount, b."mainImage", b.slug
+      group by b.id, b.title , b.price, b."mainImage", b.slug
       limit ${this.appContext.pagination.limit}
       offset ${(page - 1) * this.appContext.pagination.limit}
     `;
@@ -209,17 +209,16 @@ export class BookService extends BaseService<Book> {
     });
   }
 
-  override async delete(id: string)
-  {
+  override async delete(id: string) {
     const [reviewsCount, orderCount] = await Promise.all([
       this.client.review.count({ where: { bookId: id } }),
       this.client.order.count({ where: { bookId: id } }),
-    ])
-    
+    ]);
+
     if (reviewsCount > 0 || orderCount > 0) {
-      throw new HttpException('Book has reviews or orders', 400);
+      throw new HttpException("Book has reviews or orders", 400);
     }
-    
+
     const [_tmp1, _tmp2] = await Promise.all([
       this.client.bookToAuthor.deleteMany({ where: { bookId: id } }),
       this.client.bookToCategory.deleteMany({ where: { bookId: id } }),

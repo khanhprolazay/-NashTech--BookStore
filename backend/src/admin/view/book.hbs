@@ -43,8 +43,6 @@
               </p>
               <ul class="list-group">
                 <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Price:</strong> &nbsp; {{this.book.price}}$</li>
-                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Discount:</strong> &nbsp; {{this.book.discount}}%</li>
-                <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Final Price:</strong> &nbsp; {{this.book.total}}$</li>
               </ul>
             </div>
           </div>
@@ -150,11 +148,6 @@
                 <div class="col-6">
                   <label for="price">Price</label>
                   <input type="number" class="form-control mb-4" id="price" name="price" value="{{this.book.price}}" required="">
-                </div>
-
-                <div class="col-6">
-                  <label for="discount">Discount</label>
-                  <input type="number" class="form-control mb-4" id="discount" name="discount" value="{{this.book.discount}}" required="">
                 </div>
               </div>
               <button type="submit" class="btn btn-primary" >Submit</button>
