@@ -13,10 +13,6 @@ export class CreateBookDto {
   @IsNotEmpty()
   price: string;
 
-  @IsNumberString()
-  @IsNotEmpty()
-  discount: string;
-
   @IsString()
   @IsNotEmpty()
   author: string;

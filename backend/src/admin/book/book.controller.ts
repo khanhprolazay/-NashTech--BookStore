@@ -20,14 +20,14 @@ import { Client } from "src/core/decorator/client.decorator";
 import { CookieTokenGuard } from "src/core/guard/cookie-token.guard";
 import { BookService } from "./book.service";
 import { HttpExceptionFilter } from "../filter/http-exception.filter";
-import { UpdateInformationDto } from "./upate-information.dto";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { RolesGuard } from "src/core/guard/roles.guard";
 import { Roles } from "src/core/decorator/roles.decorator";
 import { Role } from "src/core/constant/user.constant";
-import { CreateBookDto } from "./create-book.dto";
 import { APP_CONTEXT } from "src/core/constant/app.constant";
 import { AppContext } from "src/core/type/app-context.type";
+import { CreateBookDto } from "./dto/create-book.dto";
+import { UpdateInformationDto } from "./dto/upate-information.dto";
 
 @Controller("admin/book")
 @UseFilters(HttpExceptionFilter)

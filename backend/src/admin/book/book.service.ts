@@ -1,13 +1,13 @@
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { Book } from '@prisma/client';
 import { BaseService } from 'src/core/service/base.service';
-import { UpdateInformationDto } from './upate-information.dto';
+import { UpdateInformationDto } from './dto/upate-information.dto';
 import { Util } from 'src/core/util/util';
 import { PrismaService } from 'src/core/service/prisma.service';
 import { AppContext } from 'src/core/type/app-context.type';
 import { APP_CONTEXT } from 'src/core/constant/app.constant';
 import { FileUploadService } from 'src/core/module/file-upload/base/file-upload.service';
-import { CreateBookDto } from './create-book.dto';
+import { CreateBookDto } from './dto/create-book.dto';
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -65,7 +65,6 @@ export class BookService extends BaseService<Book> {
         slug: slug,
         isbn: slug,
         price: parseInt(dto.price),
-        discount: parseInt(dto.discount),
         mainImage: file,
         categories: {
           create: [

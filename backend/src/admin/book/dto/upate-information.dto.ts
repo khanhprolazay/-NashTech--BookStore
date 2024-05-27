@@ -12,8 +12,4 @@ export class UpdateInformationDto {
   @IsNumber()
   @IsNotEmpty()
   price: number
-
-  @IsNumber()
-  @IsNotEmpty()
-  discount: number
 }
