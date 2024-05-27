@@ -70,7 +70,6 @@ export class SeedService implements OnModuleInit {
             description,
             isbn: `${book.isbn}`,
             mainImage: imageLinks.thumbnail.replace("zoom=1", "zoom=0"),
-            discount: Math.round(Math.random() * 100),
             price: Math.round(Math.random() * 100),
           },
         });
