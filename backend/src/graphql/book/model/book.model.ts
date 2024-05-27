@@ -17,7 +17,7 @@ export class Book {
   price: number
 
   @Field()
-  discount: number;
+  mainImage: string
 
   @Field()
   slug: string

@@ -21,7 +21,7 @@ type Book {
   title: String!
   description: String!
   price: Float!
-  discount: Float!
+  mainImage: String!
   slug: String!
   authors: [Author!]!
   categories: [Category!]!
