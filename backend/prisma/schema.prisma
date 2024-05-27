@@ -24,10 +24,10 @@ model Book {
   id          String   @id @default(cuid())
   title       String
   description String
-  price       Float  
+  price       Float
   slug        String
   isbn        String
-  mainImage   String @default("")
+  mainImage   String   @default("")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -89,15 +89,14 @@ model Category {
 }
 
 model BookToCategory {
-  id         String @id @default(cuid())
+  id String @id @default(cuid())
 
   bookId     String
   categoryId String
-  book     Book     @relation(fields: [bookId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
+  book       Book     @relation(fields: [bookId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id])
 
   @@unique([bookId, categoryId])
-
 }
 
 model Author {
@@ -112,12 +111,12 @@ model Author {
 }
 
 model BookToAuthor {
-  id      String @id @default(cuid())
+  id String @id @default(cuid())
 
-  bookId  String
+  bookId   String
   authorId String
-  book    Book   @relation(fields: [bookId], references: [id])
-  author  Author @relation(fields: [authorId], references: [id])
+  book     Book   @relation(fields: [bookId], references: [id])
+  author   Author @relation(fields: [authorId], references: [id])
 
   @@unique([bookId, authorId])
 }
@@ -166,13 +165,14 @@ enum OrderStatus {
 }
 
 model Promotion {
-  id String @id @default(cuid())
-  title String
+  id          String   @id @default(cuid())
+  title       String
   description String
-  beginAt DateTime
-  endAt DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  isActived   Boolean
+  beginAt     DateTime
+  endAt       DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   books PromotionToBook[]
 }
@@ -181,11 +181,11 @@ model PromotionToBook {
   id String @id @default(cuid())
 
   promotionId String
-  bookId String
-  discount Int
+  bookId      String
+  discount    Int
 
   promotion Promotion @relation(fields: [promotionId], references: [id])
-  book Book @relation(fields: [bookId], references: [id])
+  book      Book      @relation(fields: [bookId], references: [id])
 
   @@unique([promotionId, bookId])
 }
