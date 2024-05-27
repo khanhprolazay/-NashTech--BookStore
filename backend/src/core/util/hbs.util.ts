@@ -3,3 +3,6 @@ export const range = (start: number, end: number) => {
 }
 
 export const eq = (a: any, b: any) => a === b;
+export const toDateString = (date: Date) => date.toISOString().split('T')[0];
+export const getBookTitle = (book: any) => book.title.split('(')[0];
+export const caculateDiscount = (price: number, discount: number) => price - price * discount / 100;

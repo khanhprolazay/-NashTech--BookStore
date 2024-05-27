@@ -3,6 +3,7 @@ import {
   Catch,
   ExceptionFilter,
   HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Response } from 'express';
 import {
@@ -16,6 +17,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
+    const exceptionResponse = exception.getResponse();
+    
     switch (status) {
       case 401:
         response.clearCookie(TOKEN_COOKIE_KEY);
@@ -29,7 +32,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         response.redirect('/admin/forbidden');
         break;
       default:
-        response.status(400).send("Bad Request");
+        response.status(400).send(exceptionResponse);
         break;
     }
   }

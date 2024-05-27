@@ -34,7 +34,12 @@ export abstract class BaseAuthGuard extends BaseGuard {
       const decode = this.jwtUtil.decode(token);
       if (decode.email) {
         let user = await this.userService.findById(decode.sub);
-        if (!user) await this.userService.create({ id: decode.sub });
+        if (!user) await this.userService.create({ 
+          id: decode.sub,
+          email: decode.email,
+          picture: decode.picture,
+          name: decode.name, 
+        });
       }
       return decode;
     } catch (error) {

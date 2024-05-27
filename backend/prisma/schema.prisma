@@ -15,9 +15,13 @@ datasource db {
 
 model User {
   id String @id
+  name String
+  email String
+  picture String
 
   reviews Review[]
   orders  Order[]
+  promotions Promotion[]
 }
 
 model Book {
@@ -167,14 +171,17 @@ enum OrderStatus {
 model Promotion {
   id          String   @id @default(cuid())
   title       String
+  slug        String
   description String
-  isActived   Boolean
+  isActive    Boolean
   beginAt     DateTime
   endAt       DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  createdUserId String
 
   books PromotionToBook[]
+  createdUser User @relation(fields: [createdUserId], references: [id])
 }
 
 model PromotionToBook {

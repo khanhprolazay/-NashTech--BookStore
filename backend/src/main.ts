@@ -8,10 +8,13 @@ import * as hbsutil from 'hbs-utils';
 import { ValidationPipe } from '@nestjs/common';
 import { PrismaExceptionFilter } from './core/filter/prisma-exception.filter';
 import { HttpExceptionFilter } from './admin/filter/http-exception.filter';
-import { eq, range } from './core/util/hbs.util';
+import { caculateDiscount, eq, range, toDateString, getBookTitle } from './core/util/hbs.util';
 
 hbs.registerHelper('range', range)
 hbs.registerHelper('eq', eq)
+hbs.registerHelper('toDateString', toDateString)
+hbs.registerHelper('getBookTitle', getBookTitle)
+hbs.registerHelper('caculateDiscount', caculateDiscount)
 const utils = hbsutil(hbs);
 
 dotenv.config({

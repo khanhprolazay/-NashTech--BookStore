@@ -1,0 +1,269 @@
+{{#>layout}}
+  <div class="row">
+    <div class="col-5">
+        <div class="card">
+          <div class="card-header pb-0">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="text-capitalize">Promotion Information</h6>
+              <button class="btn bg-primary mb-0 text-white" data-bs-toggle="modal" data-bs-target="#update-form-modal"><i class="fas fa-pen text-sm"></i>&nbsp;&nbsp;Update</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row">
+
+              <div class="col-12">
+                <ul class="list-group">
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Title:</strong> &nbsp; {{this.promotion.title}}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark d-block">Description</strong>{{this.promotion.description}}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">Start date:</strong> &nbsp; {{toDateString this.promotion.beginAt}}</li>
+                  <li class="list-group-item border-0 ps-0 text-sm"><strong class="text-dark">End date:</strong> &nbsp; {{toDateString this.promotion.endAt}}</li>
+                </ul>
+              </div>
+
+              <hr class="horizontal gray-light">
+
+              <div class="col-12">
+                <h6 class="mb-4 text-sm">Created by</h6>
+                <div class="row">
+                  <div class="col-auto">
+                    <div class="avatar avatar-xl position-relative">
+                      <img class="w-100 border-radius-lg shadow-sm mb-4" src="{{this.promotion.createdUser.picture}}" alt="user-avatar">
+                    </div>
+                  </div>
+                  <div class="col-auto my-auto">
+                    <div class="h-100">
+                      <h6 class="mb-0">{{this.promotion.createdUser.name}}</h6>
+                      <p class="mb-0 font-weight-normal text-sm">{{this.promotion.createdUser.email}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="col-7">
+      <div class="card">
+        <div class="card-header">
+          <div class="d-flex justify-content-between align-items-center">
+            <h6 class="text-capitalize">Promotion Information</h6>
+            <button class="btn bg-primary mb-0 text-white" data-bs-toggle="modal" data-bs-target="#add-book-modal"><i class="material-icons text-sm">add</i>&nbsp;&nbsp;Add</button>
+          </div>
+        </div>
+        <div class="card-body pt-4 p-3">
+          <ul class="list-group">
+            {{#each this.promotion.books}}
+              <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg" style="gap: 16px">
+                <img src="{{this.book.mainImage}}" class="border-radius-lg" style="width: 64px">
+                <div class="d-flex flex-column">
+                  <h6 class="mb-3 text-sm">{{getBookTitle this.book}}</h6>
+                  <span class="mb-2 text-xs">Price: <span class="text-dark font-weight-bold ms-sm-2">{{this.book.price}}</span></span>
+                  <span class="mb-2 text-xs">Discount:<span class="text-dark ms-sm-2 font-weight-bold">{{this.discount}}</span></span>
+                  <span class="text-xs">Total: <span class="text-dark ms-sm-2 font-weight-bold">{{caculateDiscount this.book.price this.discount}}</span></span>
+                </div>
+                <div class="ms-auto text-end">
+                  <a class="btn btn-link text-danger text-gradient px-3 mb-0 btn-delete" data-id="{{this.book.id}}"><i class="material-icons text-sm me-2">delete</i>Delete</a>
+                  <a class="btn btn-link text-dark px-3 mb-0 btn-update" href="javascript:;" data-id="{{this.book.id}}" data-discount="{{this.discount}}" data-bs-toggle="modal" data-bs-target="#update-book-modal"><i class="material-icons text-sm me-2">edit</i>Edit</a>
+                </div>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="update-form-modal" tabindex="-1" aria-labelledby="update-form-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Update promotion</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-form" method="post">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" id="title" name="title" required="" value="{{this.promotion.title}}">
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea oninput="auto_grow(this)" type="text" class="form-control mb-4" id="description" name="description" required="">{{this.promotion.description}}</textarea>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="beginAt">Begin date</label>
+                  <input type="date" class="form-control" id="beginAt" name="beginAt" required="" value="{{this.promotion.beginAt}}">
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="endAt">End date</label>
+                  <input type="date" class="form-control" id="endAt" name="endAt" required="" value="{{this.promotion.endAt}}">
+                </div>
+              </div>
+
+            </div>
+            
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="add-book-modal" tabindex="-1" aria-labelledby="add-book-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Add book</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="add-book-form" action="/admin/promotion/{{this.promotion.id}}/book" method="post">
+  
+            <div class="input-group input-group-static">
+              <label for="add-book-book" class="ms-0">Book</label>
+              <select class="form-control" id="add-book-book" name="add-book-book">
+                {{#each this.books}}
+                  <option value="{{this.id}}">{{this.title}}</option>
+                {{/each}}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="add-book-discount">Discount</label>
+              <input type="number" class="form-control" id="add-book-discount" name="add-book-discount" required="">
+            </div>
+
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <div class="modal fade" id="update-book-modal" tabindex="-1" aria-labelledby="update-book-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Update discount</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-book-form" method="post">
+  
+            <div class="input-group input-group-static">
+              <label for="update-book-book" class="ms-0">Book</label>
+              <select disabled="" class="form-control" id="update-book-book" name="update-book-book">
+                {{#each this.books}}
+                  <option value="{{this.id}}">{{this.title}}</option>
+                {{/each}}
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="add-book-dicount">Discount</label>
+              <input type="number" class="form-control" id="update-book-dicount" name="update-book-dicount" required="">
+            </div>
+
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/layout}}
+<script>
+
+  $("#beginAt").val(new Date("{{this.promotion.beginAt}}").toISOString().split('T')[0])
+  $("#endAt").val(new Date("{{this.promotion.endAt}}").toISOString().split('T')[0])
+
+  $("#update-form").on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+      url: '/admin/promotion/{{this.promotion.id}}',
+      method: 'PATCH',
+      data: $(this).serialize(),
+      success: function (response) {
+        window.location.reload();
+      },
+      error: function (error) {
+        showToast('danger', "Unable to delete category")
+      }
+    });
+  })
+
+  $("#add-book-form").on('submit', function(e) {
+    e.preventDefault();
+    const book = $("#add-book-book").val();
+    const discount = parseInt($("#add-book-discount").val());
+    $.ajax({
+      url: '/admin/promotion/{{this.promotion.id}}/book',
+      method: 'POST',
+      data: {
+        book,
+        discount
+      },
+      success: function (response) {
+        window.location.reload();
+      },
+      error: function (error) {
+        showToast('danger', "Unable to add book")
+      }
+    });
+    }
+  )
+
+  $(".btn-delete").on('click', function(e) {
+    e.preventDefault();
+    const id = $(this).data('id');
+    $.ajax({
+      url: '/admin/promotion/{{this.promotion.id}}/book/' + id,
+      method: 'DELETE',
+      success: function (response) {
+        window.location.reload();
+      },
+      error: function (error) {
+        showToast('danger', "Unable to delete book")
+      }
+    });
+  }
+  )
+
+  $(".btn-update").on('click', function(e) {
+    e.preventDefault();
+    const id = $(this).data('id');
+    const discount = $(this).data('discount');
+    $("#update-book-book").val(id);
+    $("#update-book-dicount").val(discount);
+  }
+)
+
+  $("#update-book-form").on('submit', function (e) {
+    e.preventDefault();
+    const book = $("#update-book-book").val();
+    const discount = parseInt($("#update-book-dicount").val());
+    $.ajax({
+      url: '/admin/promotion/{{this.promotion.id}}/book/' + book,
+      method: 'PATCH',
+      data: {
+        discount
+      },
+      success: function (response) {
+        window.location.reload();
+      },
+      error: function (error) {
+        showToast('danger', "Unable to update book")
+      }
+    });
+  }) 
+</script>
