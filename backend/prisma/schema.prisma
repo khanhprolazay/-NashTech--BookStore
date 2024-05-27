@@ -24,8 +24,7 @@ model Book {
   id          String   @id @default(cuid())
   title       String
   description String
-  price       Float    @default(0)
-  discount    Float    @default(0)
+  price       Float  
   slug        String
   isbn        String
   mainImage   String @default("")
@@ -37,7 +36,8 @@ model Book {
   analysis   Analysis?
   categories BookToCategory[]
   authors    BookToAuthor[]
-  orders     OrderBook[]
+  orders     OrderToBook[]
+  promotions PromotionToBook[]
 
   @@unique([slug])
   @@unique([isbn])
@@ -132,11 +132,11 @@ model Order {
   bookId String
 
   user             User               @relation(fields: [userId], references: [id])
-  books            OrderBook[]
+  books            OrderToBook[]
   orderTrackingLog OrderTrackingLog[]
 }
 
-model OrderBook {
+model OrderToBook {
   id       String @id @default(cuid())
   quantity Int
   price    Float
@@ -163,4 +163,29 @@ enum OrderStatus {
   SHIPPING
   DELIVERED
   CANCELLED
+}
+
+model Promotion {
+  id String @id @default(cuid())
+  title String
+  description String
+  beginAt DateTime
+  endAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  books PromotionToBook[]
+}
+
+model PromotionToBook {
+  id String @id @default(cuid())
+
+  promotionId String
+  bookId String
+  discount Int
+
+  promotion Promotion @relation(fields: [promotionId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
+  @@unique([promotionId, bookId])
 }
