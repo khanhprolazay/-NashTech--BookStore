@@ -7,6 +7,7 @@ import { ControllerContext } from 'src/core/decorator/controller-context.decorat
 import { UseGuards } from '@nestjs/common';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 import { PaginationDto } from 'src/core/dto/pagination.dto';
+import { PromotionService } from '../service/promotion.service';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
@@ -16,6 +17,7 @@ export class BookResolver {
     private bookService: BookService,
     private authorService: AuthorService,
     private categoryService: CategoryService,
+    private promotionService: PromotionService,
   ) {}
 
   @Query((_) => Book)
@@ -26,6 +28,11 @@ export class BookResolver {
   @Query((_) => [Book])
   books(@Args('dto') dto: PaginationDto) {
     return this.bookService.findByPagination(dto);
+  }
+
+  @Query((_) => [Book])
+  booksOnSale(@Args('dto') dto: PaginationDto) {
+    return this.bookService.findOnSale(dto);
   }
 
   @Query((_) => Number)

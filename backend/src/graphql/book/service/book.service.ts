@@ -43,6 +43,38 @@ export class BookService extends BaseService<Book> {
     return this.findByEntitySlug(author, "authors");
   }
 
+  findOnSale(pagination: IPagination) {
+    return this.model().findMany({
+      where: {
+        promotions: {
+          some: {
+            discount: {
+              gt: 0,
+            },
+            promotion: {
+              isActive: true,
+            }
+          }
+        }
+      },
+      include: {
+        promotions: {
+          select: {
+            discount: true,
+            promotion: true,
+          },
+          where: {
+            promotion: {
+              isActive: true,
+            },
+          },
+        },
+      },
+      take: pagination.limit,
+      skip: pagination.page * pagination.limit,
+    });
+  }
+
   private findByEntitySlug(
     entity: { slug: string },
     field: "authors" | "categories",

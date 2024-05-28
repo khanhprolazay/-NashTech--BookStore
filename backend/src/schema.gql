@@ -16,6 +16,29 @@ type Category {
   books: [Book!]!
 }
 
+type Promotion {
+  id: ID!
+  title: String!
+  slug: String!
+  beginAt: DateTime!
+  endAt: DateTime!
+  isActive: Boolean!
+  description: String!
+  bookPromotions: BookPromotion!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type BookPromotion {
+  id: ID!
+  discount: Float!
+  book: Book!
+  promotion: Promotion!
+}
+
 type Book {
   id: ID!
   title: String!
@@ -25,11 +48,13 @@ type Book {
   slug: String!
   authors: [Author!]!
   categories: [Category!]!
+  promotions: [BookPromotion!]!
 }
 
 type Query {
   book(slug: String!): Book!
   books(dto: PaginationDto!): [Book!]!
+  booksOnSale(dto: PaginationDto!): [Book!]!
   count: Float!
   author(slug: String!): Author!
   authors: [Author!]!

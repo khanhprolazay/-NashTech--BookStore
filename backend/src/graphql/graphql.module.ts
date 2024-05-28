@@ -8,6 +8,7 @@ import { BookResolver } from './book/resolver/book.resolver';
 import { AuthorResolver } from './book/resolver/author.resolver';
 import { CategoryResolver } from './book/resolver/category.resolver';
 import { BookService } from './book/service/book.service';
+import { PromotionService } from './book/service/promotion.service';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { BookService } from './book/service/book.service';
     BookService,
     AuthorService,
     CategoryService,
+    PromotionService,
     BookResolver,
     AuthorResolver,
     CategoryResolver,
