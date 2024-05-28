@@ -2,17 +2,19 @@
 
 import jwt from "jsonwebtoken";
 
-let token = null;
+let token: string = "";
 
-const clientId = process.env.SERVICE_ACCOUNT_CLIENT_ID;
-const clientSecret = process.env.SERVICE_ACCOUNT_CLIENT_SECRET;
-const tokenEndpoint = process.env.SERVICE_ACCOUNT_TOKEN_ENDPOINT;
-const tokenExpriedTime = process.env.SERVICE_ACCOUNT_TOKEN_EXPRIED_TIME;
+const clientId = process.env.SERVICE_ACCOUNT_CLIENT_ID as string;
+const clientSecret = process.env.SERVICE_ACCOUNT_CLIENT_SECRET as string;
+const tokenEndpoint = process.env.SERVICE_ACCOUNT_TOKEN_ENDPOINT as string;
 
 export async function getToken() {
-	if (token && jwt.decode(token).exp > Date.now() / 1000) {
+	const decode = jwt.decode(token) as jwt.JwtPayload;
+
+	if (decode && decode.exp && decode.exp > Date.now() / 1000) {
 		return token;
 	}
+	
 	const response = await fetch(tokenEndpoint, {
 		method: "POST",
 		headers: {"Content-Type": "application/x-www-form-urlencoded"},

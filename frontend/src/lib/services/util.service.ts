@@ -1,10 +1,11 @@
 /** @format */
 
-import { getToken } from "./token.service";
+import { getToken } from './token.service';
 
-export async function execute(query) {
+const endpoint = process.env.BACKEND_ENDPOINT as string;
+
+export async function execute(query: string) {
 	const token = await getToken();
-	const endpoint = process.env.BACKEND_ENDPOINT;
 	const body = {
 		query,
 		variables: {},
@@ -12,13 +13,13 @@ export async function execute(query) {
 	};
 
 	const response = await fetch(endpoint, {
-		method: "POST",
+		method: 'POST',
 		headers: {
-			"Content-Type": "application/json",
+			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,
 		},
 		body: JSON.stringify(body),
-		cache: "no-store",
+		cache: 'no-store',
 	});
 
 	return (await response.json()).data;
