@@ -10,7 +10,7 @@ import {
 	navigationMenuTriggerStyle,
 } from './ui/navigation-menu';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils';
 
 const navs = [
 	{
@@ -38,16 +38,17 @@ export default function AppHeader() {
 				<div className="h-full flex justify-between items-center">
 					<div className="relative h-8 flex gap-2 items-center">
 						<Image className="!static" src="/bookworm.svg" alt="Logo" fill />
-						<h2 className="font-bold text-base uppercase">
-							Bookworm
-						</h2>
+						<h2 className="font-bold text-base uppercase">Bookworm</h2>
 					</div>
 					<NavigationMenu>
 						<NavigationMenuList>
 							{navs.map((nav) => (
 								<Link key={nav.label} href={nav.href} legacyBehavior passHref>
 									<NavigationMenuLink
-										className={cn(navigationMenuTriggerStyle(), '!font-normal')}>
+										className={cn(
+											navigationMenuTriggerStyle(),
+											'!font-normal !bg-transparent'
+										)}>
 										{nav.label}
 									</NavigationMenuLink>
 								</Link>

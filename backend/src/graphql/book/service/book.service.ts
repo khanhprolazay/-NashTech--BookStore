@@ -5,6 +5,7 @@ import { PrismaService } from "src/core/service/prisma.service";
 import { IPagination } from "src/core/interface";
 import { APP_CONTEXT } from "src/core/constant/app.constant";
 import { AppContext } from "src/core/type/app-context.type";
+import { BookOnAnalysisDto } from "src/core/dto/book-on-analysis.dto";
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -27,11 +28,17 @@ export class BookService extends BaseService<Book> {
     });
   }
 
-  findByPagination(pagination: IPagination) {
-    const { page = 0, limit = 20 } = pagination;
+  findMany(pagination: IPagination) {
     return this.model().findMany({
-      take: limit,
-      skip: page * limit,
+      include: {
+        promotions: {
+          select: {
+            discount: true,
+            promotion: true,
+          },
+        },
+        analysis: true,
+      },
     });
   }
 
@@ -53,9 +60,9 @@ export class BookService extends BaseService<Book> {
             },
             promotion: {
               isActive: true,
-            }
-          }
-        }
+            },
+          },
+        },
       },
       include: {
         promotions: {
@@ -63,15 +70,32 @@ export class BookService extends BaseService<Book> {
             discount: true,
             promotion: true,
           },
-          where: {
-            promotion: {
-              isActive: true,
-            },
-          },
         },
+        analysis: true,
       },
       take: pagination.limit,
       skip: pagination.page * pagination.limit,
+    });
+  }
+
+  findOnAnalysis(dto: BookOnAnalysisDto) {
+    return this.model().findMany({
+      include: {
+        promotions: {
+          select: {
+            discount: true,
+            promotion: true,
+          },
+        },
+        analysis: true,
+      },
+      orderBy: {
+        analysis: {
+          [dto.sort]: dto.order,
+        },
+      },
+      take: dto.limit,
+      skip: dto.page * dto.limit,
     });
   }
 

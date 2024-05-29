@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Analysis" ADD COLUMN     "totalRating" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalView" INTEGER NOT NULL DEFAULT 0;

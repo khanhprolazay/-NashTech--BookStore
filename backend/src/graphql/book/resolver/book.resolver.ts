@@ -8,6 +8,7 @@ import { UseGuards } from '@nestjs/common';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 import { PaginationDto } from 'src/core/dto/pagination.dto';
 import { PromotionService } from '../service/promotion.service';
+import { BookOnAnalysisDto } from 'src/core/dto/book-on-analysis.dto';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
@@ -27,12 +28,17 @@ export class BookResolver {
 
   @Query((_) => [Book])
   books(@Args('dto') dto: PaginationDto) {
-    return this.bookService.findByPagination(dto);
+    return this.bookService.findMany(dto);
   }
 
   @Query((_) => [Book])
   booksOnSale(@Args('dto') dto: PaginationDto) {
     return this.bookService.findOnSale(dto);
+  }
+
+  @Query((_) => [Book])
+  booksOnAnalysis(@Args('dto') dto: BookOnAnalysisDto) {
+    return this.bookService.findOnAnalysis(dto);
   }
 
   @Query((_) => Number)
