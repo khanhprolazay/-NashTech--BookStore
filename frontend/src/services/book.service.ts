@@ -22,11 +22,11 @@ export async function getBooks(options: IPagination = { page: 1, limit: 1 }) {
 }
 
 export async function getBooksOnSale(
-	options: BookOnAnalysisDto = { page: 1, limit: 1, sort: 'totalOrderQuantity' }
+	options: IPagination = { page: 1, limit: 1 }
 ) {
 	const query = `
   query {
-    booksOnSale(dto: { page: ${options.page}, limit: ${options.limit}, sort: "${options.sort}" }) {
+    booksOnSale(dto: { page: ${options.page}, limit: ${options.limit} }) {
       id,
       title,
       price,
@@ -38,4 +38,23 @@ export async function getBooksOnSale(
   }`;
 	const result = await execute(query);
 	return result.booksOnSale as IBook[];
+}
+
+export async function getBooksOnAnalysis(
+  options: BookOnAnalysisDto = { page: 1, limit: 1 , sort: 'totalOrderQuantity' }
+) {
+  const query = `
+  query {
+    booksOnAnalysis(dto: { page: ${options.page}, limit: ${options.limit}, sort: "${options.sort}" }) {
+      id,
+      title,
+      price,
+      mainImage,
+      promotions {
+        discount
+      }
+    }
+  }`;
+	const result = await execute(query);
+	return result.booksOnAnalysis as IBook[];
 }

@@ -1,14 +1,13 @@
 /** @format */
 
 import { Button } from '@/components/ui/button';
-import { getBooksOnSale, getBooks } from '../services/book.service';
-import AppContainer from '@/components/app-container';
 import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from '@/components/ui/card';
+	getBooksOnSale,
+	getBooks,
+	getBooksOnAnalysis,
+} from '../services/book.service';
+import AppContainer from '@/components/app-container';
+import { Card, CardContent } from '@/components/ui/card';
 import {
 	Carousel,
 	CarouselContent,
@@ -20,9 +19,10 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import BookCard from '@/components/book-card';
 
 export default async function Home() {
-	const [booksSale, books] = await Promise.all([
+	const [saleBooks, popolarBooks, recomendBooks] = await Promise.all([
 		getBooksOnSale({ page: 0, limit: 5 }),
-		getBooks({ page: 0, limit: 100 }),
+		getBooksOnAnalysis({ page: 0, limit: 20, sort: 'totalOrderQuantity' }),
+		getBooksOnAnalysis({ page: 0, limit: 20, sort: 'avarageRating' }),
 	]);
 
 	return (
@@ -37,7 +37,7 @@ export default async function Home() {
 						<CardContent className="py-6 px-20">
 							<Carousel opts={{ align: 'start' }}>
 								<CarouselContent className="-ml-4">
-									{booksSale.map((book) => (
+									{saleBooks.map((book) => (
 										<CarouselItem key={book.id} className="basis-1/4 pl-4">
 											<BookCard book={book} />
 										</CarouselItem>
@@ -64,8 +64,20 @@ export default async function Home() {
 								<Card>
 									<CardContent className="py-6 px-20">
 										<div className="grid grid-cols-5 gap-4">
-											{books.map((book) => (
-												<BookCard book={book} />
+											{popolarBooks.map((book) => (
+												<BookCard key={book.id} book={book} />
+											))}
+										</div>
+									</CardContent>
+								</Card>
+							</TabsContent>
+
+							<TabsContent value="recommend">
+								<Card>
+									<CardContent className="py-6 px-20">
+										<div className="grid grid-cols-5 gap-4">
+											{recomendBooks.map((book) => (
+												<BookCard key={book.id} book={book} />
 											))}
 										</div>
 									</CardContent>
