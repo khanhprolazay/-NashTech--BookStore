@@ -1,8 +1,9 @@
 /** @format */
 
 import { IBook } from '@/interface/book.interface';
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
+import { Card, CardContent, CardHeader } from './ui/card';
 import { Badge } from './ui/badge';
+import Link from 'next/link';
 
 interface IBookCardProps {
 	book: IBook;
@@ -16,30 +17,34 @@ export default function BookCard(props: IBookCardProps) {
 		: book.price;
 
 	return (
-		<Card key={book.id} className="book-card cursor-pointer transform duration-150 hover:scale-105 flex flex-col shadow-none">
-			<CardHeader className="p-0 py-4">
-				<div className="flex justify-around items-center">
-					<img
-						src={book.mainImage}
-						alt={book.title}
-						className="w-auto max-h-[190px] rounded-lg"
-					/>
-				</div>
-			</CardHeader>
-			<CardContent className="flex-grow text-sm">
-				<p className="line-clamp-2 h-10">{book.title.split('(')[0]}</p>
-				<div className="flex gap-4">
-					<h5 className="font-medium text-primary text-base">{price}$</h5>
+		<Link href={`/book/${book.slug}`}>
+			<Card
+				key={book.id}
+				className="book-card cursor-pointer transform duration-150 hover:scale-105 flex flex-col shadow-none">
+				<CardHeader className="p-0 py-4">
+					<div className="flex justify-around items-center">
+						<img
+							src={book.mainImage}
+							alt={book.title}
+							className="w-auto max-h-[190px] rounded-lg"
+						/>
+					</div>
+				</CardHeader>
+				<CardContent className="flex-grow text-sm">
+					<p className="line-clamp-2 h-10">{book.title.split('(')[0]}</p>
+					<div className="flex gap-4">
+						<h5 className="font-medium text-primary text-base">{price}$</h5>
+						{isOnSale && (
+							<Badge color="red" className="text-xs rounded-sm px-2">
+								-{book.promotions[0].discount}%
+							</Badge>
+						)}
+					</div>
 					{isOnSale && (
-						<Badge color="red" className="text-xs rounded-sm px-2">
-							-{book.promotions[0].discount}%
-						</Badge>
+						<p className="text-xs line-through text-slate-400">{book.price}$</p>
 					)}
-				</div>
-				{isOnSale && (
-					<p className="text-xs line-through text-slate-400">{book.price}$</p>
-				)}
-			</CardContent>
-		</Card>
+				</CardContent>
+			</Card>
+		</Link>
 	);
 }

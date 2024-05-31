@@ -10,6 +10,9 @@ export class Analysis {
   avarageRating: number
 
   @Field()
+  totalRating: number
+
+  @Field()
   totalReview: number
 
   @Field()

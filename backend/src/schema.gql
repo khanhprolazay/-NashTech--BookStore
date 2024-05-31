@@ -42,6 +42,7 @@ type BookPromotion {
 type Analysis {
   id: ID!
   avarageRating: Float!
+  totalRating: Float!
   totalReview: Float!
   totalOrder: Float!
   totalOrderQuantity: Float!

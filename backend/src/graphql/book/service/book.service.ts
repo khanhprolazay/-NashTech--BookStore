@@ -28,6 +28,43 @@ export class BookService extends BaseService<Book> {
     });
   }
 
+  override findBySlug(slug: string) {
+    return this.model().findFirst({
+      where: {
+        slug,
+      },
+      include: {
+        promotions: {
+          select: {
+            discount: true,
+            promotion: true,
+          },
+        },
+        analysis: true,
+        authors: {
+          select: {
+            author: {
+              select: {
+                name: true,
+                slug: true,
+              },
+            },
+          },
+        },
+        categories: {
+          select: {
+            category: {
+              select: {
+                name: true,
+                slug: true,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
   async findMany(pagination: IPagination, filter: BookFilterDto) {
     let where = {};
     let orderBy = {};
@@ -119,7 +156,7 @@ export class BookService extends BaseService<Book> {
           },
           analysis: true,
         },
-        skip: ( pagination.page - 1 ) * pagination.limit,
+        skip: (pagination.page - 1) * pagination.limit,
         take: pagination.limit,
       }),
     ]);
