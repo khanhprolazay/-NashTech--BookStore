@@ -3,6 +3,7 @@ import { Author } from "./author.model";
 import { Category } from "./category.model";
 import { BookPromotion } from "./book-promotion.model";
 import { Analysis } from "./analysis.model";
+import { Pagination } from "./pagination.model";
 
 @ObjectType()
 export class Book {
@@ -35,4 +36,13 @@ export class Book {
 
   @Field(type => Analysis)
   analysis: Analysis
+}
+
+@ObjectType()
+export class BooksWithPagination {
+  @Field(type => [Book])
+  books: Book[]
+
+  @Field(type => Pagination)
+  pagination: Pagination
 }

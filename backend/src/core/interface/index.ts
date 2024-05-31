@@ -1,7 +1,7 @@
 export interface IPagination {
   page: number;
   limit: number;
-  sort: string;
+  sort: Sort;
   order: PaginationOrder;
   search: string;
 }
@@ -9,4 +9,12 @@ export interface IPagination {
 export enum PaginationOrder {
   ASC = 'asc',
   DESC = 'desc',
+}
+
+export enum Sort {
+  SALE = 'sale',
+  LOW = 'low',
+  HIGH = 'high',
+  POPULARITY = 'popularity',
+  RECOMMEND = 'recommend',
 }

@@ -1,4 +1,4 @@
-import { IPagination } from "./pagination.interface";
+/** @format */
 
 export interface IPromotion {
 	discount: number;
@@ -21,11 +21,34 @@ export interface IBook {
 	title: string;
 	price: number;
 	description: string;
+	slug: string;
 	mainImage: string;
 	promotions: IPromotion[];
 	analysis: IAnalysis;
 }
 
-export interface BookOnAnalysisDto extends IPagination {
-  sort?: keyof IAnalysis;
+export interface IBooksWithPagination {
+	books: IBook[];
+	pagination: {
+		page: number;
+		total: number;
+		limit: number;
+		count: number;
+	};
+}
+
+export interface ICategory {
+	name: string;
+	slug: string;
+}
+
+export interface IAuthor {
+	name: string;
+	slug: string;
+}
+
+export interface IBookFilter {
+	categories?: string[];
+	authors?: string[];
+	search?: string;
 }

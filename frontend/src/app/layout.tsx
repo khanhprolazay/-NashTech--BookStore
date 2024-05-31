@@ -1,23 +1,7 @@
 /** @format */
 
-import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
 import './globals.css';
-import Head from 'next/head';
-import { cn } from '../lib/utils';
 import AppLayout from '@/components/app-layout';
-
-const roboto = Roboto({
-	weight: ['100', '300', '400', '500', '700', '900'],
-	style: ['normal', 'italic'],
-	subsets: ['latin'],
-	variable: '--font-sans',
-});
-
-export const metadata = {
-	title: 'Bookworm',
-	description: 'The most popular book selling platform',
-};
 
 export default function RootLayout({
 	children,
@@ -26,17 +10,7 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<Head>
-				<meta charSet="UTF-8" />
-				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-				<title>{metadata.title}</title>
-				<meta name="description" content={metadata.description} />
-			</Head>
-			<body
-				className={cn(
-					'min-h-screen bg-background font-sans antialiased relative',
-					roboto.variable
-				)}>
+			<body>
 				<AppLayout>{children}</AppLayout>
 			</body>
 		</html>

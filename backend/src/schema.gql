@@ -47,6 +47,13 @@ type Analysis {
   totalOrderQuantity: Float!
 }
 
+type Pagination {
+  page: Float!
+  limit: Float!
+  count: Float!
+  total: Float!
+}
+
 type Book {
   id: ID!
   title: String!
@@ -60,11 +67,14 @@ type Book {
   analysis: Analysis!
 }
 
+type BooksWithPagination {
+  books: [Book!]!
+  pagination: Pagination!
+}
+
 type Query {
   book(slug: String!): Book!
-  books(dto: PaginationDto!): [Book!]!
-  booksOnSale(dto: PaginationDto!): [Book!]!
-  booksOnAnalysis(dto: BookOnAnalysisDto!): [Book!]!
+  books(pagination: PaginationDto!, filter: BookFilterDto!): BooksWithPagination!
   count: Float!
   author(slug: String!): Author!
   authors: [Author!]!
@@ -73,17 +83,15 @@ type Query {
 }
 
 input PaginationDto {
-  page: Float = 0
+  page: Float = 1
   limit: Float = 10
-  sort: String
+  sort: String = "popularity"
   order: String = "desc"
   search: String = ""
 }
 
-input BookOnAnalysisDto {
-  page: Float = 0
-  limit: Float = 10
-  sort: String = "totalOrderQuantity"
-  order: String = "desc"
+input BookFilterDto {
+  categories: [String!] = []
+  authors: [String!] = []
   search: String = ""
 }

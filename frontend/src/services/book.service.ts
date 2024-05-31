@@ -1,60 +1,62 @@
 /** @format */
 
 import { execute } from './util.service';
-import { IBook, BookOnAnalysisDto } from '../interface/book.interface';
-import { IPagination } from '@/interface/pagination.interface';
+import {
+	IAuthor,
+	ICategory,
+	IBookFilter,
+	IBooksWithPagination,
+} from '../interface/book.interface';
+import { IPagination, Sort } from '@/interface/pagination.interface';
 
-
-export async function getBooks(options: IPagination = { page: 1, limit: 1 }) {
-	const query = `
-  query {
-    books(dto: { page: ${options.page}, limit: ${options.limit} }) {
-      title,
-      price,
-      mainImage,
-      promotions {
-        discount
-      }
-    }
-  }`;
-	const result = await execute(query);
-	return result.books as IBook[];
-}
-
-export async function getBooksOnSale(
-	options: IPagination = { page: 1, limit: 1 }
+export async function getBooks(
+	options: IPagination = { page: 1, limit: 1, sort: Sort.POPULARITY },
+	filter: IBookFilter = { authors: [], categories: [], search: '' }
 ) {
 	const query = `
   query {
-    booksOnSale(dto: { page: ${options.page}, limit: ${options.limit} }) {
-      id,
-      title,
-      price,
-      mainImage,
-      promotions {
-        discount
+    books(pagination: { page: ${options.page}, limit: ${options.limit}, sort: "${options.sort}" }, filter: { authors: ${JSON.stringify(filter.authors)}, categories: ${JSON.stringify(filter.categories)}, search: "${filter.search}" }) {
+      books {
+        title,
+        price,
+        slug,
+        mainImage,
+        promotions {
+          discount
+        }
+      },
+      pagination {
+        count,
+        total,
+        page,
+        limit
       }
     }
   }`;
 	const result = await execute(query);
-	return result.booksOnSale as IBook[];
+	return result.books as IBooksWithPagination;
 }
 
-export async function getBooksOnAnalysis(
-  options: BookOnAnalysisDto = { page: 1, limit: 1 , sort: 'totalOrderQuantity' }
-) {
-  const query = `
+export async function getAuthors() {
+	const query = `
   query {
-    booksOnAnalysis(dto: { page: ${options.page}, limit: ${options.limit}, sort: "${options.sort}" }) {
-      id,
-      title,
-      price,
-      mainImage,
-      promotions {
-        discount
-      }
+    authors {
+      name,
+      slug 
     }
   }`;
 	const result = await execute(query);
-	return result.booksOnAnalysis as IBook[];
+	return result.authors as IAuthor[];
+}
+
+export async function getCategories() {
+	const query = `
+  query {
+    categories {
+      name,
+      slug
+    }
+  }`;
+	const result = await execute(query);
+	return result.categories as ICategory[];
 }

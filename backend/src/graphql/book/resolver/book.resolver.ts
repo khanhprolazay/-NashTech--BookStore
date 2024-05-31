@@ -1,5 +1,5 @@
 import { Query, Resolver, Args, ResolveField, Parent } from '@nestjs/graphql';
-import { Book } from '../model/book.model';
+import { Book, BooksWithPagination } from '../model/book.model';
 import { BookService } from '../service/book.service';
 import { CategoryService } from '../service/category.service';
 import { AuthorService } from '../service/author.service';
@@ -7,8 +7,7 @@ import { ControllerContext } from 'src/core/decorator/controller-context.decorat
 import { UseGuards } from '@nestjs/common';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 import { PaginationDto } from 'src/core/dto/pagination.dto';
-import { PromotionService } from '../service/promotion.service';
-import { BookOnAnalysisDto } from 'src/core/dto/book-on-analysis.dto';
+import { BookFilterDto } from 'src/core/dto/book-filter.dto';
 
 @Resolver((_) => Book)
 @ControllerContext('gql')
@@ -18,7 +17,6 @@ export class BookResolver {
     private bookService: BookService,
     private authorService: AuthorService,
     private categoryService: CategoryService,
-    private promotionService: PromotionService,
   ) {}
 
   @Query((_) => Book)
@@ -26,19 +24,9 @@ export class BookResolver {
     return this.bookService.findBySlug(slug);
   }
 
-  @Query((_) => [Book])
-  books(@Args('dto') dto: PaginationDto) {
-    return this.bookService.findMany(dto);
-  }
-
-  @Query((_) => [Book])
-  booksOnSale(@Args('dto') dto: PaginationDto) {
-    return this.bookService.findOnSale(dto);
-  }
-
-  @Query((_) => [Book])
-  booksOnAnalysis(@Args('dto') dto: BookOnAnalysisDto) {
-    return this.bookService.findOnAnalysis(dto);
+  @Query((_) => BooksWithPagination)
+  books(@Args('pagination') dto: PaginationDto, @Args('filter') bookFilter: BookFilterDto) {
+    return this.bookService.findMany(dto, bookFilter);
   }
 
   @Query((_) => Number)

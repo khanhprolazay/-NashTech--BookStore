@@ -15,11 +15,11 @@ import { cn } from '../lib/utils';
 const navs = [
 	{
 		label: 'Home',
-		href: '#',
+		href: '/',
 	},
 	{
 		label: 'Shop',
-		href: '#',
+		href: '/shop',
 	},
 	{
 		label: 'About',
@@ -36,10 +36,13 @@ export default function AppHeader() {
 		<header className="h-14 sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
 			<AppContainer>
 				<div className="h-full flex justify-between items-center">
-					<div className="relative h-8 flex gap-2 items-center">
-						<Image className="!static" src="/bookworm.svg" alt="Logo" fill />
-						<h2 className="font-bold text-base uppercase">Bookworm</h2>
-					</div>
+					<Link href="/">
+						<div className="relative h-8 flex gap-2 items-center">
+							<Image className="!static" src="/bookworm.svg" alt="Logo" fill />
+							<h2 className="font-bold text-base uppercase">Bookworm</h2>
+						</div>
+					</Link>
+
 					<NavigationMenu>
 						<NavigationMenuList>
 							{navs.map((nav) => (
