@@ -19,6 +19,7 @@ model User {
   email String
   picture String
 
+  cart Cart[]
   reviews Review[]
   orders  Order[]
   promotions Promotion[]
@@ -35,6 +36,7 @@ model Book {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  cart       Cart[]
   reviews    Review[]
   images     Image[]
   analysis   Analysis?
@@ -198,4 +200,17 @@ model PromotionToBook {
   book      Book      @relation(fields: [bookId], references: [id])
 
   @@unique([promotionId, bookId])
+}
+
+model Cart {
+  id String @id @default(cuid())
+
+  userId String
+  bookId String
+  quantity Int
+
+  user User @relation(fields: [userId], references: [id])
+  book Book @relation(fields: [bookId], references: [id])
+
+  @@unique([userId, bookId])
 }
