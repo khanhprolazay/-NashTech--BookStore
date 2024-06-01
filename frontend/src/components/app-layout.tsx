@@ -31,6 +31,7 @@ export default function AppLayout(props: PropsWithChildren) {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>{metadata.title}</title>
 				<meta name="description" content={metadata.description} />
+				<link rel='icon' type="image/svg" href='/bookworm.svg'/>
 			</Head>
 			<AppHeader />
 			<main className="flex-1 py-16">{props.children}</main>
