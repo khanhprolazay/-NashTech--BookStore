@@ -9,6 +9,7 @@ import { AuthorResolver } from './book/resolver/author.resolver';
 import { CategoryResolver } from './book/resolver/category.resolver';
 import { BookService } from './book/service/book.service';
 import { PromotionService } from './book/service/promotion.service';
+import { BookModule } from './book/book.module';
 
 @Module({
   imports: [
@@ -16,15 +17,7 @@ import { PromotionService } from './book/service/promotion.service';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
-  ],
-  providers: [
-    BookService,
-    AuthorService,
-    CategoryService,
-    PromotionService,
-    BookResolver,
-    AuthorResolver,
-    CategoryResolver,
+    BookModule
   ],
 })
 export class GraphQLModule {}

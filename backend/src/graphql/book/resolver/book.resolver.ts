@@ -3,14 +3,12 @@ import { Book, BooksWithPagination } from '../model/book.model';
 import { BookService } from '../service/book.service';
 import { CategoryService } from '../service/category.service';
 import { AuthorService } from '../service/author.service';
-import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 import { PaginationDto } from 'src/core/dto/pagination.dto';
 import { BookFilterDto } from 'src/core/dto/book-filter.dto';
 
 @Resolver((_) => Book)
-@ControllerContext('gql')
 @UseGuards(HeaderTokenGuard)
 export class BookResolver {
   constructor(

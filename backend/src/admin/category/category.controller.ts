@@ -16,7 +16,7 @@ import {
 } from "@nestjs/common";
 import { Client } from "src/core/decorator/client.decorator";
 import { CookieTokenGuard } from "src/core/guard/cookie-token.guard";
-import { HttpExceptionFilter } from "../filter/http-exception.filter";
+import { HttpExceptionFilter } from "../../core/filter/http-exception.filter";
 import { CategoryService } from "./category.service";
 import { UpdateCategoryDto } from "./category.dto";
 import { RolesGuard } from "src/core/guard/roles.guard";

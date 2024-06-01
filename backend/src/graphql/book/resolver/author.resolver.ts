@@ -3,11 +3,9 @@ import { Author } from '../model/author.model';
 import { AuthorService } from '../service/author.service';
 import { BookService } from '../service/book.service';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
-import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
 
 @Resolver((_) => Author)
-@ControllerContext('gql')
 @UseGuards(HeaderTokenGuard)
 export class AuthorResolver {
   constructor(

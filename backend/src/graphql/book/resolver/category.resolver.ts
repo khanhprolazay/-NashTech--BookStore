@@ -2,12 +2,10 @@ import { Query, Resolver, Args, ResolveField, Parent } from '@nestjs/graphql';
 import { Category } from '../model/category.model';
 import { CategoryService } from '../service/category.service';
 import { BookService } from '../service/book.service';
-import { ControllerContext } from 'src/core/decorator/controller-context.decorator';
 import { UseGuards } from '@nestjs/common';
 import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
 
 @Resolver((_) => Category)
-@ControllerContext('gql')
 @UseGuards(HeaderTokenGuard)
 export class CategoryResolver {
   constructor(

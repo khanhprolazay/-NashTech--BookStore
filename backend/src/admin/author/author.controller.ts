@@ -13,19 +13,19 @@ import {
   Render,
   UseFilters,
   UseGuards,
-} from '@nestjs/common';
-import { HttpExceptionFilter } from '../filter/http-exception.filter';
-import { CookieTokenGuard } from 'src/core/guard/cookie-token.guard';
-import { RolesGuard } from 'src/core/guard/roles.guard';
-import { Roles } from 'src/core/decorator/roles.decorator';
-import { Role } from 'src/core/constant/user.constant';
-import { Client } from 'src/core/decorator/client.decorator';
-import { AuthorService } from './author.service';
-import { UpdateAuthorDto } from './dto/update-author.dto';
-import { APP_CONTEXT } from 'src/core/constant/app.constant';
-import { AppContext } from 'src/core/type/app-context.type';
+} from "@nestjs/common";
+import { HttpExceptionFilter } from "../../core/filter/http-exception.filter";
+import { CookieTokenGuard } from "src/core/guard/cookie-token.guard";
+import { RolesGuard } from "src/core/guard/roles.guard";
+import { Roles } from "src/core/decorator/roles.decorator";
+import { Role } from "src/core/constant/user.constant";
+import { Client } from "src/core/decorator/client.decorator";
+import { AuthorService } from "./author.service";
+import { UpdateAuthorDto } from "./dto/update-author.dto";
+import { APP_CONTEXT } from "src/core/constant/app.constant";
+import { AppContext } from "src/core/type/app-context.type";
 
-@Controller('admin/author')
+@Controller("admin/author")
 @UseFilters(HttpExceptionFilter)
 @UseGuards(CookieTokenGuard, RolesGuard)
 export class AuthorController {
@@ -35,11 +35,11 @@ export class AuthorController {
   ) {}
 
   @Get()
-  @Render('authors')
+  @Render("authors")
   @Roles([Role.Admin])
   async author(
     @Client() client: any,
-    @Query('page', new DefaultValuePipe('1'), ParseIntPipe) page: number,
+    @Query("page", new DefaultValuePipe("1"), ParseIntPipe) page: number,
   ) {
     const [count, authors] = await Promise.all([
       this.authorService.count(),
@@ -49,7 +49,7 @@ export class AuthorController {
     const totalPage = Math.ceil(count / this.appContext.pagination.limit);
 
     return {
-      title: 'Author',
+      title: "Author",
       client,
       authors,
       totalPage,
@@ -57,9 +57,9 @@ export class AuthorController {
     };
   }
 
-  @Put(':id')
+  @Put(":id")
   @Roles([Role.Admin])
-  update(@Param('id') id: string, @Body() dto: UpdateAuthorDto) {
+  update(@Param("id") id: string, @Body() dto: UpdateAuthorDto) {
     return this.authorService.update(id, dto);
   }
 
@@ -69,9 +69,9 @@ export class AuthorController {
     return this.authorService.create(dto);
   }
 
-  @Delete(':id')
+  @Delete(":id")
   @Roles([Role.Admin])
-  delete(@Param('id') id: string) {
+  delete(@Param("id") id: string) {
     return this.authorService.delete(id);
   }
 }

@@ -1,20 +1,26 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import * as dotenv from 'dotenv';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import * as hbs from 'hbs';
-import * as cookieParser from 'cookie-parser';
-import * as hbsutil from 'hbs-utils';
-import { ValidationPipe } from '@nestjs/common';
-import { PrismaExceptionFilter } from './core/filter/prisma-exception.filter';
-import { HttpExceptionFilter } from './admin/filter/http-exception.filter';
-import { caculateDiscount, eq, range, toDateString, getBookTitle } from './core/util/hbs.util';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import * as dotenv from "dotenv";
+import { NestExpressApplication } from "@nestjs/platform-express";
+import * as hbs from "hbs";
+import * as cookieParser from "cookie-parser";
+import * as hbsutil from "hbs-utils";
+import { ValidationPipe } from "@nestjs/common";
+import { PrismaExceptionFilter } from "./core/filter/prisma-exception.filter";
+import { HttpExceptionFilter } from "./core/filter/http-exception.filter";
+import {
+  caculateDiscount,
+  eq,
+  range,
+  toDateString,
+  getBookTitle,
+} from "./core/util/hbs.util";
 
-hbs.registerHelper('range', range)
-hbs.registerHelper('eq', eq)
-hbs.registerHelper('toDateString', toDateString)
-hbs.registerHelper('getBookTitle', getBookTitle)
-hbs.registerHelper('caculateDiscount', caculateDiscount)
+hbs.registerHelper("range", range);
+hbs.registerHelper("eq", eq);
+hbs.registerHelper("toDateString", toDateString);
+hbs.registerHelper("getBookTitle", getBookTitle);
+hbs.registerHelper("caculateDiscount", caculateDiscount);
 const utils = hbsutil(hbs);
 
 dotenv.config({
@@ -24,15 +30,17 @@ dotenv.config({
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    transformOptions: { enableImplicitConversion: true }
-  })); 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  );
 
-  app.useGlobalFilters(new HttpExceptionFilter())
-  app.useGlobalFilters(new PrismaExceptionFilter())
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new PrismaExceptionFilter());
 
-  app.setViewEngine('hbs');
+  app.setViewEngine("hbs");
   app.use(cookieParser());
   app.useStaticAssets(`${__dirname}/admin/public`);
   app.setBaseViewsDir(`${__dirname}/admin/view`);
