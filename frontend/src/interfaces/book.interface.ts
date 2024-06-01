@@ -25,6 +25,8 @@ export interface IBook {
 	mainImage: string;
 	promotions: IPromotion[];
 	analysis: IAnalysis;
+	categories: ICategory[];
+	authors: IAuthor[];
 }
 
 export interface IBooksWithPagination {

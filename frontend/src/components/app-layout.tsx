@@ -3,13 +3,13 @@
 import { PropsWithChildren } from 'react';
 import AppHeader from './app-header';
 import AppFooter from './app-footer';
-import { Roboto } from 'next/font/google';
+import { Roboto_Flex} from 'next/font/google';
 import { cn } from '@/lib/utils';
 import Head from 'next/head';
 
-const roboto = Roboto({
+const roboto = Roboto_Flex({
 	weight: ['100', '300', '400', '500', '700', '900'],
-	style: ['normal', 'italic'],
+	style: ['normal'],
 	subsets: ['latin'],
 	variable: '--font-sans',
 });

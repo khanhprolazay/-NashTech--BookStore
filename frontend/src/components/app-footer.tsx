@@ -9,7 +9,7 @@ export default function AppFooter() {
 			<AppContainer>
 				<div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-slate-100 text-center md:justify-between">
 					<img
-						src="./bookworm.svg"
+						src="/bookworm.svg"
 						alt="logo-ct"
 						className="w-10"
 					/>

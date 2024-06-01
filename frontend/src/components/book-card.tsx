@@ -1,6 +1,6 @@
 /** @format */
 
-import { IBook } from '@/interface/book.interface';
+import { IBook } from '@/interfaces/book.interface';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Badge } from './ui/badge';
 import Link from 'next/link';

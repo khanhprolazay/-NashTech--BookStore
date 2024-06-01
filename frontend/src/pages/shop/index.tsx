@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/typography';
 import { getAuthors, getBooks, getCategories } from '@/services/book.service';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import { IAuthor, ICategory } from '@/interface/book.interface';
+import { IAuthor, ICategory } from '@/interfaces/book.interface';
 import FilterForm from './_components/filter-form';
 import BookCard from '@/components/book-card';
 import {
@@ -22,11 +22,10 @@ import {
 } from '@/components/ui/select';
 import { useRouter } from 'next/router';
 import { transformQueryValueToArray } from '@/lib/utils';
-import { Sort } from '@/interface/pagination.interface';
+import { Sort } from '@/interfaces/pagination.interface';
 import {
 	Pagination,
 	PaginationContent,
-	PaginationEllipsis,
 	PaginationItem,
 	PaginationLink,
 	PaginationNext,
@@ -99,7 +98,7 @@ export default function Shop({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	const router = useRouter();
 	const query = router.query;
-	const sort = (query.sort as string) || 'popularity';
+	const sort = (query.sort as string) || Sort.POPULARITY;
 	const show = (query.show as string) || '20';
 	const page = (query.page as string) || '1';
 	const maxPage = Math.ceil(

@@ -1,6 +1,6 @@
 /** @format */
 
-import { PropsWithChildrenAndClassname } from '@/interface/props.interface';
+import { PropsWithChildrenAndClassname } from '@/interfaces/props.interface';
 import { cn } from '@/lib/utils';
 
 export function TypographyH1(props: PropsWithChildrenAndClassname) {
@@ -77,7 +77,8 @@ export function TypographyH6(props: PropsWithChildrenAndClassname) {
 
 export function TypographyP(props: PropsWithChildrenAndClassname) {
 	return (
-		<p className={cn('leading-7 [&:not(:first-child)]:mt-6', props.className)}>
+		<p
+			className={cn('[&:not(:first-child)]:mt-6 font-normal', props.className)}>
 			{props.children}
 		</p>
 	);
@@ -108,9 +109,9 @@ export function TypographySmall(props: PropsWithChildrenAndClassname) {
 }
 
 export function TypographyMuted(props: PropsWithChildrenAndClassname) {
-  return (
-    <p className={cn("text-sm text-muted-foreground", props.className)}>
+	return (
+		<p className={cn('text-sm text-muted-foreground', props.className)}>
 			{props.children}
 		</p>
-  )
+	);
 }

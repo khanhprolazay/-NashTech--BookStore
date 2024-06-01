@@ -1,12 +1,15 @@
 /** @format */
 
 import './_globals.css';
+import { SessionProvider } from 'next-auth/react';
 import AppLayout from '@/components/app-layout';
 
-export default function RootLayout({ Component, pageProps }: any) {
+export default function RootLayout({ Component, pageProps: { session, ...pageProps } }: any) {
 	return (
-		<AppLayout>
-			<Component {...pageProps} />
-		</AppLayout>
+		<SessionProvider session={session}>
+			<AppLayout>
+				<Component {...pageProps} />
+			</AppLayout>
+		</SessionProvider>
 	);
 }

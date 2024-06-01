@@ -6,8 +6,9 @@ import {
 	ICategory,
 	IBookFilter,
 	IBooksWithPagination,
-} from '../interface/book.interface';
-import { IPagination, Sort } from '@/interface/pagination.interface';
+	IBook,
+} from '../interfaces/book.interface';
+import { IPagination, Sort } from '@/interfaces/pagination.interface';
 
 export async function getBooks(
 	options: IPagination = { page: 1, limit: 1, sort: Sort.POPULARITY },
@@ -59,4 +60,35 @@ export async function getCategories() {
   }`;
 	const result = await execute(query);
 	return result.categories as ICategory[];
+}
+
+export async function getBook(slug: string) {
+	const query = `
+  query {
+    book(slug: "${slug}") {
+      title,
+      description,
+      mainImage,
+      categories {
+        name,
+      },
+      authors {
+        name,
+      },
+      analysis {
+        avarageRating,
+        totalRating
+      },
+      price,
+      promotions {
+        discount,
+        promotion {
+          title
+        }
+      }
+    }
+  }
+  `;
+	const result = await execute(query);
+	return result.book as IBook;
 }

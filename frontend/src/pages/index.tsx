@@ -14,15 +14,37 @@ import {
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
 import BookCard from '@/components/book-card';
 import { TypographyH4 } from '@/components/ui/typography';
-import { Sort } from '@/interface/pagination.interface';
+import { Sort } from '@/interfaces/pagination.interface';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { IBooksWithPagination } from '@/interfaces/book.interface';
 
-export default async function Home() {
+type Repo = {
+	saleBooks: IBooksWithPagination;
+	popolarBooks: IBooksWithPagination;
+	recomendBooks: IBooksWithPagination;
+};
+
+export const getServerSideProps = (async () => {
 	const [saleBooks, popolarBooks, recomendBooks] = await Promise.all([
 		getBooks({ page: 1, limit: 5, sort: Sort.SALE }),
 		getBooks({ page: 1, limit: 20, sort: Sort.POPULARITY }),
 		getBooks({ page: 1, limit: 20, sort: Sort.RECOMMEND }),
 	]);
+	return {
+		props: {
+			repo: {
+				saleBooks,
+				popolarBooks,
+				recomendBooks,
+			},
+		},
+	};
+}) satisfies GetServerSideProps<{ repo: Repo }>;
 
+export default function Home({
+	repo,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+	
 	return (
 		<AppContainer>
 			<section className="w-full mb-28">
@@ -34,7 +56,7 @@ export default async function Home() {
 					<CardContent className="py-6 px-20">
 						<Carousel opts={{ align: 'start' }}>
 							<CarouselContent className="-ml-4">
-								{saleBooks.books.map((book) => (
+								{repo.saleBooks.books.map((book) => (
 									<CarouselItem key={book.id} className="basis-1/4 pl-4">
 										<BookCard book={book} />
 									</CarouselItem>
@@ -61,7 +83,7 @@ export default async function Home() {
 							<Card>
 								<CardContent className="py-6 px-20">
 									<div className="grid grid-cols-5 gap-4">
-										{popolarBooks.books.map((book) => (
+										{repo.popolarBooks.books.map((book) => (
 											<BookCard key={book.id} book={book} />
 										))}
 									</div>
@@ -73,7 +95,7 @@ export default async function Home() {
 							<Card>
 								<CardContent className="py-6 px-20">
 									<div className="grid grid-cols-5 gap-4">
-										{recomendBooks.books.map((book) => (
+										{repo.recomendBooks.books.map((book) => (
 											<BookCard key={book.id} book={book} />
 										))}
 									</div>

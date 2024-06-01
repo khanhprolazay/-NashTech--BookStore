@@ -2,7 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { IAuthor, ICategory } from '@/interface/book.interface';
+import { IAuthor, ICategory } from '@/interfaces/book.interface';
 import { transformQueryValueToArray } from '@/lib/utils';
 import { useRouter } from 'next/router';
 import React from 'react';
