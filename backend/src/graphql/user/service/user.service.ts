@@ -45,7 +45,7 @@ export class UserService extends BaseService<User> {
         bookId: dto.bookId,
         quantity: dto.quantity,
         discount: promotion?.discount || 0,
-        promotionId: promotion?.id,
+        promotionId: promotion?.promotionId,
       },
     });
 

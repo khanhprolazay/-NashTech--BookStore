@@ -27,7 +27,6 @@ export async function getUser(token: string) {
 }
 
 export async function updateCart(token: string, dto: UpdateCartDto) {
-  console.log(token, dto);
 	const query = `
   mutation {
     updateCart(dto: {bookId: "${dto.bookId}", quantity: ${dto.quantity}, promotionId: "${dto.promotionId}"}) {
