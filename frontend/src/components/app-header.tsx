@@ -14,31 +14,39 @@ import {
 } from './ui/navigation-menu';
 import Link from 'next/link';
 import { cn } from '../lib/utils';
-import { signOut, useSession } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { NavigationMenuItem } from '@radix-ui/react-navigation-menu';
-
-const navs = [
-	{
-		label: 'Home',
-		href: '/',
-	},
-	{
-		label: 'Shop',
-		href: '/shop',
-	},
-	{
-		label: 'About',
-		href: '#',
-	},
-	{
-		label: 'Card',
-		href: '#',
-	},
-];
+import useSession from '@/hooks/use-session.hook';
+import { TrashIcon } from 'lucide-react';
+import { Button } from './ui/button';
+import { removeCart } from '@/services/user.service';
 
 export default function AppHeader() {
-	const { data } = useSession();
-	const user = data?.user;
+	const { user, update, accessToken } = useSession();
+
+	const navs = [
+		{
+			label: 'Home',
+			href: '/',
+		},
+		{
+			label: 'Shop',
+			href: '/shop',
+		},
+		{
+			label: 'About',
+			href: '#',
+		},
+	];
+	
+	async function handleRemoveCart(bookId: string) {
+		if (!accessToken) return;
+		const carts = await removeCart(accessToken, bookId);
+		update({
+			...user,
+			carts
+		})
+	}
 
 	return (
 		<header className="h-14 sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -65,6 +73,58 @@ export default function AppHeader() {
 										</NavigationMenuLink>
 									</Link>
 								))}
+
+								{user && (
+									<Link href="/cart" passHref>
+										<NavigationMenuItem>
+											<NavigationMenuTrigger className="px-0">
+												<NavigationMenuLink
+													className={cn(
+														navigationMenuTriggerStyle(),
+														'!font-normal !bg-transparent pr-0'
+													)}>
+													Cart ({user.carts.length})
+												</NavigationMenuLink>
+											</NavigationMenuTrigger>
+											<NavigationMenuContent>
+												<ul className="grid gap-3 p-4 w-[400px] grid-cols-1">
+													{user.carts.map((cart, index) => (
+														<Link href={`/book/${cart.book.slug}`} key={index}>
+															<div className="relative select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none flex gap-4 transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+																<img
+																	src={cart.book.mainImage}
+																	alt={cart.book.title}
+																	className="w-10 rounded"
+																/>
+																<div className="flex flex-col justify-center">
+																	<div className="text-sm font-medium leading-4 w-3/4 mb-1">
+																		{cart.book.title.split('(')[0]}
+																	</div>
+																	<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+																		x{cart.quantity} -{' '}
+																		{(cart.book.price *
+																			cart.quantity *
+																			(100 - cart.discount)) /
+																			100}{' '}
+																		$
+																	</p>
+																</div>
+																<Button
+																	onClick={() => handleRemoveCart(cart.book.id)}
+																	variant="outline"
+																	size="icon"
+																	className="absolute z-20 text-destructive !p-2 top-2 w-8 border-destructive hover:text-destructive h-8 right-3">
+																	<TrashIcon className=" w-6 h-6" />
+																</Button>
+															</div>
+														</Link>
+													))}
+												</ul>
+											</NavigationMenuContent>
+										</NavigationMenuItem>
+									</Link>
+								)}
+
 								{user && (
 									<NavigationMenuItem>
 										<NavigationMenuTrigger>
@@ -75,16 +135,27 @@ export default function AppHeader() {
 											/>
 										</NavigationMenuTrigger>
 										<NavigationMenuContent>
-											<ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-												<ListItem href="https://keycloak.bagiit.vn/realms/bookworm/account" title="Manage account">
-													Manage information likes email, password, ...
-												</ListItem>
-												<ListItem
-													href="#"
-													onClick={() => signOut()}
-													title="Sign out">
-													Log out from the system
-												</ListItem>
+											<ul className="grid gap-3 p-4 md:w-[400px] grid-cols-[1.5fr_2fr]">
+												<div className="flex justify-around items-center">
+													<img
+														src="/bookworm.svg"
+														alt="logo"
+														className="w-1/3"
+													/>
+												</div>
+												<div>
+													<ListItem
+														href="https://keycloak.bagiit.vn/realms/bookworm/account"
+														title="Manage account">
+														Manage information likes email, password, ...
+													</ListItem>
+													<ListItem
+														href="#"
+														onClick={() => signOut()}
+														title="Sign out">
+														Log out off the system
+													</ListItem>
+												</div>
 											</ul>
 										</NavigationMenuContent>
 									</NavigationMenuItem>

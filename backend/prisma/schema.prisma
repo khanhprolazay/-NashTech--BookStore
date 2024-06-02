@@ -14,14 +14,14 @@ datasource db {
 }
 
 model User {
-  id String @id
-  name String
-  email String
+  id      String @id
+  name    String
+  email   String
   picture String
 
-  cart Cart[]
-  reviews Review[]
-  orders  Order[]
+  cart       Cart[]
+  reviews    Review[]
+  orders     Order[]
   promotions Promotion[]
 }
 
@@ -174,19 +174,20 @@ enum OrderStatus {
 }
 
 model Promotion {
-  id          String   @id @default(cuid())
-  title       String
-  slug        String
-  description String
-  isActive    Boolean
-  beginAt     DateTime
-  endAt       DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(cuid())
+  title         String
+  slug          String
+  description   String
+  isActive      Boolean
+  beginAt       DateTime
+  endAt         DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   createdUserId String
 
-  books PromotionToBook[]
-  createdUser User @relation(fields: [createdUserId], references: [id])
+  books       PromotionToBook[]
+  createdUser User              @relation(fields: [createdUserId], references: [id])
+  Cart        Cart[]
 }
 
 model PromotionToBook {
@@ -203,14 +204,17 @@ model PromotionToBook {
 }
 
 model Cart {
-  id String @id @default(cuid())
-
-  userId String
-  bookId String
+  id       String @id @default(cuid())
   quantity Int
+  discount Float  @default(0)
 
-  user User @relation(fields: [userId], references: [id])
-  book Book @relation(fields: [bookId], references: [id])
+  bookId      String
+  userId      String
+  promotionId String?
+
+  user      User       @relation(fields: [userId], references: [id])
+  book      Book       @relation(fields: [bookId], references: [id])
+  promotion Promotion? @relation(fields: [promotionId], references: [id])
 
   @@unique([userId, bookId])
 }

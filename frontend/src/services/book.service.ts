@@ -66,6 +66,7 @@ export async function getBook(slug: string) {
 	const query = `
   query {
     book(slug: "${slug}") {
+      id,
       title,
       description,
       mainImage,
@@ -83,6 +84,7 @@ export async function getBook(slug: string) {
       promotions {
         discount,
         promotion {
+          id,
           title
         }
       }

@@ -2,11 +2,11 @@
 
 import { getToken } from './token.service';
 
-const endpoint = process.env.BACKEND_ENDPOINT as string;
+const endpoint = "http://localhost:5000/graphql"
 
-export async function execute(query: string) {
+export async function execute(query: string, token?: string) {
 	try {
-		const token = await getToken();
+		const accssToken = token || (await getToken());
 		const body = {
 			query,
 			variables: {},
@@ -17,7 +17,7 @@ export async function execute(query: string) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token}`,
+				Authorization: `Bearer ${accssToken}`,
 			},
 			body: JSON.stringify(body),
 			cache: 'no-store',
@@ -28,3 +28,4 @@ export async function execute(query: string) {
 		console.error(error);
 	}
 }
+

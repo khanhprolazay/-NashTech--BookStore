@@ -17,7 +17,10 @@ export class PrismaExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    console.log(exception)
-    return response.sendStatus(400);
+    const type = host.getType();
+
+    if (type === "http") {
+      return response.sendStatus(400);
+    }
   }
 }

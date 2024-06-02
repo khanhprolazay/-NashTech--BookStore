@@ -73,6 +73,25 @@ type BooksWithPagination {
   pagination: Pagination!
 }
 
+type Order {
+  books: [Book!]!
+  quantity: Float!
+  status: String!
+}
+
+type Cart {
+  book: Book!
+  quantity: Float!
+  discount: Float!
+  promotion: Promotion
+}
+
+type User {
+  id: ID!
+  orders: [Order!]!
+  carts: [Cart!]!
+}
+
 type Query {
   book(slug: String!): Book!
   books(pagination: PaginationDto!, filter: BookFilterDto!): BooksWithPagination!
@@ -81,6 +100,7 @@ type Query {
   authors: [Author!]!
   category(slug: String!): Category!
   categories: [Category!]!
+  user: User!
 }
 
 input PaginationDto {
@@ -95,4 +115,15 @@ input BookFilterDto {
   categories: [String!] = []
   authors: [String!] = []
   search: String = ""
+}
+
+type Mutation {
+  updateCart(dto: UpdateCartDto!): [Cart!]!
+  removeCart(bookId: String!): [Cart!]!
+}
+
+input UpdateCartDto {
+  bookId: String!
+  quantity: Float!
+  promotionId: String
 }

@@ -1,10 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { GqlContextType, GqlExecutionContext } from "@nestjs/graphql";
+import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export abstract class BaseGuard implements CanActivate {
-  constructor() {}
 
   abstract canActivate(
     context: ExecutionContext,

@@ -3,6 +3,7 @@
 export interface IPromotion {
 	discount: number;
 	promotion: {
+		id: string;
 		title: string;
 	};
 }
