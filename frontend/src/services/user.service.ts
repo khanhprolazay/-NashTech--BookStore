@@ -19,6 +19,22 @@ export async function getUser(token: string) {
           price,
           mainImage
         }
+      },
+      orders {
+        id,
+        status,
+        books {
+          price,
+          quantity,
+          discount,
+          book {
+            id,
+            title, 
+            slug, 
+            price, 
+            mainImage
+          } 
+        }
       }
     }
   }`;
@@ -29,7 +45,7 @@ export async function getUser(token: string) {
 export async function updateCart(token: string, dto: UpdateCartDto) {
 	const query = `
   mutation {
-    updateCart(dto: {bookId: "${dto.bookId}", quantity: ${dto.quantity}, promotionId: "${dto.promotionId}"}) {
+    updateCart(dto: {bookId: "${dto.bookId}", quantity: ${dto.quantity}}) {
       quantity,
       discount,
       book {
@@ -62,4 +78,28 @@ export async function removeCart(token: string, bookId: string) {
   }`;
   const result = await execute(query, token);
   return result.removeCart as IUser['carts'];
+}
+
+export async function checkoutOrder(token: string) {
+  const query = `
+  mutation {
+    checkoutOrder {
+      id,
+      status,
+      books {
+        price,
+        quantity,
+        discount,
+        book {
+          id,
+          title, 
+          slug, 
+          price, 
+          mainImage
+        }
+      }
+    }
+  }`;
+  const result = await execute(query, token);
+  return result.checkoutOrder as IUser['orders'];
 }

@@ -1,16 +1,38 @@
-import { IBook, IPromotion } from "./book.interface";
+/** @format */
+
+import { IBook, IPromotion } from './book.interface';
 
 export interface IUser {
-  id: string;
-  email: string;
-  name: string;
-  image: string;
-  carts: ICart[];
+	id: string;
+	email: string;
+	name: string;
+	image: string;
+	carts: ICart[];
+  orders: IOrder[];
 }
 
 export interface ICart {
-  quantity: number;
-  promotion: IPromotion;
-  book: IBook;
-  discount: number;
+	quantity: number;
+	promotion: IPromotion;
+	book: IBook;
+	discount: number;
+}
+
+export interface IOrder {
+	id: string;
+	status: OrderStatus;
+	books: {
+		book: IBook;
+		quantity: number;
+		discount: number;
+		price: number;
+	}[];
+}
+
+export enum OrderStatus {
+	PENDING = 'PENDING',
+	PROCESSING = 'PROCESSING',
+	SHIPPING = 'SHIPPING',
+	COMPLETED = 'COMPLETED',
+	CANCELLED = 'CANCELLED',
 }

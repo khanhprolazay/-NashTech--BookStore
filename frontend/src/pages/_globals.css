@@ -28,6 +28,9 @@
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 210 40% 98%;
 
+      --success: 122.7 39.6% 49.8%;
+      --success-foreground: 222.2 47.4% 11.2%;
+
       --border: 214.3 31.8% 91.4%;
       --input: 214.3 31.8% 91.4%;
       --ring: 222.2 84% 4.9%;
@@ -85,3 +88,30 @@
   trasition: transform 0.2s;
 }
 
+.table-body::before {
+	content: "";
+	display: block;
+	height: 20px;
+	background: #e2e8f0;
+}
+
+.dark .table-body::before {
+  background: #2b2b35;
+}
+
+.group-tab::after {
+  height: 40px;
+  width: 70px;
+  background-color: #2b2b35;
+  content: "";
+  position: absolute;
+  right: -15px;
+  top: 0;
+  transform: skewX(40deg);
+  z-index: -1;
+  background: #fff;
+}
+
+.dark .group-tab::after {
+  background: #141414;
+}

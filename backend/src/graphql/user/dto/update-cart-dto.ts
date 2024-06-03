@@ -7,7 +7,4 @@ export class UpdateCartDto {
 
   @Field()
   quantity: number;
-
-  @Field({ nullable: true })
-  promotionId: string;
 }

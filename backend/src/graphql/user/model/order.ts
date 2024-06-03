@@ -3,12 +3,27 @@ import { Book } from "src/graphql/book/model/book.model";
 
 @ObjectType()
 export class Order {
-  @Field(type => [Book])
-  books: Book[]
+  @Field(type => [OrderToBook])
+  books: OrderToBook[]
+
+  @Field()
+  id: string
+
+  @Field()
+  status: string
+} 
+
+@ObjectType()
+export class OrderToBook {
+  @Field(type => Book)
+  book: Book
 
   @Field()
   quantity: number
 
   @Field()
-  status: string
-} 
+  discount: number
+
+  @Field()
+  price: number
+}

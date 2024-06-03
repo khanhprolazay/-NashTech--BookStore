@@ -22,7 +22,7 @@ export default function CartForm({ book }: Props) {
 		? (book.price * (100 - book.promotions[0].discount)) / 100
 		: book.price;
 
-	const { toast } = useToast()
+	const { toast } = useToast();
 	const [quatity, setQuatity] = useState<number>(1);
 	const [open, setOpen] = useState<boolean>(false);
 	const { user, accessToken, update } = useSession();
@@ -39,7 +39,6 @@ export default function CartForm({ book }: Props) {
 		const carts = await updateCart(accessToken, {
 			bookId: book.id,
 			quantity: quatity,
-			promotionId: isOnSale ? book.promotions[0].promotion.id : null,
 		});
 
 		if (carts) {

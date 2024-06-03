@@ -28,8 +28,8 @@ export class BookService extends BaseService<Book> {
     });
   }
 
-  override findBySlug(slug: string) {
-    return this.model().findFirst({
+  override async findBySlug(slug: string) {
+    const book = await this.model().findFirst({
       where: {
         slug,
       },
@@ -63,6 +63,21 @@ export class BookService extends BaseService<Book> {
         },
       },
     });
+
+    await this.model().update({
+      where: {
+        id: book.id,
+      },
+      data: {
+        analysis: {
+          update: {
+            totalView: book.analysis.totalView + 1,
+          }
+        }
+      }
+    })
+
+    return book;
   }
 
   async findMany(pagination: IPagination, filter: BookFilterDto) {

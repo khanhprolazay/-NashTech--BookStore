@@ -38,14 +38,14 @@ export default function AppHeader() {
 			href: '#',
 		},
 	];
-	
+
 	async function handleRemoveCart(bookId: string) {
 		if (!accessToken) return;
 		const carts = await removeCart(accessToken, bookId);
 		update({
 			...user,
-			carts
-		})
+			carts,
+		});
 	}
 
 	return (
@@ -75,7 +75,7 @@ export default function AppHeader() {
 								))}
 
 								{user && (
-									<Link href="/cart" passHref>
+									<Link href="/user/cart" passHref>
 										<NavigationMenuItem>
 											<NavigationMenuTrigger className="px-0">
 												<NavigationMenuLink
@@ -113,8 +113,8 @@ export default function AppHeader() {
 																	onClick={() => handleRemoveCart(cart.book.id)}
 																	variant="outline"
 																	size="icon"
-																	className="absolute z-20 text-destructive !p-2 top-2 w-8 border-destructive hover:text-destructive h-8 right-3">
-																	<TrashIcon className=" w-6 h-6" />
+																	className="absolute z-20 text-destructive top-2 border-destructive hover:text-destructive right-3">
+																	<TrashIcon className=" w-3 h-3" />
 																</Button>
 															</div>
 														</Link>
@@ -148,6 +148,11 @@ export default function AppHeader() {
 														href="https://keycloak.bagiit.vn/realms/bookworm/account"
 														title="Manage account">
 														Manage information likes email, password, ...
+													</ListItem>
+													<ListItem
+														href="/user/order"
+														title="Manage order">
+														Manage your order
 													</ListItem>
 													<ListItem
 														href="#"

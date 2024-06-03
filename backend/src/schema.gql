@@ -74,9 +74,16 @@ type BooksWithPagination {
 }
 
 type Order {
-  books: [Book!]!
-  quantity: Float!
+  books: [OrderToBook!]!
+  id: String!
   status: String!
+}
+
+type OrderToBook {
+  book: Book!
+  quantity: Float!
+  discount: Float!
+  price: Float!
 }
 
 type Cart {
@@ -120,10 +127,10 @@ input BookFilterDto {
 type Mutation {
   updateCart(dto: UpdateCartDto!): [Cart!]!
   removeCart(bookId: String!): [Cart!]!
+  checkoutOrder: Order!
 }
 
 input UpdateCartDto {
   bookId: String!
   quantity: Float!
-  promotionId: String
 }

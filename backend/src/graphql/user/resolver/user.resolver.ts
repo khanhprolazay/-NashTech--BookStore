@@ -6,6 +6,7 @@ import { Client } from "src/core/decorator/client.decorator";
 import { UserService } from "../service/user.service";
 import { UpdateCartDto } from "../dto/update-cart-dto";
 import { Cart } from "../model/cart.model";
+import { Order } from "../model/order";
 
 @Resolver((_) => User)
 @UseGuards(HeaderTokenGuard)
@@ -35,5 +36,10 @@ export class UserResolver {
   @Mutation(returns => [Cart])
   removeCart(@Args('bookId') bookId: string, @Client() client: any) {
     return this.userService.removeCart(client.sub, bookId);
+  }
+
+  @Mutation(returns => Order)
+  checkoutOrder(@Client() client: any) {
+    return this.userService.checkoutOrder(client.sub);
   }
 }

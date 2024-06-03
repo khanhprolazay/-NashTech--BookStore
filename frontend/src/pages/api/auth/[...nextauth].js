@@ -9,7 +9,6 @@ async function doFinalSignout({ id_token }) {
 		const params = new URLSearchParams();
 		params.append('id_token_hint', id_token);
 		params.append('client_id', process.env.SERVICE_ACCOUNT_CLIENT_ID);
-		console.log(`${process.env.SERVICE_ACCOUNT_END_SESSION}/protocol/openid-connect/logout?${params.toString()}`);
 		await fetch(
 			`${process.env.SERVICE_ACCOUNT_END_SESSION}?${params.toString()}`
 		);

@@ -132,12 +132,11 @@ model BookToAuthor {
 
 model Order {
   id            String      @id @default(cuid())
-  currentStatus OrderStatus
+  status OrderStatus
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
   userId String
-  bookId String
 
   user             User               @relation(fields: [userId], references: [id])
   books            OrderToBook[]

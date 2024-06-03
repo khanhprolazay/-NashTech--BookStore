@@ -212,7 +212,7 @@ export class BookService extends BaseService<Book> {
   override async delete(id: string) {
     const [reviewsCount, orderCount] = await Promise.all([
       this.client.review.count({ where: { bookId: id } }),
-      this.client.order.count({ where: { bookId: id } }),
+      this.client.orderToBook.count({ where: { bookId: id } }),
     ]);
 
     if (reviewsCount > 0 || orderCount > 0) {
