@@ -2,14 +2,15 @@
 
 'use client';
 
-import NotLoginModal from '@/components/modal/not-login-modal';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { ToastAction } from '@/components/ui/toast';
 import { TypographyH4 } from '@/components/ui/typography';
 import { useToast } from '@/components/ui/use-toast';
 import useSession from '@/hooks/use-session.hook';
 import { IBook } from '@/interfaces/book.interface';
 import { updateCart } from '@/services/user.service';
+import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 
 interface Props {
@@ -24,24 +25,23 @@ export default function CartForm({ book }: Props) {
 
 	const { toast } = useToast();
 	const [quatity, setQuatity] = useState<number>(1);
-	const [open, setOpen] = useState<boolean>(false);
 	const { user, accessToken, update } = useSession();
 
-	const onSubmit = async () => {
-		if (!user) {
-			return setOpen(true);
+	const onSubmit = () => {
+		if (!user || !accessToken) {
+			return toast({
+				title: 'Login required!',
+				duration: 5000,
+				description: 'You need to login to add to cart',
+				variant: 'infor',
+				action: <ToastAction altText="Try again" onClick={() => signIn("keycloak")}>Go to Login</ToastAction>
+			})
 		}
 
-		if (!accessToken) {
-			return setOpen(true);
-		}
-
-		const carts = await updateCart(accessToken, {
+		return updateCart(accessToken, {
 			bookId: book.id,
 			quantity: quatity,
-		});
-
-		if (carts) {
+		}).then((carts) => {
 			toast({
 				title: 'Success',
 				duration: 3000,
@@ -52,12 +52,18 @@ export default function CartForm({ book }: Props) {
 				...user,
 				carts,
 			});
-		}
+		}).catch((error) => {
+			toast({
+				title: 'Oh! Something went wrong!',
+				duration: 3000,
+				description: error.message,
+				variant: 'destructive',
+			});
+		})
 	};
 
 	return (
 		<>
-			<NotLoginModal open={open} handleOpen={setOpen} />
 			<Card>
 				<CardHeader className="py-4 border-b">
 					<div className="flex items-center gap-2">

@@ -4,12 +4,12 @@ import { Cart } from "./cart.model";
 
 @ObjectType()
 export class User {
-  @Field(type => ID)
-  id: string
+  @Field((type) => ID)
+  id: string;
 
-  @Field(type => [Order])
-  orders: Order[]
+  @Field((type) => [Order])
+  orders: Order[];
 
-  @Field(type => [Cart])
-  carts: Cart[]
+  @Field((type) => [Cart])
+  carts: Cart[];
 }

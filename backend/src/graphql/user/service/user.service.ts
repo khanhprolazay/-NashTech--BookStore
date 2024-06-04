@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { BaseService } from "src/core/service/base.service";
-import { User } from "../model/user.model";
+import { User } from "../../model/user.model";
 import { UpdateCartDto } from "../dto/update-cart-dto";
 import { OrderStatus } from "src/core/constant/order.constant";
 
@@ -140,7 +140,7 @@ export class UserService extends BaseService<User> {
           },
         },
         updatedAt: true,
-      }
+      },
     });
     return order;
   }

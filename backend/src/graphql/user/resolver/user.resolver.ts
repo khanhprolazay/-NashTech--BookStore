@@ -1,12 +1,19 @@
-import { Args, Mutation, Parent, Query, ResolveField, Resolver } from "@nestjs/graphql";
-import { User } from "../model/user.model";
+import {
+  Args,
+  Mutation,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from "@nestjs/graphql";
+import { User } from "../../model/user.model";
 import { UseGuards } from "@nestjs/common";
 import { HeaderTokenGuard } from "src/core/guard/header-token.guard";
 import { Client } from "src/core/decorator/client.decorator";
 import { UserService } from "../service/user.service";
 import { UpdateCartDto } from "../dto/update-cart-dto";
-import { Cart } from "../model/cart.model";
-import { Order } from "../model/order";
+import { Cart } from "../../model/cart.model";
+import { Order } from "../../model/order";
 
 @Resolver((_) => User)
 @UseGuards(HeaderTokenGuard)
@@ -28,18 +35,23 @@ export class UserResolver {
     return this.userService.findCart(user.id);
   }
 
-  @Mutation(returns => [Cart])
-  updateCart(@Args('dto') dto: UpdateCartDto, @Client() client: any) {
+  @Mutation((returns) => [Cart])
+  updateCart(@Args("dto") dto: UpdateCartDto, @Client() client: any) {
     return this.userService.updateCart(client.sub, dto);
   }
 
-  @Mutation(returns => [Cart])
-  removeCart(@Args('bookId') bookId: string, @Client() client: any) {
+  @Mutation((returns) => [Cart])
+  removeCart(@Args("bookId") bookId: string, @Client() client: any) {
     return this.userService.removeCart(client.sub, bookId);
   }
 
-  @Mutation(returns => Order)
+  @Mutation((returns) => Order)
   checkoutOrder(@Client() client: any) {
     return this.userService.checkoutOrder(client.sub);
   }
+
+  // @Mutation((returns) => Order)
+  // review(@Client() client: any) {
+  //   return this.userService.review(client.sub);
+  // }
 }

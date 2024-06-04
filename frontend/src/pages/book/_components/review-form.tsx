@@ -2,7 +2,12 @@
 
 'use client';
 
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+} from '@/components/ui/card';
 import { TypographyH5, TypographyH6 } from '@/components/ui/typography';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,8 +22,17 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import useSession from '@/hooks/use-session.hook';
+import { signIn } from 'next-auth/react';
+import { ToastAction } from '@/components/ui/toast';
 
 const FormSchema = z.object({
 	title: z.string().min(3).max(100),
@@ -27,16 +41,32 @@ const FormSchema = z.object({
 });
 
 export default function ReviewForm() {
+	const { toast } = useToast();
+	const { user, accessToken } = useSession();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			title: '',
 			description: '',
-			rating: '1',
+			rating: '5',
 		},
 	});
 
-	function onSubmit(data: z.infer<typeof FormSchema>) {}
+	function onSubmit(data: z.infer<typeof FormSchema>) {
+		if (!user || !accessToken) {
+			return toast({
+				title: 'Login required!',
+				duration: 5000,
+				description: 'You need to login to add to cart',
+				variant: 'infor',
+				action: (
+					<ToastAction altText="Try again" onClick={() => signIn('keycloak')}>
+						Go to Login
+					</ToastAction>
+				),
+			});
+		}
+	}
 
 	return (
 		<Form {...form}>
@@ -106,8 +136,10 @@ export default function ReviewForm() {
 							)}
 						/>
 					</CardContent>
-					<CardFooter className='py-4 border-t'>
-						<Button type="submit" className="w-full">Submit</Button>
+					<CardFooter className="py-4 border-t">
+						<Button type="submit" className="w-full">
+							Submit
+						</Button>
 					</CardFooter>
 				</Card>
 			</form>

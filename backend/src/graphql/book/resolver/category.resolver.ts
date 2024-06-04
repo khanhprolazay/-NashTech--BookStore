@@ -1,9 +1,9 @@
-import { Query, Resolver, Args, ResolveField, Parent } from '@nestjs/graphql';
-import { Category } from '../model/category.model';
-import { CategoryService } from '../service/category.service';
-import { BookService } from '../service/book.service';
-import { UseGuards } from '@nestjs/common';
-import { HeaderTokenGuard } from 'src/core/guard/header-token.guard';
+import { Query, Resolver, Args, ResolveField, Parent } from "@nestjs/graphql";
+import { Category } from "../../model/category.model";
+import { CategoryService } from "../service/category.service";
+import { BookService } from "../service/book.service";
+import { UseGuards } from "@nestjs/common";
+import { HeaderTokenGuard } from "src/core/guard/header-token.guard";
 
 @Resolver((_) => Category)
 @UseGuards(HeaderTokenGuard)
@@ -14,7 +14,7 @@ export class CategoryResolver {
   ) {}
 
   @Query((_) => Category)
-  category(@Args('slug') slug: string) {
+  category(@Args("slug") slug: string) {
     return this.categoryService.findBySlug(slug);
   }
 
