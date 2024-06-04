@@ -49,20 +49,20 @@ export default function ReviewList({ book, reviews }: Props) {
 					<div>
 						<TypographyH3>Star</TypographyH3>
 						<div className="flex h-5 items-center space-x-2">
-							<TypographyMuted>5 start ({findCount(5)})</TypographyMuted>
+							<TypographyMuted>5 star ({findCount(5)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>4 start ({findCount(4)})</TypographyMuted>
+							<TypographyMuted>4 star ({findCount(4)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>3 start ({findCount(3)})</TypographyMuted>
+							<TypographyMuted>3 star ({findCount(3)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>2 start ({findCount(2)})</TypographyMuted>
+							<TypographyMuted>2 star ({findCount(2)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>1 start ({findCount(1)})</TypographyMuted>
+							<TypographyMuted>1 star ({findCount(1)})</TypographyMuted>
 						</div>
 					</div>
 				</div>
 
-				<div className="flex justify-between items-start mt-4">
+				<div className="flex justify-between items-star mt-4">
 					<TypographySmall className="text-xs">
 						Showing 1-12 of 150 reviews
 					</TypographySmall>
@@ -117,7 +117,7 @@ function Review({ review }: ReviewProps) {
 			<div className="flex items-center h-5 space-x-2">
 				<TypographyH5>{review.title}</TypographyH5>
 				<Separator orientation="vertical" />
-				<TypographyMuted>{review.rating} start</TypographyMuted>
+				<TypographyMuted>{review.rating} star</TypographyMuted>
 			</div>
 			<TypographyP className="text-sm">{review.content}</TypographyP>
 			<TypographyP className="text-slate-600 text-sm">
