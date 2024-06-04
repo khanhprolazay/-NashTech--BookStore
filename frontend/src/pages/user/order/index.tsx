@@ -16,6 +16,23 @@ export default function OrderPage() {
 		} , 0);
 	}
 
+	const getVariant = (status: string) => {
+		switch (status) {
+			case 'PENDING':
+				return 'warning';
+			case 'PROCESSING':
+				return 'success';
+			case 'SHIPPING':
+				return 'success';
+			case 'DELIVERED':
+				return 'success';
+			case 'CANCELLED':
+				return 'destructive';
+			default:
+				return 'default';
+		}
+	}
+
 	return (
 		<Layout>
 			<div className="col-span-10 flex flex-col gap-4">
@@ -27,7 +44,7 @@ export default function OrderPage() {
 								<TypographyP className='text-sm'>Order ID: {order.id}</TypographyP>
 								<TypographyP className='text-sm'>Total: {caculateTotal(order)} $</TypographyP>
 								</div>
-								<Badge variant="success">{order.status}</Badge>
+								<Badge variant={getVariant(order.status)} className='text-slate-100'>{order.status}</Badge>
 							</div>
 						</CardContent>
 					</Card>

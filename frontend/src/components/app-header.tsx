@@ -14,7 +14,7 @@ import {
 } from './ui/navigation-menu';
 import Link from 'next/link';
 import { cn } from '../lib/utils';
-import { signOut } from 'next-auth/react';
+import { signIn, signOut } from 'next-auth/react';
 import { NavigationMenuItem } from '@radix-ui/react-navigation-menu';
 import useSession from '@/hooks/use-session.hook';
 import { TrashIcon } from 'lucide-react';
@@ -67,17 +67,28 @@ export default function AppHeader() {
 										<NavigationMenuLink
 											className={cn(
 												navigationMenuTriggerStyle(),
-												'!font-normal !bg-transparent'
+												'!font-normal !bg-transparent cursor-pointer hover:underline'
 											)}>
 											{nav.label}
 										</NavigationMenuLink>
 									</Link>
 								))}
 
+								{!user && (
+									<NavigationMenuLink
+										onClick={() => signIn("keycloak")}
+										className={cn(
+											navigationMenuTriggerStyle(),
+											'!font-normal !bg-transparent cursor-pointer hover:underline'
+										)}>
+										Sign in
+									</NavigationMenuLink>
+								)}
+
 								{user && (
 									<Link href="/user/cart" passHref>
 										<NavigationMenuItem>
-											<NavigationMenuTrigger className="px-0">
+											<NavigationMenuTrigger className="px- bg-transparent">
 												<NavigationMenuLink
 													className={cn(
 														navigationMenuTriggerStyle(),
@@ -127,7 +138,7 @@ export default function AppHeader() {
 
 								{user && (
 									<NavigationMenuItem>
-										<NavigationMenuTrigger>
+										<NavigationMenuTrigger className='bg-transparent'>
 											<img
 												className="w-8 h-8 rounded-full"
 												src={user.image as string}
@@ -149,9 +160,7 @@ export default function AppHeader() {
 														title="Manage account">
 														Manage information likes email, password, ...
 													</ListItem>
-													<ListItem
-														href="/user/order"
-														title="Manage order">
+													<ListItem href="/user/order" title="Manage order">
 														Manage your order
 													</ListItem>
 													<ListItem

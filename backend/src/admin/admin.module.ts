@@ -6,6 +6,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
 import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
 import { PromotionModule } from './promotion/promotion.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PromotionModule } from './promotion/promotion.module';
     CategoryModule,
     BookModule,
     AuthorModule,
+    OrderModule
   ],
   controllers: [AdminController],
 })

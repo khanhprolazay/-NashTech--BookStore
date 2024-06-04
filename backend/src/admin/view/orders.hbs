@@ -1,0 +1,121 @@
+{{#> layout }}
+  
+<div class="row">
+  <div class="col-12">
+    <div class="card my-4">
+      <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center px-3">
+          <h6 class="text-white text-capitalize">Orders Table</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2">
+        <div class="table-responsive p-0">
+          <table class="table align-items-center mb-0">
+            <thead>
+              <tr>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Order Id</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
+                <th class="text-secondary opacity-7"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each this.orders}}
+                <tr>
+                  <td class="align-middle">
+                    <span class="text-secondary text-xs font-weight-bold">{{this.id}}</span>
+                  </td>
+
+                  <td class="align-middle">
+                    <span class="text-secondary text-xs font-weight-bold">{{this.user.email}}</span>
+                  </td>
+         
+                  <td class="align-middle">
+                    {{#ifeq this.status "PENDING"}}
+                      <span class="badge text-white bg-gradient-primary text-secondary text-xs font-weight-bold">{{this.status}}</span>
+                    {{else}}
+                      {{#ifeq this.status "CANCELLED"}}
+                        <span class="badge text-white bg-gradient-danger text-secondary text-xs font-weight-bold">{{this.status}}</span>
+                      {{else}}
+                        <span class="badge text-white bg-gradient-success text-secondary text-xs font-weight-bold">{{this.status}}</span>
+                      {{/ifeq}}
+                    {{/ifeq}}
+                  </td>
+
+                  <td class="align-middle">
+                    <span class="text-secondary text-xs font-weight-bold">{{caculateTotal this}}</span>
+                  </td>
+                  <td class="align-middle">
+                    <a class="btn btn-link text-dark px-3 mb-0" href="/admin/book/{{this.slug}}" data-id="{{this.id}}" data-status="{{this.status}}"  data-bs-toggle="modal" data-bs-target="#update-modal" data-toggle="tooltip"><i class="material-icons text-sm me-2">edit</i>Edit</a>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>  
+
+ <div class="modal fade" id="update-modal" tabindex="-1" aria-labelledby="update-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5">Edit author</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="update-form" method="post">
+
+            <div class="form-group d-none">
+              <label for="id">Id</label>
+              <input type="text" class="form-control mb-4" id="id" name="id">
+            </div>
+
+            <div class="input-group input-group-static mb-4">
+              <label for="status" class="ms-0">Status</label>
+              <select class="form-control" id="status" name="status">
+                <option value="PENDING">PENDING</option>
+                <option value="PROCESSING">PROCESSING</option>
+                <option value="SHIPPING">SHIPPING</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="CANCELLED">CANCELLED</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{{/layout}}
+
+
+<script>
+  $("#update-modal").on("show.bs.modal", function (event) {
+    var button = $(event.relatedTarget);
+    var id = button.data("id");
+    var status = button.data("status");
+    var modal = $(this);
+    modal.find("#id").val(id);
+    modal.find("#status").val(status);
+  });
+
+  $("#update-form").submit(function (e) {
+    e.preventDefault();
+    var id = $("#id").val();
+    var status = $("#status").val();
+    $.ajax({
+      type: "POST",
+      url: "/admin/order/update",
+      data: { id: id, status: status },
+      success: function (data) {
+        window.location.reload();
+      },
+    });
+  });
+</script>

@@ -14,6 +14,7 @@ import {
   range,
   toDateString,
   getBookTitle,
+  caculateTotal,
 } from "./core/util/hbs.util";
 
 hbs.registerHelper("range", range);
@@ -21,6 +22,14 @@ hbs.registerHelper("eq", eq);
 hbs.registerHelper("toDateString", toDateString);
 hbs.registerHelper("getBookTitle", getBookTitle);
 hbs.registerHelper("caculateDiscount", caculateDiscount);
+hbs.registerHelper("caculateTotal", caculateTotal);
+hbs.registerHelper('ifeq', function (a, b, options) {
+	if (a === b) {
+		return options.fn(this);
+	} else {
+		return options.inverse(this);
+	}
+});
 const utils = hbsutil(hbs);
 
 dotenv.config({
