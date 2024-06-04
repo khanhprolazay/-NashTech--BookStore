@@ -10,7 +10,7 @@ export class Analysis {
   avarageRating: number
 
   @Field()
-  totalRating: number
+  totalView: number
 
   @Field()
   totalReview: number

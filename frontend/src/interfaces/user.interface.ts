@@ -1,6 +1,6 @@
 /** @format */
 
-import { IBook, IPromotion } from './book.interface';
+import { IBook, IPromotion, IReview } from './book.interface';
 
 export interface IUser {
 	id: string;
@@ -9,6 +9,7 @@ export interface IUser {
 	image: string;
 	carts: ICart[];
   orders: IOrder[];
+	reviews: IReview[];
 }
 
 export interface ICart {

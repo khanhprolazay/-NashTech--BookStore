@@ -42,7 +42,7 @@ type BookPromotion {
 type Analysis {
   id: ID!
   avarageRating: Float!
-  totalRating: Float!
+  totalView: Float!
   totalReview: Float!
   totalOrder: Float!
   totalOrderQuantity: Float!
@@ -93,10 +93,36 @@ type Cart {
   promotion: Promotion
 }
 
+type Review {
+  id: String!
+  title: String!
+  content: String!
+  rating: Float!
+  createdAt: DateTime!
+  user: User!
+}
+
+type RatingCount {
+  rating: Float!
+  _count: Float!
+}
+
+type BookReview {
+  reviews: [Review!]!
+  pagination: Pagination!
+  count: [RatingCount!]!
+  avarageRating: Float!
+  totalReview: Float!
+}
+
 type User {
   id: ID!
+  name: String!
+  email: String!
+  picture: String!
   orders: [Order!]!
   carts: [Cart!]!
+  reviews: [Review!]!
 }
 
 type Query {
@@ -108,6 +134,7 @@ type Query {
   category(slug: String!): Category!
   categories: [Category!]!
   user: User!
+  reviews(slug: String!): BookReview!
 }
 
 input PaginationDto {
@@ -128,9 +155,17 @@ type Mutation {
   updateCart(dto: UpdateCartDto!): [Cart!]!
   removeCart(bookId: String!): [Cart!]!
   checkoutOrder: Order!
+  review(dto: AddReviewDto!): Review!
 }
 
 input UpdateCartDto {
   bookId: String!
   quantity: Float!
+}
+
+input AddReviewDto {
+  bookId: String!
+  title: String!
+  content: String!
+  rating: Float!
 }

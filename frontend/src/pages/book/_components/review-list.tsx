@@ -11,7 +11,7 @@ import {
 	TypographyP,
 	TypographySmall,
 } from '@/components/ui/typography';
-import { IBook } from '@/interfaces/book.interface';
+import { IBook, IReview, IReviewExtend } from '@/interfaces/book.interface';
 
 import {
 	Pagination,
@@ -25,9 +25,16 @@ import {
 
 interface Props {
 	book: IBook;
+	reviews: IReviewExtend;
 }
 
-export default function ReviewList({ book }: Props) {
+export default function ReviewList({ book, reviews }: Props) {
+
+	function findCount(rating: number) {
+		const count = reviews.count.find(count => count.rating === rating)
+		return count?._count || 0;
+	}
+
 	return (
 		<Card>
 			<CardHeader className="py-4">
@@ -36,21 +43,21 @@ export default function ReviewList({ book }: Props) {
 			<CardContent>
 				<div className="flex gap-4">
 					<div>
-						<TypographyH3>4.6</TypographyH3>
-						<TypographyMuted>[150]</TypographyMuted>
+						<TypographyH3>{reviews.avarageRating}</TypographyH3>
+						<TypographyMuted>[{reviews.totalReview}]</TypographyMuted>
 					</div>
 					<div>
 						<TypographyH3>Star</TypographyH3>
 						<div className="flex h-5 items-center space-x-2">
-							<TypographyMuted>5 start(100)</TypographyMuted>
+							<TypographyMuted>5 start ({findCount(5)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>4 start(50)</TypographyMuted>
+							<TypographyMuted>4 start ({findCount(4)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>3 start(0)</TypographyMuted>
+							<TypographyMuted>3 start ({findCount(3)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>2 start(0)</TypographyMuted>
+							<TypographyMuted>2 start ({findCount(2)})</TypographyMuted>
 							<Separator orientation="vertical" />
-							<TypographyMuted>1 start(0)</TypographyMuted>
+							<TypographyMuted>1 start ({findCount(1)})</TypographyMuted>
 						</div>
 					</div>
 				</div>
@@ -66,22 +73,18 @@ export default function ReviewList({ book }: Props) {
 				</div>
 
 				<div className="my-4">
-					<Review />
-					<Separator className="my-4" />
-					<Review />
-					<Separator className="my-4" />
-					<Review />
-					<Separator className="my-4" />
-					<Review />
-					<Separator className="my-4" />
-					<Review />
-					<Separator className="my-4" />
+					{reviews.reviews.map((review) => (
+						<>
+							<Review review={review} />
+							<Separator className="my-4" />
+						</>
+					))}
 				</div>
 
 				<Pagination>
 					<PaginationContent>
 						<PaginationItem>
-							<PaginationPrevious href="#" />
+							<PaginationPrevious size="default" href="#" />
 						</PaginationItem>
 						<PaginationItem>
 							<PaginationLink href="#">1</PaginationLink>
@@ -95,10 +98,7 @@ export default function ReviewList({ book }: Props) {
 							<PaginationLink href="#">3</PaginationLink>
 						</PaginationItem>
 						<PaginationItem>
-							<PaginationEllipsis />
-						</PaginationItem>
-						<PaginationItem>
-							<PaginationNext href="#" />
+							<PaginationNext size="default" href="#" />
 						</PaginationItem>
 					</PaginationContent>
 				</Pagination>
@@ -107,25 +107,21 @@ export default function ReviewList({ book }: Props) {
 	);
 }
 
-function Review() {
+type ReviewProps = {
+	review: IReview;
+};
+
+function Review({ review }: ReviewProps) {
 	return (
 		<div>
 			<div className="flex items-center h-5 space-x-2">
-				<TypographyH5>Review title</TypographyH5>
+				<TypographyH5>{review.title}</TypographyH5>
 				<Separator orientation="vertical" />
-				<TypographyMuted>5 start</TypographyMuted>
+				<TypographyMuted>{review.rating} start</TypographyMuted>
 			</div>
-			<TypographyP className="text-sm">
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-				veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-				commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-				velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-				occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-				mollit anim id est laborum.
-			</TypographyP>
+			<TypographyP className="text-sm">{review.content}</TypographyP>
 			<TypographyP className="text-slate-600 text-sm">
-				April 12, 2021
+				{review.createdAt.split('T')[0]}
 			</TypographyP>
 		</div>
 	);

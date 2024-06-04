@@ -7,6 +7,8 @@ import {
 	IBookFilter,
 	IBooksWithPagination,
 	IBook,
+  IReview,
+  IReviewExtend,
 } from '../interfaces/book.interface';
 import { IPagination, Sort } from '@/interfaces/pagination.interface';
 
@@ -78,7 +80,8 @@ export async function getBook(slug: string) {
       },
       analysis {
         avarageRating,
-        totalRating
+        totalView,
+        totalReview
       },
       price,
       promotions {
@@ -93,4 +96,32 @@ export async function getBook(slug: string) {
   `;
 	const result = await execute(query);
 	return result.book as IBook;
+}
+
+export async function getReviews(slug: string) {
+  const query = `
+  query {
+    reviews(slug: "${slug}") {
+      avarageRating,
+      totalReview,
+      count {
+        rating,
+        _count
+      }
+      reviews {
+        title,
+        content,
+        rating,
+        createdAt,
+        user {
+          name,
+          email,
+          picture,
+        }
+      }
+    }
+  }
+  `;
+  const result = await execute(query);
+  return result.reviews as IReviewExtend;
 }

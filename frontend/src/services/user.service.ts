@@ -2,7 +2,8 @@
 
 import { IUser } from '@/interfaces/user.interface';
 import { execute } from './util.service';
-import { UpdateCartDto } from './dto';
+import { AddReviewDto, UpdateCartDto } from './dto';
+import { IReview } from '@/interfaces/book.interface';
 
 export async function getUser(token: string) {
 	const query = `
@@ -102,4 +103,24 @@ export async function checkoutOrder(token: string) {
   }`;
   const result = await execute(query, token);
   return result.checkoutOrder as IUser['orders'];
+}
+
+export async function review(token: string, dto: AddReviewDto) {
+  const query = `
+  mutation {
+    review(dto: {bookId: "${dto.bookId}", title: "${dto.title}", content: "${dto.content}", rating: ${dto.rating}}) {
+      id,
+      title,
+      content,
+      rating,
+      createdAt,
+      user {
+        id,
+        name,
+        email,
+      },
+    }
+  }`;
+  const result = await execute(query, token);
+  return result.review as IReview;
 }

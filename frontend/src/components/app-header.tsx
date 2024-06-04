@@ -108,7 +108,7 @@ export default function AppHeader() {
 																	className="w-10 rounded"
 																/>
 																<div className="flex flex-col justify-center">
-																	<div className="text-sm font-medium leading-4 w-3/4 mb-1">
+																	<div className="text-sm font-medium leading-4 w-full mb-1">
 																		{cart.book.title.split('(')[0]}
 																	</div>
 																	<p className="line-clamp-2 text-sm leading-snug text-muted-foreground">

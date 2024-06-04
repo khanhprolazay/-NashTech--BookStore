@@ -27,27 +27,36 @@ import {
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
+	SelectValue,
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import useSession from '@/hooks/use-session.hook';
 import { signIn } from 'next-auth/react';
 import { ToastAction } from '@/components/ui/toast';
+import { review } from '@/services/user.service';
+import { IBook, IReviewExtend } from '@/interfaces/book.interface';
+import { Dispatch, SetStateAction } from 'react';
 
 const FormSchema = z.object({
 	title: z.string().min(3).max(100),
-	description: z.string().min(3).max(1000),
+	content: z.string().min(3).max(1000),
 	rating: z.string().min(1).max(5),
 });
 
-export default function ReviewForm() {
+type Props = {
+	book: IBook;
+	setReviews: Dispatch<SetStateAction<IReviewExtend>>;
+};
+
+export default function ReviewForm({ book, setReviews }: Props) {
 	const { toast } = useToast();
 	const { user, accessToken } = useSession();
 	const form = useForm<z.infer<typeof FormSchema>>({
 		resolver: zodResolver(FormSchema),
 		defaultValues: {
 			title: '',
-			description: '',
+			content: '',
 			rating: '5',
 		},
 	});
@@ -57,7 +66,7 @@ export default function ReviewForm() {
 			return toast({
 				title: 'Login required!',
 				duration: 5000,
-				description: 'You need to login to add to cart',
+				description: 'You need to login to add a review',
 				variant: 'infor',
 				action: (
 					<ToastAction altText="Try again" onClick={() => signIn('keycloak')}>
@@ -66,6 +75,34 @@ export default function ReviewForm() {
 				),
 			});
 		}
+
+		review(accessToken, {
+			...data,
+			bookId: book.id,
+			rating: parseInt(data.rating),
+		})
+			.then((newReview) => {
+				toast({
+					title: 'Success',
+					duration: 3000,
+					description: 'Review added successfully',
+					variant: 'success',
+				});
+				setReviews((prev) => ({
+					...prev,
+					totalReview: prev.totalReview + 1,
+					avarageRating: Math.round((prev.avarageRating * prev.totalReview + newReview.rating) / (prev.totalReview + 1)),
+					reviews: [newReview, ...prev.reviews],
+				}))
+			})
+			.catch((error) => {
+				toast({
+					title: 'Oh! Something went wrong!',
+					duration: 3000,
+					description: error.message,
+					variant: 'destructive',
+				});
+			});
 	}
 
 	return (
@@ -92,17 +129,14 @@ export default function ReviewForm() {
 
 						<FormField
 							control={form.control}
-							name="description"
+							name="content"
 							render={({ field }) => (
 								<FormItem className="pt-6">
 									<FormLabel className="font-normal">
 										Details please! Your review helps other shoppers.
 									</FormLabel>
 									<FormControl>
-										<Textarea
-											placeholder="Your description goes here"
-											{...field}
-										/>
+										<Textarea placeholder="Your content goes here" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
@@ -121,7 +155,9 @@ export default function ReviewForm() {
 										onValueChange={field.onChange}
 										defaultValue={field.value}>
 										<FormControl>
-											<SelectTrigger>1</SelectTrigger>
+											<SelectTrigger>
+												<SelectValue placeholder="Select a rating" />
+											</SelectTrigger>
 										</FormControl>
 										<SelectContent>
 											<SelectItem value="1">1</SelectItem>

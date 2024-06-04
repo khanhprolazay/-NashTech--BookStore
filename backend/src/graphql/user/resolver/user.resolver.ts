@@ -14,6 +14,8 @@ import { UserService } from "../service/user.service";
 import { UpdateCartDto } from "../dto/update-cart-dto";
 import { Cart } from "../../model/cart.model";
 import { Order } from "../../model/order";
+import { Review } from "src/graphql/model/review.model";
+import { AddReviewDto } from "../dto/add-review.dto";
 
 @Resolver((_) => User)
 @UseGuards(HeaderTokenGuard)
@@ -50,8 +52,8 @@ export class UserResolver {
     return this.userService.checkoutOrder(client.sub);
   }
 
-  // @Mutation((returns) => Order)
-  // review(@Client() client: any) {
-  //   return this.userService.review(client.sub);
-  // }
+  @Mutation((returns) => Review)
+  review(@Client() client: any, @Args("dto") dto: AddReviewDto) {
+    return this.userService.review(client.sub, dto);
+  }
 }

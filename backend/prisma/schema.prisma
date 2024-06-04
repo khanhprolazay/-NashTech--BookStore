@@ -74,7 +74,6 @@ model Image {
 model Analysis {
   id                 String @id @default(cuid())
   avarageRating      Float  @default(0)
-  totalRating        Int    @default(0)
   totalReview        Int    @default(0)
   totalView          Int    @default(0)
   totalOrder         Int    @default(0)

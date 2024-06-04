@@ -2,7 +2,7 @@
 
 import { getToken } from './token.service';
 
-const endpoint = "http://localhost:5000/graphql"
+const endpoint = "http://localhost:5000/graphql";
 
 export async function execute(query: string, token?: string) {
 	const accessToken = token || (await getToken());
@@ -23,12 +23,17 @@ export async function execute(query: string, token?: string) {
 	});
 	
 	const json = await response.json();
+
 	if (json.error) {
-		Promise.reject(json.error);
+		throw new Error(json.error);
+	}
+
+	if (json.errors) {
+		throw new Error(json.errors[0].message);
 	}
 
 	if (!json.data) {
-		Promise.reject(json);
+		throw new Error('No data found');
 	}
 
 	return json.data;	

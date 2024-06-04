@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { BaseService } from "src/core/service/base.service";
 import { User } from "../../model/user.model";
 import { UpdateCartDto } from "../dto/update-cart-dto";
 import { OrderStatus } from "src/core/constant/order.constant";
+import { AddReviewDto } from "../dto/add-review.dto";
 
 @Injectable()
 export class UserService extends BaseService<User> {
@@ -143,5 +144,70 @@ export class UserService extends BaseService<User> {
       },
     });
     return order;
+  }
+
+  async review(userId: string, dto: AddReviewDto) {
+    const order = await this.client.order.findFirst({
+      where: {
+        userId,
+        books: {
+          some: {
+            bookId: dto.bookId,
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      throw new HttpException(
+        "You must buy this book first",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const [review, analysis] = await Promise.all([
+      this.client.review.create({
+        data: {
+          userId,
+          bookId: dto.bookId,
+          title: dto.title,
+          content: dto.content,
+          rating: dto.rating,
+        },
+        select: {
+          id: true,
+          title: true,
+          rating: true,
+          content: true,
+          createdAt: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              picture: true,
+            }
+          }
+        }
+      }),
+      this.client.analysis.findFirst({
+        where: {
+          bookId: dto.bookId,
+        },
+      }),
+    ]);
+
+    await this.client.analysis.update({
+      where: {
+        bookId: dto.bookId,
+      },
+      data: {
+        totalReview: analysis.totalReview + 1,
+        avarageRating:
+          (analysis.avarageRating * analysis.totalReview + dto.rating) /
+          (analysis.totalReview + 1),
+      },
+    });
+    return review;
   }
 }

@@ -3,3 +3,9 @@ export interface UpdateCartDto {
   quantity: number;
 }
 
+export interface AddReviewDto {
+  bookId: string;
+  title: string;
+  content: string;
+  rating: number;
+}

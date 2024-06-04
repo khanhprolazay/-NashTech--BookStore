@@ -28,6 +28,7 @@ export interface IBook {
 	analysis: IAnalysis;
 	categories: ICategory[];
 	authors: IAuthor[];
+	reviews: IReview[];
 }
 
 export interface IBooksWithPagination {
@@ -54,4 +55,28 @@ export interface IBookFilter {
 	categories?: string[];
 	authors?: string[];
 	search?: string;
+}
+
+export interface IReview {
+	id: string;
+	title: string;
+	content: string;
+	rating: number;
+	createdAt: string;
+	user: {
+		id: string;
+		name: string;
+		email: string;
+		picture: string;
+	};
+}
+
+export interface IReviewExtend {
+	reviews: IReview[];
+	count: {
+		rating: number;
+		_count: number;
+	}[],
+	avarageRating: number;
+	totalReview: number;
 }
