@@ -18,7 +18,7 @@ import { PrismaService } from "src/core/service/prisma.service";
 @Controller("admin/about")
 @UseFilters(HttpExceptionFilter)
 export class AboutController {
-  private id: string = "clx0nts2u0000i1ifwj1fpk74";
+  private title: string = "about";
   constructor(private readonly client: PrismaService) {}
 
   @Get()
@@ -28,10 +28,11 @@ export class AboutController {
   async index() {
     const data = await this.client.aboutContent.findFirst({
       where: {
-        id: this.id,
+        title: this.title,
       },
     });
-    return { title: "About", content: data.content };
+    const content = data ? data.content : "";
+    return { title: "About", content };
   }
 
   @Get("content")
@@ -39,7 +40,7 @@ export class AboutController {
   async getContent() {
     const about = await this.client.aboutContent.findUnique({
       where: {
-        id: this.id,
+        title: this.title,
       },
     });
     return {
@@ -52,9 +53,16 @@ export class AboutController {
   @UseGuards(CookieTokenGuard, RolesGuard)
   updateContent(@Body() dto: UpdateContentDto) {
     return this.client.aboutContent.upsert({
-      where: { id: this.id },
-      update: { content: dto.data },
-      create: { content: dto.data },
+      where: {
+        title: this.title,
+      },
+      update: {
+        content: dto.data,
+      },
+      create: {
+        title: this.title,
+        content: dto.data,
+      },
     });
   }
 }

@@ -130,10 +130,10 @@ model BookToAuthor {
 }
 
 model Order {
-  id            String      @id @default(cuid())
-  status OrderStatus
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id        String      @id @default(cuid())
+  status    OrderStatus
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   userId String
 
@@ -219,6 +219,7 @@ model Cart {
 
 model AboutContent {
   id        String   @id @default(cuid())
+  title     String   @unique
   content   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
