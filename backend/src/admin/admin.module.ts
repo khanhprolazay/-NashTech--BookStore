@@ -7,6 +7,7 @@ import { CategoryModule } from './category/category.module';
 import { AuthorModule } from './author/author.module';
 import { PromotionModule } from './promotion/promotion.module';
 import { OrderModule } from './order/order.module';
+import { AboutModule } from './about/about.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { OrderModule } from './order/order.module';
     CategoryModule,
     BookModule,
     AuthorModule,
-    OrderModule
+    OrderModule,
+    AboutModule
   ],
   controllers: [AdminController],
 })

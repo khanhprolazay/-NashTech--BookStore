@@ -1,0 +1,33 @@
+{{#> layout }}
+  <div id="editor">
+  </div>
+  <button id="save" class="btn btn-primary mt-2">Save</button>
+{{/layout}}
+<script src="https://cdn.ckeditor.com/4.22.1/full-all/ckeditor.js"></script>
+<script>
+  // This sample still does not showcase all CKEditor&nbsp;5 features (!)
+  // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
+
+  CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+  CKEDITOR.config.basicEntities = false;
+  CKEDITOR.config.autoParagraph = false;
+  CKEDITOR.config.height = 500;
+  CKEDITOR.config.allowedContent = true;
+  CKEDITOR.config.extraAllowedContent = 'div(*)';
+  CKEDITOR.replace('editor');
+
+  
+  CKEDITOR.instances.editor.setData(`{{{content}}}`);   
+
+  $('#save').click(function() {
+    const data = CKEDITOR.instances.editor.getData();
+    $.ajax({
+      url: '/admin/about',
+      method: 'POST',
+      data: { data },
+      success: function() {
+        showToast('success', 'About page updated successfully');
+      }
+    });
+  });
+</script>

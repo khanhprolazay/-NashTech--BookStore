@@ -35,7 +35,7 @@ export default function AppHeader() {
 		},
 		{
 			label: 'About',
-			href: '#',
+			href: '/about',
 		},
 	];
 
