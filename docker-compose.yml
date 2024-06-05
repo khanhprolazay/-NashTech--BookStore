@@ -3,16 +3,36 @@
 version: "3.8"
 
 services:
-  database:
-    container_name: bookstore-database
+  bookworm-database:
+    container_name: bookworm-database
     image: postgres:latest
     volumes:
       - ./volume/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - bookworm-net
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: postgres
 
-  
+  bookworm-nest:
+    container_name: bookworm-nest
+    build: backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    networks:
+      - bookworm-net
+    depends_on:
+      - bookworm-database
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgres://admin:admin@bookworm-database:5432/postgres
+
+networks:
+  bookworm-net:
+    driver: bridge
