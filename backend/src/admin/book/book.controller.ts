@@ -69,8 +69,8 @@ export class BookController {
   @Render("book")
   @Roles([Role.Admin])
   async getBook(@Client() client: any, @Param("slug") slug: string) {
-    let book = await this.bookService.findBySlug(slug);
-    const [authors, categories] = await Promise.all([
+    const [book, authors, categories] = await Promise.all([
+      this.bookService.findBySlug(slug),
       this.bookService.getAuthors(),
       this.bookService.getCategories(),
     ]);

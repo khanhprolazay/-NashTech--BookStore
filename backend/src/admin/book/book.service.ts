@@ -23,16 +23,22 @@ export class BookService extends BaseService<Book> {
     return this.client.book;
   }
 
-  async findByPage(page: number) {
-    return this.client.$queryRaw` 
-      select b.id, b.title, b.slug, string_agg(A."name" , ', ') authors, b.price, b."mainImage"
-      from "Book" b
-      left join "BookToAuthor" bta on bta."bookId" =b.id
-      left join "Author" a  on a.id  = bta."authorId"
-      group by b.id, b.title , b.price, b."mainImage", b.slug
-      limit ${this.appContext.pagination.limit}
-      offset ${(page - 1) * this.appContext.pagination.limit}
-    `;
+  findByPage(page: number) {
+    return this.model().findMany({
+      include: {
+        authors: {
+          select: {
+            author: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      take: this.appContext.pagination.limit,
+      skip: (page - 1) * this.appContext.pagination.limit,
+    });
   }
 
   override findBySlug(slug: string) {
@@ -51,6 +57,20 @@ export class BookService extends BaseService<Book> {
             category: true,
           },
         },
+        reviews: {
+          select: {
+            rating: true,
+            content: true,
+            title: true,
+            user: {
+              select: {
+                name: true,
+                picture: true,
+                email: true,
+              }
+            }
+          }
+        }
       },
     });
   }

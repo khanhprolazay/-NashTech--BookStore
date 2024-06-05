@@ -124,6 +124,47 @@
       </div>
     </div>
 
+     <div class="col-12 my-4">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="px-3 bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center">
+            <h6 class="text-white text-capitalize">Reviews table</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each this.book.reviews}}
+                  <tr>
+                    <td class="align-middle">
+                      <span class="text-secondary text-xs font-weight-bold">{{this.user.email}}</span>
+                    </td>
+                    <td class="align-middle">
+                      <span class="text-secondary text-xs font-weight-bold">{{this.title}}</span>
+                    </td>
+                    <td class="align-middle text-center">
+                      <input type="text" class="rating" value="5" data-readonly="true"/>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 
 
     <div class="modal fade" id="update-form-modal" tabindex="-1" aria-labelledby="update-form-modal" aria-hidden="true">
@@ -239,6 +280,9 @@
 {{/layout}}
 
 <script>
+
+  $(".rating").rating({displayOnly: true, size: 'xs'});
+
   $('#update-form').on('submit', function (e) {
     e.preventDefault();
     const url = $(this).attr('action');

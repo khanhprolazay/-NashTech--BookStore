@@ -10,6 +10,7 @@
         </div>
         <div class="card-body px-0 pb-2">
           <div class="table-responsive p-0">
+
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
@@ -48,55 +49,56 @@
               </tbody>
             </table>
 
-            <div class="modal fade" id="update-form-modal" tabindex="-1" aria-labelledby="update-form-modal" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="update-form-modal">Edit author</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="update-form" method="post">
-
-                      <div class="form-group d-none">
-                        <label for="update-id">Id</label>
-                        <input type="text" class="form-control mb-4" id="update-id" name="update-id">
-                      </div>
-
-                      <div class="form-group">
-                        <label for="update-name">Name</label>
-                        <input type="text" class="form-control mb-4" id="update-name" name="update-name">
-                      </div>
-                      <button type="submit" class="btn btn-primary" >Submit</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="modal fade" id="create-form-modal" tabindex="-1" aria-labelledby="create-form-modal" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="update-form-modal">Add author</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="create-form" method="post">
-                      <div class="form-group">
-                        <label for="create-name">Name</label>
-                        <input type="text" class="form-control mb-4" id="create-name" name="create-name">
-                      </div>
-                      <button type="submit" class="btn btn-primary" >Submit</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>
+
+      <div class="modal fade" id="update-form-modal" tabindex="-1" aria-labelledby="update-form-modal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="update-form-modal">Edit author</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form id="update-form" method="post">
+
+                  <div class="form-group d-none">
+                    <label for="update-id">Id</label>
+                    <input type="text" class="form-control mb-4" id="update-id" name="update-id">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="update-name">Name</label>
+                    <input type="text" class="form-control mb-4" id="update-name" name="update-name">
+                  </div>
+                  <button type="submit" class="btn btn-primary" >Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade" id="create-form-modal" tabindex="-1" aria-labelledby="create-form-modal" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="update-form-modal">Add author</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form id="create-form" method="post">
+                  <div class="form-group">
+                    <label for="create-name">Name</label>
+                    <input type="text" class="form-control mb-4" id="create-name" name="create-name">
+                  </div>
+                  <button type="submit" class="btn btn-primary" >Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
     </div>
   </div>
   {{> pagination }}
