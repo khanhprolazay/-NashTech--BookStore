@@ -10,6 +10,6 @@ CMD ["npm", "install"]
 
 CMD ["npx", "prisma", "generate"]
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:dev"]
 
 EXPOSE 5000
