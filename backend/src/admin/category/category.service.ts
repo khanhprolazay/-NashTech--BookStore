@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { Category } from "@prisma/client";
-import { BaseService } from "src/core/service/base.service";
-import { Dto } from "src/core/type/utility.type";
-import { Util } from "src/core/util/util";
+import { BaseService } from "@/core/service/base.service";
+import { Dto } from "@/core/type/utility.type";
+import { Util } from "@/core/util/util";
 
 @Injectable()
 export class CategoryService extends BaseService<Category> {
