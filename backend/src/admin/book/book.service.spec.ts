@@ -139,6 +139,20 @@ describe("AdminBookService", () => {
     expect(service).toBeDefined();
   });
 
+  it("Should create a book", async () => {
+    const book = await service.findById(bookId);
+    const analysis = await prisma.analysis.findFirst({
+      where: {
+        bookId: bookId,
+      }
+    })
+    expect(book).toBeDefined();
+    expect(book.title).toBe(serviceTestName);
+    expect(analysis).toBeDefined();
+    expect(analysis.totalOrder).toBe(0);
+    
+  })
+
   it("should return a list of book", async () => {
     const categories = await service.findByPage(1);
     expect(categories).toBeDefined();

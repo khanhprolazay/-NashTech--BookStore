@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
-import { BaseService } from "src/core/service/base.service";
+import { BaseService } from "@/core/service/base.service";
 import { User } from "../../model/user.model";
 import { UpdateCartDto } from "../dto/update-cart-dto";
-import { OrderStatus } from "src/core/constant/order.constant";
+import { OrderStatus } from "@/core/constant/order.constant";
 import { AddReviewDto } from "../dto/add-review.dto";
 
 @Injectable()
@@ -89,7 +89,7 @@ export class UserService extends BaseService<User> {
   async checkoutOrder(userId: string) {
     const carts = await this.findCart(userId);
 
-    carts.forEach(async (cart) => {
+    for (let cart of carts) {
       const analysis = await this.client.analysis.findFirst({
         where: {
           bookId: cart.bookId,
@@ -114,7 +114,7 @@ export class UserService extends BaseService<User> {
           },
         },
       });
-    });
+    }
 
     const order = await this.client.order.create({
       data: {
@@ -186,9 +186,9 @@ export class UserService extends BaseService<User> {
               name: true,
               email: true,
               picture: true,
-            }
-          }
-        }
+            },
+          },
+        },
       }),
       this.client.analysis.findFirst({
         where: {

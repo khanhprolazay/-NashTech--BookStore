@@ -67,10 +67,10 @@ export class BookService extends BaseService<Book> {
                 name: true,
                 picture: true,
                 email: true,
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -96,6 +96,15 @@ export class BookService extends BaseService<Book> {
               },
             },
           ],
+        },
+        analysis: {
+          create: {
+            totalOrder: 0,
+            totalReview: 0,
+            avarageRating: 0,
+            totalOrderQuantity: 0,
+            totalView: 0,
+          },
         },
         authors: {
           create: [
@@ -242,6 +251,7 @@ export class BookService extends BaseService<Book> {
     const [_tmp1, _tmp2] = await Promise.all([
       this.client.bookToAuthor.deleteMany({ where: { bookId: id } }),
       this.client.bookToCategory.deleteMany({ where: { bookId: id } }),
+      this.client.analysis.delete({ where: { bookId: id } }),
     ]);
 
     return super.delete(id);
