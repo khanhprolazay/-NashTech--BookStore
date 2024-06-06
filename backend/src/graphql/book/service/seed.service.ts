@@ -16,7 +16,7 @@ export class SeedService implements OnModuleInit {
     private readonly prismaService: PrismaService,
   ) {
     this.data = this.excelService.read<IBook>(
-      "/home/leminh/Desktop/nashtech/bookworm/data/books.csv",
+      `${__dirname}/../../../../data/books.csv`,
     );
   }
 

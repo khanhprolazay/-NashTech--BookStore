@@ -1,5 +1,5 @@
 import { Algorithm, decode, verify } from 'jsonwebtoken';
-import * as jwkToPem from 'jwk-to-pem';
+import jwkToPem from 'jwk-to-pem';
 
 export class JwtUtil {
   verify(token: string, secret: string, algorihtm: Algorithm): any {
