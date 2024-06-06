@@ -97,12 +97,13 @@ export class PromotionService extends BaseService<Promotion> {
     });
   }
 
-  override create(data: CreatePromotionDto) {
+  override create(data: CreatePromotionDto, createdUserId?: string) {
     const now = new Date();
     return super.create({
       ...data,
       slug: Util.slugify(data.title),
       isActive: data.beginAt <= now && now <= data.endAt,
+      createdUserId: createdUserId,
     });
   }
 

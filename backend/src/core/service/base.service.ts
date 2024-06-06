@@ -73,7 +73,7 @@ export abstract class BaseService<T> {
 
   async delete(id: string): Promise<void> {
     try {
-      await this.model().delete({
+      await this.model().deleteMany({
         where: {
           id,
         },
