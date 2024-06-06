@@ -29,7 +29,7 @@ services:
     depends_on:
       - bookworm-database
     env_file:
-      - ./backend/.env
+      - .env
     environment:
       - DATABASE_URL=postgres://admin:admin@bookworm-database:5432/postgres
 
