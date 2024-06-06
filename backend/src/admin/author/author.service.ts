@@ -19,7 +19,7 @@ export class AuthorService extends BaseService<Author> {
       order by count desc
       limit ${this.appContext.pagination.limit}
       offset ${(page - 1) * this.appContext.pagination.limit}
-    `;
+    ` as Promise<Author[]>;
   }
 
   override create(data: Dto<Author>) {

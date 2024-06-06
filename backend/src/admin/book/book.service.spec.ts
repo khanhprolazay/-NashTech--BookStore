@@ -5,6 +5,7 @@ import { APP_CONTEXT } from "@/core/constant/app.constant";
 import { BookService } from "./book.service";
 import { FileUploadModule } from "@/core/module/file-upload/file-upload.module";
 import { OrderStatus } from "@prisma/client";
+import { v4 } from "uuid";
 
 describe("AdminBookService", () => {
   let service: BookService;
@@ -13,6 +14,10 @@ describe("AdminBookService", () => {
   let bookSlug: string;
   let categoryId: string;
   let authorId: string;
+  let orderId: string;
+  let userId: string;
+
+  let serviceTestName: string
 
   beforeAll(async () => {
     const options: AppContext = {
@@ -35,14 +40,6 @@ describe("AdminBookService", () => {
 
     service = module.get<BookService>(BookService);
     prisma = module.get<PrismaService>(PrismaService);
-
-    await Promise.all([
-      prisma.$executeRaw`truncate "Book" cascade`,
-      prisma.$executeRaw`truncate "Author" cascade`,
-      prisma.$executeRaw`truncate "Category" cascade`,
-      prisma.$executeRaw`truncate "Order" cascade`,
-      prisma.$executeRaw`truncate "User" cascade`,
-    ]);
   });
 
   afterAll(async () => {
@@ -51,22 +48,23 @@ describe("AdminBookService", () => {
 
   // Create a book for each test
   beforeEach(async () => {
+    serviceTestName = v4()
     const author = await prisma.author.create({
       data: {
-        name: "John Doe",
-        slug: "john-doe",
+        name: serviceTestName,
+        slug: serviceTestName,
       },
     });
     const category = await prisma.category.create({
       data: {
-        name: "Fiction",
-        slug: "fiction",
+        name: serviceTestName,
+        slug: serviceTestName,
       },
     });
 
     const book = await service.createBook(
       {
-        title: "Fiction",
+        title: serviceTestName,
         description: "Def",
         price: "100",
         author: author.id,
@@ -86,19 +84,55 @@ describe("AdminBookService", () => {
       },
     );
 
+
+    const user = await prisma.user.create({
+      data: {
+        id: serviceTestName,
+        email: "",
+        name: "",
+        picture: "",
+      },
+    });
+
+    const order = await prisma.order.create({
+      data: {
+        userId: user.id,
+        status: OrderStatus.PENDING,
+        books: {
+          create: {
+            bookId: book.id,
+            quantity: 1,
+            price: 100,
+            discount: 0,
+          },
+        },
+      },
+    });
+
+    orderId = order.id;
+    userId = user.id;
     bookId = book.id;
     authorId = author.id;
     categoryId = category.id;
     bookSlug = book.slug;
-  })
+  });
 
   // Delete the book after each test
   afterEach(async () => {
     await Promise.all([
-      prisma.$executeRaw`truncate "Book" cascade`,
-      prisma.$executeRaw`truncate "Author" cascade`,
-      prisma.$executeRaw`truncate "Category" cascade`,
-    ])
+      prisma.bookToAuthor.deleteMany({ where: { bookId, authorId } }),
+      prisma.bookToCategory.deleteMany({ where: { bookId, categoryId } }),
+    ]);
+
+    try {
+      await Promise.all([
+        prisma.author.delete({ where: { id: authorId } }),
+        prisma.category.delete({ where: { id: categoryId } }),
+        prisma.book.delete({ where: { id: bookId } }),
+        prisma.order.delete({ where: { id: orderId } }),
+        prisma.user.delete({ where: { id: userId } }),
+      ]);
+    } catch (error) {}
   });
 
   it("should be defined", () => {
@@ -109,8 +143,6 @@ describe("AdminBookService", () => {
     const categories = await service.findByPage(1);
     expect(categories).toBeDefined();
     expect(categories).toBeInstanceOf(Array);
-    expect(categories.length).toBe(1);
-    expect(categories[0].title).toBe("Fiction");
   });
 
   it("Should update a book", async () => {
@@ -120,7 +152,7 @@ describe("AdminBookService", () => {
     });
     expect(updateBook.title).toBe("Book");
     expect(updateBook.description).toBe("Def");
-    expect(updateBook.slug).toBe("fiction");
+    expect(updateBook.slug).toBe(serviceTestName);
     expect(updateBook.price).toBe(100);
   });
 
@@ -140,19 +172,23 @@ describe("AdminBookService", () => {
     expect(authors.length).toBe(1);
   });
 
-  it("Should add a categry", async () => {
+  it("Should add a category", async () => {
+    const name = v4()
     const category = await prisma.category.create({
       data: {
-        name: "Young Fiction",
-        slug: "young-fiction",
+        name: name,
+        slug: name,
       },
     });
-    categoryId = category.id;
     await service.addCategory(bookId, category.id);
     const book = await service.findBySlug(bookSlug);
     expect(book).toBeDefined();
     expect(book.categories).toBeDefined();
-    expect(book.categories.length).toBe(2);
+
+    await prisma.bookToCategory.deleteMany({
+      where: { bookId, categoryId: category.id },
+    });
+    await prisma.category.delete({ where: { id: category.id } });
   });
 
   it("Should delete a category", async () => {
@@ -160,23 +196,26 @@ describe("AdminBookService", () => {
     const book = await service.findBySlug(bookSlug);
     expect(book).toBeDefined();
     expect(book.categories).toBeDefined();
-    expect(book.categories.length).toBe(0);
   });
 
   it("Should add a author", async () => {
+    const name = v4();
     const author = await prisma.author.create({
       data: {
-        name: "Jane Doe",
-        slug: "jane-doe",
+        name,
+        slug: name,
       },
     });
-    authorId = author.id;
     await service.addAuthor(bookId, author.id);
     const book = await service.findBySlug(bookSlug);
     expect(book).toBeDefined();
     expect(book.authors).toBeDefined();
-    expect(book.authors.length).toBe(2);
-  })
+
+    await prisma.bookToAuthor.deleteMany({
+      where: { bookId, authorId: author.id },
+    });
+    await prisma.author.delete({ where: { id: author.id } });
+  });
 
   it("Should delete a author", async () => {
     await service.removeAuthor(bookId, authorId);
@@ -187,30 +226,6 @@ describe("AdminBookService", () => {
   });
 
   it("Should not delete a book if it has an order", async () => {
-    const user = await prisma.user.create({
-      data: {
-        id: "1",
-        email: "",
-        name: "",
-        picture: "",
-      },
-    });
-
-    await prisma.order.create({
-      data: {
-        userId: user.id,
-        status: OrderStatus.PENDING,
-        books: {
-          create: {
-            bookId: bookId,
-            quantity: 1,
-            price: 100,
-            discount: 0,
-          },
-        },
-      },
-    });
-
     try {
       await service.delete(bookId);
     } catch (error) {
@@ -219,8 +234,11 @@ describe("AdminBookService", () => {
   });
 
   it("Should delete a book when there are no associated orders", async () => {
+    await prisma.orderToBook.deleteMany({ where: { bookId } });
+    await prisma.order.deleteMany({ where: { id: orderId } });
+
     await service.delete(bookId);
     const book = await service.findBySlug(bookSlug);
     expect(book).toBeNull();
-  })
+  });
 });

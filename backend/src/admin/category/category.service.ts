@@ -20,7 +20,7 @@ export class CategoryService extends BaseService<Category> {
       order by count desc
       limit ${this.appContext.pagination.limit}
       offset ${(page - 1) * this.appContext.pagination.limit}
-    `;
+    ` as Promise<Category[]>;
   }
 
   override create(data: Dto<Category>) {

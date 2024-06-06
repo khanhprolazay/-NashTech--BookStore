@@ -3,11 +3,13 @@ import { CategoryService } from "./category.service";
 import { PrismaService } from "@/core/service/prisma.service";
 import { AppContext } from "@/core/type/app-context.type";
 import { APP_CONTEXT } from "@/core/constant/app.constant";
-
+import { v4 } from "uuid";
 
 describe("AdminCategoryService", () => {
   let service: CategoryService;
   let prisma: PrismaService;
+  let testName = v4();
+  let categoryId: string;
 
   beforeAll(async () => {
     const options: AppContext = {
@@ -31,12 +33,18 @@ describe("AdminCategoryService", () => {
     prisma = module.get<PrismaService>(PrismaService);
   });
 
-  afterAll(async () => {
-    await prisma.$disconnect();
-  });
 
   beforeEach(async () => {
-    await prisma.$executeRaw`truncate "Category" cascade`;
+    const category = await service.create({
+      name: testName,
+    });
+    categoryId = category.id;
+  })
+
+  afterEach(async () => {
+    try {
+      await service.delete(categoryId);
+    } catch (err) {}
   })
 
   it("should be defined", () => {
@@ -47,30 +55,23 @@ describe("AdminCategoryService", () => {
     const categories = await service.findByPage(1);
     expect(categories).toBeDefined();
     expect(categories).toBeInstanceOf(Array);
+    expect(categories.length).toBeGreaterThan(0);
   });
 
 
   it("Should create and update an category", async () => {
-    const category = await service.create({
-      name: "Fiction",
-    });
-
-    const updateCategory = await service.update(category.id, {
-      name: "Young Fiction",
+    const updateCategory = await service.update(categoryId, {
+      name: "abc 123",
     });
 
     expect(updateCategory).toBeDefined();
-    expect(updateCategory.name).toBe("Young Fiction");
-    expect(updateCategory.slug).toBe("young-fiction");
+    expect(updateCategory.name).toBe("abc 123");
+    expect(updateCategory.slug).toBe("abc-123");
   })
 
   it("Should create and delete a category", async () => {
-    const category = await service.create({
-      name: "FictionAbc",
-    });
-
-    await service.delete(category.id);
-    const categories = await service.findAll();
-    expect(categories).toHaveLength(0);
+    await service.delete(categoryId);
+    const category = await service.findById(categoryId);
+    expect(category).toBeNull();
   })
 });

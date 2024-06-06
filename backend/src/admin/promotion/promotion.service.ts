@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Promotion } from "@prisma/client";
-import { BaseService } from "src/core/service/base.service";
+import { BaseService } from "@/core/service/base.service";
 import { CreatePromotionDto } from "./dto/create-promotion.dto";
-import { Util } from "src/core/util/util";
+import { Util } from "@/core/util/util";
 
 @Injectable()
 export class PromotionService extends BaseService<Promotion> {

@@ -4,8 +4,6 @@ services:
   bookworm-database-test:
     container_name: bookworm-database-test
     image: postgres:latest
-    volumes:
-      - ./volume/postgres:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     networks:

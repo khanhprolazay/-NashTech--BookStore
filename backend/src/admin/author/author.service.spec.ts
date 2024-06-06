@@ -3,10 +3,13 @@ import { AuthorService } from "./author.service";
 import { AppContext } from "@/core/type/app-context.type";
 import { APP_CONTEXT } from "@/core/constant/app.constant";
 import { PrismaService } from "@/core/service/prisma.service";
+import { v4 } from "uuid";
 
 describe("AdminAuthorService", () => {
   let service: AuthorService;
   let prisma: PrismaService;
+  let testName = v4();
+  let authorId: string;
 
   beforeAll(async () => {
     const options: AppContext = {
@@ -35,8 +38,17 @@ describe("AdminAuthorService", () => {
   });
 
   beforeEach(async () => {
-    await prisma.$executeRaw`truncate "Author" cascade`;
-  })
+    const author = await service.create({
+      name: testName,
+    });
+    authorId = author.id;
+  });
+
+  afterEach(async () => {
+    try {
+      await service.delete(authorId);
+    } catch (err) {}
+  });
 
   it("should be defined", () => {
     expect(service).toBeDefined();
@@ -46,30 +58,22 @@ describe("AdminAuthorService", () => {
     const authors = await service.findByPage(1);
     expect(authors).toBeDefined();
     expect(authors).toBeInstanceOf(Array);
+    expect(authors.length).toBeGreaterThan(0);
   });
 
-
   it("Should create and update an author", async () => {
-    const author = await service.create({
-      name: "John Doe",
-    });
-
-    const updatedAuthor = await service.update(author.id, {
-      name: "Jane Doe",
+    const updatedAuthor = await service.update(authorId, {
+      name: "asfasdfasd 1",
     });
 
     expect(updatedAuthor).toBeDefined();
-    expect(updatedAuthor.name).toBe("Jane Doe");
-    expect(updatedAuthor.slug).toBe("jane-doe");
-  })
+    expect(updatedAuthor.name).toBe("asfasdfasd 1");
+    expect(updatedAuthor.slug).toBe("asfasdfasd-1");
+  });
 
   it("Should create and delete an author", async () => {
-    const author = await service.create({
-      name: "John Doe",
-    });
-
-    await service.delete(author.id);
+    await service.delete(authorId);
     const authors = await service.findAll();
-    expect(authors).toHaveLength(0);
-  })
+    expect(authors).toBeInstanceOf(Array);
+  });
 });

@@ -5,6 +5,7 @@ import { APP_CONTEXT } from "@/core/constant/app.constant";
 import { PrismaService } from "@/core/service/prisma.service";
 import { BookService } from "../book/book.service";
 import { OrderStatus } from "@prisma/client";
+import { v4 } from "uuid";
 
 describe("AdminOrderService", () => {
   let orderService: OrderService;
@@ -13,6 +14,10 @@ describe("AdminOrderService", () => {
   let bookId: string;
   let bookSlug: string;
   let orderId: string;
+  let authorId: string;
+  let categoryId: string;
+
+  let serviceTestName = v4();
 
   beforeAll(async () => {
     const options: AppContext = {
@@ -45,21 +50,21 @@ describe("AdminOrderService", () => {
   beforeEach(async () => {
     const author = await prisma.author.create({
       data: {
-        name: "John Doe",
-        slug: "john-doe",
+        name: serviceTestName,
+        slug: serviceTestName,
       },
     });
 
     const category = await prisma.category.create({
       data: {
-        name: "Fiction",
-        slug: "fiction",
+        name: serviceTestName,
+        slug: serviceTestName,
       },
     });
 
     const book = await bookService.createBook(
       {
-        title: "Fiction",
+        title: serviceTestName,
         description: "Def",
         price: "100",
         author: author.id,
@@ -78,12 +83,10 @@ describe("AdminOrderService", () => {
         path: "",
       },
     );
-    bookId = book.id;
-    bookSlug = book.slug;
 
     const user = await prisma.user.create({
       data: {
-        id: "1",
+        id: serviceTestName,
         email: "",
         name: "",
         picture: "",
@@ -105,15 +108,22 @@ describe("AdminOrderService", () => {
       },
     });
     orderId = order.id;
+    bookId = book.id;
+    bookSlug = book.slug;
+    authorId = author.id;
+    bookId = book.id;
   })
 
   afterEach(async () => {
     await Promise.all([
-      prisma.$executeRaw`truncate "Book" cascade`,
-      prisma.$executeRaw`truncate "Author" cascade`,
-      prisma.$executeRaw`truncate "Category" cascade`,
-      prisma.$executeRaw`truncate "Order" cascade`,
-      prisma.$executeRaw`truncate "User" cascade`,
+      prisma.bookToAuthor.deleteMany({ where: { bookId, authorId}}),
+      prisma.bookToCategory.deleteMany({ where: { bookId, categoryId}}),
+    ])
+
+    await Promise.all([
+      prisma.author.delete({ where: { id: authorId }, }),
+      prisma.category.delete({ where: { id: categoryId } }),
+      prisma.book.delete({ where: { id: bookId } }),
     ])
   });
 
