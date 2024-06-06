@@ -19,9 +19,9 @@ services:
 
   bookworm-nest:
     container_name: bookworm-nest
-    build: backend
+    build: .
     volumes:
-      - ./backend:/app
+      - .:/app
     ports:
       - "5000:5000"
     networks:
