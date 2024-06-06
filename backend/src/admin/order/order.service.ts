@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Order, OrderStatus } from "@prisma/client";
 import { BaseService } from "src/core/service/base.service";
-import { UpdateOrderDto } from "./update-order.dto";
 
 @Injectable()
 export class OrderService extends BaseService<Order> {
@@ -38,12 +37,16 @@ export class OrderService extends BaseService<Order> {
     });
   }
 
-  tracking(id: string, status: OrderStatus) {
-    return this.client.orderTrackingLog.create({
-      data: {
-        status,
-        orderId: id,
-      },
-    });
+  async tracking(id: string, status: OrderStatus) {
+    const [order, _] = await Promise.all([
+      this.model().update({
+        where: { id },
+        data: { status },
+      }),
+      this.client.orderTrackingLog.create({
+        data: { orderId: id, status },
+      }),
+    ]);
+    return order;
   }
 }

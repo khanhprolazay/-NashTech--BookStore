@@ -64,13 +64,13 @@ describe("AdminCategoryService", () => {
     expect(updateCategory.slug).toBe("young-fiction");
   })
 
-  it("Should create and delete an category", async () => {
-    const author = await service.create({
-      name: "Fiction",
+  it("Should create and delete a category", async () => {
+    const category = await service.create({
+      name: "FictionAbc",
     });
 
-    await service.delete(author.id);
-    const authors = await service.findAll();
-    expect(authors).toHaveLength(0);
+    await service.delete(category.id);
+    const categories = await service.findAll();
+    expect(categories).toHaveLength(0);
   })
 });
