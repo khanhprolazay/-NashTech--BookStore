@@ -4,7 +4,7 @@ import { AppContext } from "@/core/type/app-context.type";
 import { APP_CONTEXT } from "@/core/constant/app.constant";
 import { PrismaService } from "@/core/service/prisma.service";
 
-describe("AuthorService", () => {
+describe("AdminAuthorService", () => {
   let service: AuthorService;
   let prisma: PrismaService;
 

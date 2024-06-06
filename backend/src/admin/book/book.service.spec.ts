@@ -6,7 +6,7 @@ import { BookService } from "./book.service";
 import { FileUploadModule } from "@/core/module/file-upload/file-upload.module";
 import { OrderStatus } from "@prisma/client";
 
-describe("BookService", () => {
+describe("AdminBookService", () => {
   let service: BookService;
   let prisma: PrismaService;
   let bookId: string;
