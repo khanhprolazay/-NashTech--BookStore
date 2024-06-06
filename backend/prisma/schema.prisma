@@ -177,7 +177,6 @@ model Promotion {
   title         String
   slug          String
   description   String
-  isActive      Boolean
   beginAt       DateTime
   endAt         DateTime
   createdAt     DateTime @default(now())

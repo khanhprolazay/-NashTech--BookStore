@@ -12,10 +12,12 @@ export class PromotionService extends BaseService<Promotion> {
 
   findByPage(page: number) {
     return this.client.$queryRaw`
-      select p.id, p.title, p.description, p."beginAt" , p."endAt", p."isActive", p."slug", count(ptb."bookId")
+      select p.id, p.title, p.description, p."beginAt" , p."endAt",
+      (p."beginAt" <= CURRENT_TIMESTAMP and p."endAt" >= CURRENT_TIMESTAMP) as "isActive",
+      p."slug", count(ptb."bookId")
       from "Promotion" p
       left join "PromotionToBook" ptb on ptb."promotionId" = p.id
-      group by p.id, p.title , p.description, p."beginAt" , p."endAt", p."isActive", p."slug"
+      group by p.id, p.title , p.description, p."beginAt" , p."endAt", p."slug"
       limit ${this.appContext.pagination.limit}
       offset ${(page - 1) * this.appContext.pagination.limit}
     ` as Promise<Promotion[]>;
@@ -102,7 +104,6 @@ export class PromotionService extends BaseService<Promotion> {
     return super.create({
       ...data,
       slug: Util.slugify(data.title),
-      isActive: data.beginAt <= now && now <= data.endAt,
       createdUserId: createdUserId,
     });
   }

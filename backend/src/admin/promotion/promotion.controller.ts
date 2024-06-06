@@ -51,9 +51,7 @@ export class PromotionController {
   @Post()
   @Roles([Role.Admin])
   createPromotion(@Client() client: any, @Body() body: CreatePromotionDto) {
-    return this.promotionService.create(
-      Object.assign(body, { createdUserId: client.sub }),
-    );
+    return this.promotionService.create(body, client.sub);
   }
 
   @Post(":id/book")
