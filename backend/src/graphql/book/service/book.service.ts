@@ -1,11 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { Book } from "@prisma/client";
-import { BaseService } from "src/core/service/base.service";
-import { PrismaService } from "src/core/service/prisma.service";
-import { IPagination, Sort } from "src/core/interface";
-import { APP_CONTEXT } from "src/core/constant/app.constant";
-import { AppContext } from "src/core/type/app-context.type";
-import { BookFilterDto } from "src/core/dto/book-filter.dto";
+import { BaseService } from "@/core/service/base.service";
+import { PrismaService } from "@/core/service/prisma.service";
+import { IPagination, Sort } from "@/core/interface";
+import { APP_CONTEXT } from "@/core/constant/app.constant";
+import { AppContext } from "@/core/type/app-context.type";
+import { BookFilterDto } from "@/graphql/book/dto/book-filter.dto";
 
 @Injectable()
 export class BookService extends BaseService<Book> {
@@ -72,10 +72,10 @@ export class BookService extends BaseService<Book> {
         analysis: {
           update: {
             totalView: book.analysis.totalView + 1,
-          }
-        }
-      }
-    })
+          },
+        },
+      },
+    });
 
     return book;
   }

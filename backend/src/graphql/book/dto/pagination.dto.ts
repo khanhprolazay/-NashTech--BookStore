@@ -1,5 +1,5 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { IPagination, PaginationOrder, Sort } from "../interface";
+import { IPagination, PaginationOrder, Sort } from "../../../core/interface";
 
 @InputType()
 export class PaginationDto implements IPagination {
@@ -15,6 +15,6 @@ export class PaginationDto implements IPagination {
   @Field({ nullable: true, defaultValue: PaginationOrder.DESC })
   order: PaginationOrder;
 
-  @Field({ nullable: true, defaultValue: '' })
+  @Field({ nullable: true, defaultValue: "" })
   search: string;
 }

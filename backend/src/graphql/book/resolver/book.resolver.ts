@@ -5,8 +5,8 @@ import { CategoryService } from "../service/category.service";
 import { AuthorService } from "../service/author.service";
 import { UseGuards } from "@nestjs/common";
 import { HeaderTokenGuard } from "src/core/guard/header-token.guard";
-import { PaginationDto } from "src/core/dto/pagination.dto";
-import { BookFilterDto } from "src/core/dto/book-filter.dto";
+import { PaginationDto } from "@/graphql/book/dto/pagination.dto";
+import { BookFilterDto } from "@/graphql/book/dto/book-filter.dto";
 
 @Resolver((_) => Book)
 @UseGuards(HeaderTokenGuard)

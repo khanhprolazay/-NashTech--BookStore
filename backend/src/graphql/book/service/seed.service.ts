@@ -1,9 +1,9 @@
 import { Injectable, OnModuleInit } from "@nestjs/common";
-import { ExcelService } from "src/core/module/excel/excel.service";
-import { HttpClient } from "src/core/util/http-client";
+import { ExcelService } from "@/core/module/excel/excel.service";
+import { HttpClient } from "@/core/util/http-client";
 import { IBook, IGoogleBookResponse } from "../book.type";
-import { PrismaService } from "src/core/service/prisma.service";
-import { Util } from "src/core/util/util";
+import { PrismaService } from "@/core/service/prisma.service";
+import { Util } from "@/core/util/util";
 
 @Injectable()
 export class SeedService implements OnModuleInit {
