@@ -93,7 +93,12 @@ export class BookService extends BaseService<Book> {
                 gt: 0,
               },
               promotion: {
-                isActive: true,
+                beginAt: {
+                  lte: new Date(),
+                },
+                endAt: {
+                  gte: new Date(),
+                }
               },
             },
           },
