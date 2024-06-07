@@ -19,7 +19,6 @@ export class DashboardController {
   @Roles([Role.Admin])
   async dashboard(@Client() client: any) {
     const summerize = await this.dashboardService.summerize();
-    console.log(summerize);
     return { client, title: "Dashboard", ...summerize };
   }
 }
