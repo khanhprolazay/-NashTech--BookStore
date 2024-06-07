@@ -91,9 +91,16 @@ export default function ReviewForm({ book, setReviews }: Props) {
 				setReviews((prev) => ({
 					...prev,
 					totalReview: prev.totalReview + 1,
-					avarageRating: Math.round((prev.avarageRating * prev.totalReview + newReview.rating) / (prev.totalReview + 1)),
+					count: prev.count.map((countR) =>
+						countR.rating === newReview.rating
+							? { ...countR, _count: countR._count + 1 }
+							: countR
+					),
+					avarageRating:
+						(prev.avarageRating * prev.totalReview + newReview.rating) /
+						(prev.totalReview + 1),
 					reviews: [newReview, ...prev.reviews],
-				}))
+				}));
 			})
 			.catch((error) => {
 				toast({

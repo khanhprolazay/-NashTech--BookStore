@@ -43,7 +43,7 @@ export default function ReviewList({ book, reviews }: Props) {
 			<CardContent>
 				<div className="flex gap-4">
 					<div>
-						<TypographyH3>{reviews.avarageRating}</TypographyH3>
+						<TypographyH3>{Math.round(reviews.avarageRating * 10) / 10}</TypographyH3>
 						<TypographyMuted>[{reviews.totalReview}]</TypographyMuted>
 					</div>
 					<div>
