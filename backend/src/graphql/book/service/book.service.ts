@@ -5,7 +5,7 @@ import { PrismaService } from "@/core/service/prisma.service";
 import { IPagination, Sort } from "@/core/interface";
 import { APP_CONTEXT } from "@/core/constant/app.constant";
 import { AppContext } from "@/core/type/app-context.type";
-import { BookFilterDto } from "@/graphql/book/dto/book-filter.dto";
+import { BookFilterDto } from "../dto/book-filter.dto";
 
 @Injectable()
 export class BookService extends BaseService<Book> {
