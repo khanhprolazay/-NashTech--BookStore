@@ -137,6 +137,32 @@ describe("AdminPromotionService", () => {
     expect(promotionId).toBeDefined();
   });
 
+  it("Should not create same title promotion", async () => {
+    try {
+      await promotionService.create({
+        title: serviceTestName,
+        beginAt: new Date(),
+        endAt: new Date(),
+        description: "",
+      }, userId);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
+  })
+
+  it("Should not create promotion if beginAt is greater than endAt", async () => {
+    try {
+      await promotionService.create({
+        title: "Test",
+        beginAt: new Date(),
+        endAt: new Date(new Date().setDate(new Date().getDate() - 1)),
+        description: "",
+      }, userId);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
+  })
+
   it("should add book to promotion", async () => {
     const result = await promotionService.addBook(promotionId, bookId, 10);
     expect(result.bookId).toEqual(bookId);
