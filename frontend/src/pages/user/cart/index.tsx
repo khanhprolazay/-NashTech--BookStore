@@ -15,8 +15,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { checkoutOrder } from '@/services/user.service';
 import Layout from '../_components/layout';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function CartPage() {
+	const { toast } = useToast();
 	const { user, accessToken, update } = useSession();
 
 	const subTotal = Math.round(
@@ -34,13 +36,28 @@ export default function CartPage() {
 		}, 0) || 0
 	);
 
-	const checkout = async () => {
+	const checkout = () => {
 		if (!accessToken) return;
-		const orders = await checkoutOrder(accessToken);
-		update({
-			...user,
-			orders,
+		return checkoutOrder(accessToken).then((orders) => {
+			toast({
+				title: 'Success',
+				duration: 3000,
+				description: 'Checkout successfully',
+				variant: 'success',
+			});
+			update({
+				...user,
+				orders,
+			});
+		}).catch(errr => {
+			toast({
+				title: 'Oh! Something went wrong!',
+				duration: 3000,
+				description: errr.message,
+				variant: 'destructive',
+			});
 		});
+		
 	};
 
 	return (
