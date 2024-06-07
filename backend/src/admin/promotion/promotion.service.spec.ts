@@ -99,7 +99,7 @@ describe("AdminPromotionService", () => {
     const promotion = await promotionService.create({
       title: serviceTestName,
       beginAt: new Date(),
-      endAt: new Date(),
+      endAt: new Date(new Date().setDate(new Date().getDate() + 1)),
       description: "",
     }, user.id);
 
@@ -220,5 +220,23 @@ describe("AdminPromotionService", () => {
     } catch (error) {
       expect(error).toBeDefined();
     }
+  })
+
+  it("Should not add book to promotion if book is in another active promotion", async () => {
+    const promotionId = v4();
+    const promotionTmp = await promotionService.create({
+      title: promotionId,
+      beginAt: new Date(),
+      endAt: new Date(new Date().setDate(new Date().getDate() + 1)),
+      description: "",
+    }, userId);
+
+    try {
+      await promotionService.addBook(promotionId, bookId, 10);
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
+
+    await promotionService.delete(promotionId);
   })
 });

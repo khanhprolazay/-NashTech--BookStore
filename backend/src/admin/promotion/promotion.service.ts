@@ -56,7 +56,7 @@ export class PromotionService extends BaseService<Promotion> {
   }
 
   async addBook(promotionId: string, bookId: string, discount: number) {
-    const check = await this.checkBookInActivePromotion(bookId);
+    const check = await this.checkBookInActivePromotion(bookId, promotionId);
     if (check)
       throw new HttpException(
         "Book is already in promotion",
