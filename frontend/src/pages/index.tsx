@@ -17,6 +17,7 @@ import { TypographyH4 } from '@/components/ui/typography';
 import { Sort } from '@/interfaces/pagination.interface';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import { IBooksWithPagination } from '@/interfaces/book.interface';
+import Link from 'next/link';
 
 type Repo = {
 	saleBooks: IBooksWithPagination;
@@ -44,20 +45,23 @@ export const getServerSideProps = (async () => {
 export default function Home({
 	repo,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-	
 	return (
 		<AppContainer>
 			<section className="w-full mb-28">
 				<div className="flex justify-between items-center mb-2">
 					<TypographyH4>On Sale</TypographyH4>
-					<Button>View All</Button>
+					<Link href="/shop">
+						<Button>View All</Button>
+					</Link>
 				</div>
 				<Card>
 					<CardContent className="py-6 px-4 lg:px-20">
-						<Carousel className='w-full max-w-full' opts={{ align: 'start' }}>
+						<Carousel className="w-full max-w-full" opts={{ align: 'start' }}>
 							<CarouselContent className="-ml-4">
 								{repo.saleBooks.books.map((book) => (
-									<CarouselItem key={book.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
+									<CarouselItem
+										key={book.id}
+										className="basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
 										<BookCard book={book} />
 									</CarouselItem>
 								))}
