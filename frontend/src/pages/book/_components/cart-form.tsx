@@ -63,8 +63,7 @@ export default function CartForm({ book }: Props) {
 	};
 
 	return (
-		<>
-			<Card>
+			<Card className='flex-1'>
 				<CardHeader className="py-4 border-b">
 					<div className="flex items-center gap-2">
 						{isOnSale && (
@@ -96,6 +95,5 @@ export default function CartForm({ book }: Props) {
 					</Button>
 				</CardContent>
 			</Card>
-		</>
 	);
 }

@@ -97,8 +97,8 @@ export default function ReviewForm({ book, setReviews }: Props) {
 							: countR
 					),
 					avarageRating:
-						(prev.avarageRating * prev.totalReview + newReview.rating) /
-						(prev.totalReview + 1),
+							((prev.avarageRating * prev.totalReview + newReview.rating) /
+								(prev.totalReview + 1)),
 					reviews: [newReview, ...prev.reviews],
 				}));
 			})

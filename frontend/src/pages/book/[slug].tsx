@@ -32,12 +32,12 @@ export default function Book({
 	const [reviews, setReviews] = useState(initialReviews);
 	return (
 		<AppContainer>
-			<div className="grid grid-cols-12 gap-4">
-				<div className="col-span-8 flex flex-col gap-4">
+			<div className="grid grid-cols-1 lg:grid-cols-[8fr_4fr] gap-4">
+				<div className="flex flex-col gap-4">
 					<BookCard book={book} />
 					<ReviewList book={book} reviews={reviews}  />
 				</div>
-				<div className="col-span-4 flex flex-col gap-4">
+				<div className="flex flex-col md:flex-row lg:flex-col h-fit gap-4">
 					<CartForm book={book} />
 					<ReviewForm book={book} setReviews={setReviews}/>
 				</div>

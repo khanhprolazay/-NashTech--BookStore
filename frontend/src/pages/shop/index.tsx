@@ -142,8 +142,8 @@ export default function Shop({
 		<AppContainer>
 			<TypographyH4>Books</TypographyH4>
 			<Separator className="my-6" />
-			<div className="grid grid-cols-12 gap-4">
-				<div className="col-span-3">
+			<div className="relative grid md:grid-cols-[minmax(215px,_3fr)_9fr] gap-4">
+				<div className="sticky top-20 h-fit hidden md:block">
 					<TypographyH6 className="mb-2">Filter</TypographyH6>
 					<div className="flex flex-col gap-4">
 						<FilterForm
@@ -159,7 +159,7 @@ export default function Shop({
 					</div>
 				</div>
 
-				<div className="col-span-9">
+				<div>
 					<div className="flex justify-between items-center min-h-8 mb-4">
 						<TypographyMuted>
 							Showing {repo.books.pagination.count} of{' '}
@@ -202,7 +202,7 @@ export default function Shop({
 							</Select>
 						</div>
 					</div>
-					<div className="grid grid-cols-4 gap-4 mb-8">
+					<div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
 						{repo.books.books.map((book) => (
 							<BookCard key={book.slug} book={book} />
 						))}
