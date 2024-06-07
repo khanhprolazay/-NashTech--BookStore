@@ -36,7 +36,7 @@ export class PromotionService extends BaseService<Promotion> {
                 price: true,
                 title: true,
                 mainImage: true,
-              }
+              },
             },
           },
         },
@@ -55,7 +55,13 @@ export class PromotionService extends BaseService<Promotion> {
     return this.client.book.findMany();
   }
 
-  addBook(promotionId: string, bookId: string, discount: number) {
+  async addBook(promotionId: string, bookId: string, discount: number) {
+    const check = await this.checkBookInActivePromotion(bookId);
+    if (check)
+      throw new HttpException(
+        "Book is already in promotion",
+        HttpStatus.BAD_REQUEST,
+      );
     return this.client.promotionToBook.create({
       data: {
         bookId,
@@ -116,5 +122,58 @@ export class PromotionService extends BaseService<Promotion> {
       throw new HttpException("Promotion is in use", HttpStatus.BAD_REQUEST);
     }
     return super.delete(id);
+  }
+
+  override async update(id: string, data: Partial<Promotion>) {
+    const promotion = await this.model().findUnique({
+      where: {
+        id,
+      },
+      include: {
+        books: {
+          select: {
+            bookId: true,
+          },
+        },
+      },
+    });
+
+    for (const book of promotion.books) {
+      const check = await this.checkBookInActivePromotion(book.bookId, id);
+      if (check)
+        throw new HttpException(
+          "Book is already in promotion",
+          HttpStatus.BAD_REQUEST,
+        );
+    }
+
+    if (data.title) {
+      data.slug = Util.slugify(data.title);
+    }
+    return super.update(id, data);
+  }
+
+  private checkBookInActivePromotion(bookId: string, promotionId: string = null) {
+    const query = {
+      where: {
+        bookId,
+        promotion: {
+          beginAt: {
+            lte: new Date(),
+          },
+          endAt: {
+            gte: new Date(),
+          },
+        },
+      },
+    }
+
+    if (promotionId) {
+      query.where["promotionId"] = {
+        not: promotionId,
+      };
+
+    }
+    return this.client.promotionToBook.findFirst(query);
   }
 }

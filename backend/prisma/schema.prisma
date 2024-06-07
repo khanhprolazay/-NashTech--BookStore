@@ -174,8 +174,8 @@ enum OrderStatus {
 
 model Promotion {
   id            String   @id @default(cuid())
-  title         String
-  slug          String
+  title         String   
+  slug          String   @unique
   description   String
   beginAt       DateTime
   endAt         DateTime
