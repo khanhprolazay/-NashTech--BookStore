@@ -53,11 +53,11 @@ export default function Home({
 					<Button>View All</Button>
 				</div>
 				<Card>
-					<CardContent className="py-6 px-20">
-						<Carousel opts={{ align: 'start' }}>
+					<CardContent className="py-6 px-4 lg:px-20">
+						<Carousel className='w-full max-w-full' opts={{ align: 'start' }}>
 							<CarouselContent className="-ml-4">
 								{repo.saleBooks.books.map((book) => (
-									<CarouselItem key={book.id} className="basis-1/4 pl-4">
+									<CarouselItem key={book.id} className="basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4">
 										<BookCard book={book} />
 									</CarouselItem>
 								))}
@@ -81,8 +81,8 @@ export default function Home({
 						</div>
 						<TabsContent value="popular">
 							<Card>
-								<CardContent className="py-6 px-20">
-									<div className="grid grid-cols-5 gap-4">
+								<CardContent className="py-6 px-4 lg:px-20">
+									<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 										{repo.popolarBooks.books.map((book) => (
 											<BookCard key={book.id} book={book} />
 										))}
@@ -93,8 +93,8 @@ export default function Home({
 
 						<TabsContent value="recommend">
 							<Card>
-								<CardContent className="py-6 px-20">
-									<div className="grid grid-cols-5 gap-4">
+								<CardContent className="py-6 px-4 lg:px-20">
+									<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
 										{repo.recomendBooks.books.map((book) => (
 											<BookCard key={book.id} book={book} />
 										))}
