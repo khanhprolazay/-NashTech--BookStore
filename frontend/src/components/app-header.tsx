@@ -160,9 +160,11 @@ export default function AppHeader() {
 														title="Manage account">
 														Manage information likes email, password, ...
 													</ListItem>
-													<ListItem href="/user/order" title="Manage order">
-														Manage your order
-													</ListItem>
+													<Link href="/user/order" passHref>
+														<ListItem title="Manage order">
+															Manage your order
+														</ListItem>
+													</Link>
 													<ListItem
 														href="#"
 														onClick={() => signOut()}
