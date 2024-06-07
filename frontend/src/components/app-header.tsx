@@ -20,6 +20,7 @@ import useSession from '@/hooks/use-session.hook';
 import { TrashIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { removeCart } from '@/services/user.service';
+import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 
 export default function AppHeader() {
 	const { user, update, accessToken } = useSession();
@@ -139,11 +140,10 @@ export default function AppHeader() {
 								{user && (
 									<NavigationMenuItem>
 										<NavigationMenuTrigger className='bg-transparent'>
-											<img
-												className="w-8 h-8 rounded-full"
-												src={user.image as string}
-												alt="user"
-											/>
+											<Avatar className='h-7 w-7'>
+												<AvatarImage src={user.image as string} alt={user.email}/>
+												<AvatarFallback>U</AvatarFallback>
+											</Avatar>
 										</NavigationMenuTrigger>
 										<NavigationMenuContent>
 											<ul className="grid gap-3 p-4 md:w-[400px] grid-cols-[1.5fr_2fr]">
